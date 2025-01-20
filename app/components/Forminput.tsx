@@ -25,7 +25,7 @@ const Forminput = ({label,placeholder}:ForminputProps) => {
 const style = StyleSheet.create({
     container:{
         display:'flex',
-        
+        paddingHorizontal:20
     },
     labeltext:{
         fontWeight:600,

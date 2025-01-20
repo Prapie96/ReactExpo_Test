@@ -8,12 +8,13 @@ import { Redirect, router } from 'expo-router';
 export default function index() {
   return (
     <SafeAreaView >
+      {/* <View style={styles.Circle}></View> */}
       <View style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
         <Text style={styles.titleText}>Welcome,Pie</Text>
       <Text>select the button to choose menu.</Text>
       <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
-      <CustomButton Onpress={()=>router.push('/(auth)/seeUser')}title='See All User'></CustomButton>
+      <CustomButton Onpress={()=>router.push('/(auth)/editUser')}title='See All User'></CustomButton>
       </View>
 
     
@@ -23,13 +24,23 @@ export default function index() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 140,
+    display:'flex',
     alignItems:'center',
     justifyContent:'center',
     gap: 10,
+    height: '100%',
   },
   titleText:{
     fontSize:34,
-  }
+  },
+  // Circle:{
+  //   backgroundColor:'#c4d9ff',
+  //   width: 100,
+  //   height: 100,
+  //   borderRadius: 50,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   marginBottom: 20,
+  // }
 
 })

@@ -4,42 +4,39 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
-export default function AddUser() {
+
+export default function editUser() {
   return (
-    <SafeAreaView style={style.container}>
-    <View style={style.viewcontain} >
-        <Text style={style.titletext} >กรอกข้อมูล User</Text>
-       
+    <SafeAreaView>
+        <View>
+        <Text style={style.titletext} >แก้ไขข้อมูล User</Text>
         <Forminput label='Firstname' placeholder='firstname...'></Forminput>
         <Forminput label = 'Lastname'placeholder='lastname...'></Forminput>
         <Forminput label = 'Nickname'placeholder='Nickname...'></Forminput>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Back'></CustomButton>
-    </View>
+        </View>
     </SafeAreaView>
-    
   )
 }
 
 const style = StyleSheet.create({
     container:{
         backgroundColor: '#E8F9FF',
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center',
-        height:'100%',
         
     },
     viewcontain:{
         backgroundColor: '#FFFFFF',
+        // alignItems: 'center',
         borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        marginTop: 200,
+        borderTopRightRadius: 10,
+        marginTop: 100,
         width: '100%',
         height: '100%',
         paddingTop:30,
         paddingLeft:30,
         paddingRight:30,
+        flexDirection: 'column',
         gap: 2
     },
     titletext:{
