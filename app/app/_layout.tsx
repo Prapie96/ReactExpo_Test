@@ -35,7 +35,7 @@ export default function RootLayout() {
        
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="dark" /> {/* Baterry,Noti,Time,Wifi Bar */}
+      <StatusBar style="dark" /> 
     </ThemeProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageBackground, } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
@@ -7,18 +7,21 @@ import { Redirect, router } from 'expo-router';
 
 export default function index() {
   return (
-    <SafeAreaView >
-      {/* <View style={styles.Circle}></View> */}
-      <View style={styles.container}>
+    <View >
+      
+      <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 
+      <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
         <Text style={styles.titleText}>Welcome,Pie</Text>
-      <Text>select the button to choose menu.</Text>
-      <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
-      <CustomButton Onpress={()=>router.push('/(auth)/editUser')}title='See All User'></CustomButton>
-      </View>
+        <Text>select the button to choose menu.</Text>
+        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
+        <CustomButton Onpress={()=>router.push('/(auth)/showUser')}title='See All User'></CustomButton>
+      </SafeAreaView>
+      </ImageBackground>
+      
 
     
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -33,6 +36,15 @@ const styles = StyleSheet.create({
   titleText:{
     fontSize:34,
   },
+  bgimg:{
+  
+    width: '50%',
+    height:'100%',
+  }
+
+
+
+
   // Circle:{
   //   backgroundColor:'#c4d9ff',
   //   width: 100,

@@ -8,7 +8,7 @@ export default function auth_layout() {
    <>
     <Stack>
       <Stack.Screen name='addUser'options={{headerShown: false}}/>
-      <Stack.Screen name='seeUser'options={{headerShown: false}}/>
+      <Stack.Screen name='showUser'options={{headerShown: false}}/>
       <Stack.Screen name='editUser'options={{headerShown: false}}/>
     </Stack>
    </>
