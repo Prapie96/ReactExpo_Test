@@ -6,15 +6,15 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 interface ForminputProps{
      label: string,
      placeholder : string,
-     name:string
-    onchange: () => void,
+     values:string
+     handleonchange: (text: string) => void;
 }
-const Forminput = ({label,placeholder,name,onchange}:ForminputProps) => {
+const Forminput = ({label,placeholder,values,handleonchange}:ForminputProps) => {
   return (
     <SafeAreaView style={style.container}>
     <View>
     <Text style={style.labeltext}>{label}</Text>
-    <TextInput style={style.inputfield} placeholder={placeholder} value={name} onChange={onchange}></TextInput>
+    <TextInput style={style.inputfield} placeholder={placeholder} value={values} onChangeText={handleonchange}></TextInput>
     </View>
     </SafeAreaView>
   )

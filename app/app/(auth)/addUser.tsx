@@ -6,7 +6,27 @@ import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
 import { useState } from 'react'
 export default function AddUser() {
-  const [name,setname] = useState('');
+  const [input,setinput] = useState({
+        firstname:'',
+        lastname:'',
+        nickname:'',
+    });
+    const handleChange = (fieldinput:string) =>(text:string)=>{
+        setinput((prevState) => ({
+            ...prevState,
+            [fieldinput]: text,
+          }));
+    }
+    const handleSubmit = () => {
+        console.log("ค่าที่กรอกในฟอร์ม: ", input); // พิมพ์ค่าทั้งหมดใน console
+        setinput({
+            firstname:'',
+            lastname:'',
+            nickname:'',
+        });
+        router.push('/(auth)/showUser');
+    };
+
     return (
     <View style={style.container}>
         
@@ -14,11 +34,13 @@ export default function AddUser() {
     <SafeAreaView style={style.viewcontain} >
         
         <Text style={style.titletext} >กรอกข้อมูล User</Text>
-        <Forminput label='Firstname' placeholder='firstname...' name={name} onchange={}></Forminput>
-        <Forminput label = 'Lastname'placeholder='lastname...'></Forminput>
-        <Forminput label = 'Nickname'placeholder='Nickname...'></Forminput>
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Back'></CustomButton>
+        <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
+        <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
+        <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
+        {/* <Forminput label = 'Lastname'placeholder='lastname...'values ={input.lastname}></Forminput>
+        <Forminput label = 'Nickname'placeholder='Nickname...'values ={input.nickname}></Forminput> */}
+        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Add User'></CustomButton>
+        <CustomButton Onpress={handleSubmit} title='Check'></CustomButton>
     </SafeAreaView>
     </ImageBackground>
     </View>
