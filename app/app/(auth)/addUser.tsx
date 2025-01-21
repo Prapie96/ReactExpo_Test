@@ -40,8 +40,7 @@ export default function AddUser() {
                     alert('Success to  Add New User');
                     return result;
                 }
-                }).catch(err => console.error);
-            
+                }).catch(err => console.error(err));
             setinput({
                 firstname:'',
                 lastname:'',

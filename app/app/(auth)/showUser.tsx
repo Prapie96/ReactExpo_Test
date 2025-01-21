@@ -1,27 +1,46 @@
-import { ImageBackground, StyleSheet, Text, View,ScrollView } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,ScrollView,FlatList } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
 import UserCompo from '@/components/userCompo'
-
+import { useState,useEffect } from 'react'
 
 export default function showUser() {
-  return (
+    interface User {
+        userid:number,
+        firstname: string;
+        lastname: string;
+        nickname: string;
+    }
+
+    const [datauser,setdatauser] = useState<User[]>([]);
+    
+    useEffect(() => {
+        const api = 'http://192.168.1.106:3000/';
+        fetch(api,{
+            method:'GET',
+        }).then(response => response.json()).then(result => {
+            if(result){
+                setdatauser(result);
+            }
+        }).catch(err => console.error(err));
+    },[])
+  
+  
+    return (
     <ScrollView style={style.container}>
         
     
     <SafeAreaView style={style.viewcontain} >
         
         <Text style={style.titletext} >ดูข้อมูล User</Text>
-        <UserCompo name='John' lastname='Doe' nickname='Johnny'></UserCompo>
-        <UserCompo name='Jenny' lastname='Doe' nickname='Johnny'></UserCompo>
-        <UserCompo name='Pathipan' lastname='Saeyoy' nickname='Pun'></UserCompo>
-        <UserCompo name='Kimnathan' lastname='Partousd' nickname='Dephnie'></UserCompo>
-        <UserCompo name='Pluem' lastname='Parb' nickname='Canada'></UserCompo>
-        <UserCompo name='John' lastname='Doe' nickname='Johnny'></UserCompo>
-        <UserCompo name='John' lastname='Doe' nickname='Johnny'></UserCompo>
+        <FlatList 
+            data = {datauser}   
+            renderItem={({ item }) => <UserCompo name={item.firstname} lastname={item.lastname} nickname={item.nickname} />}
+            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
+        />
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
         <CustomButton Onpress={() => router.push('/')} title='Back'></CustomButton>
     </SafeAreaView>
@@ -40,12 +59,12 @@ const style = StyleSheet.create({
     },
     viewcontain:{
         backgroundColor: '#FFFFFF',
-        width:'100%',
-        height:'100%',
+        
         paddingHorizontal:20,
         marginTop:100,
         alignItems:'center',
-        gap:10
+        gap:10,
+        
     },
     titletext:{
         fontSize: 32,
@@ -56,5 +75,6 @@ const style = StyleSheet.create({
         
         paddingTop:36,
         paddingHorizontal:13
-    }
+    },
+   
 })
