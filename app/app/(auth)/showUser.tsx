@@ -23,7 +23,7 @@ export default function showUser() {
         <UserCompo name='John' lastname='Doe' nickname='Johnny'></UserCompo>
         <UserCompo name='John' lastname='Doe' nickname='Johnny'></UserCompo>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Back'></CustomButton>
+        <CustomButton Onpress={() => router.push('/')} title='Back'></CustomButton>
     </SafeAreaView>
    
     </ScrollView>

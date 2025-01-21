@@ -13,6 +13,7 @@ export default function index() {
       <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
         <Text style={styles.titleText}>Welcome,Pie</Text>
+        <Text>Welcome to applicion to handle users in systems</Text>
         <Text>select the button to choose menu.</Text>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
         <CustomButton Onpress={()=>router.push('/(auth)/showUser')}title='See All User'></CustomButton>

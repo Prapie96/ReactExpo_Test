@@ -10,9 +10,9 @@ export default function editUser() {
     <SafeAreaView>
         <View>
         <Text style={style.titletext} >แก้ไขข้อมูล User</Text>
-        <Forminput label='Firstname' placeholder='firstname...'></Forminput>
+        {/* <Forminput label='Firstname' placeholder='firstname...'></Forminput>
         <Forminput label = 'Lastname'placeholder='lastname...'></Forminput>
-        <Forminput label = 'Nickname'placeholder='Nickname...'></Forminput>
+        <Forminput label = 'Nickname'placeholder='Nickname...'></Forminput> */}
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Back'></CustomButton>
         </View>

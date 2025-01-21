@@ -17,14 +17,46 @@ export default function AddUser() {
             [fieldinput]: text,
           }));
     }
-    const handleSubmit = () => {
-        console.log("ค่าที่กรอกในฟอร์ม: ", input); // พิมพ์ค่าทั้งหมดใน console
-        setinput({
-            firstname:'',
-            lastname:'',
-            nickname:'',
-        });
-        router.push('/(auth)/showUser');
+    const handleSubmit=async () =>{
+        console.log("ค่าที่กรอกในฟอร์ม: ", input);  
+        if(!input.firstname || !input.lastname || !input.nickname  ){
+            alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
+        }
+        else{
+            console.log("Into else to fect")
+            const api = 'http://192.168.1.106:3000/regisuser';
+            await fetch(api,{
+                method:'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({firstname:input.firstname,
+                    lastname:input.lastname,
+                    nickname:input.nickname
+                })
+            }).then(respond => respond.json()).then(result => result).catch(err => console.error)
+            setinput({
+                firstname:'',
+                lastname:'',
+                nickname:'',
+            });
+        }
+    }
+    const handleClear = () => {
+        // console.log("ค่าที่กรอกในฟอร์ม: ", input); 
+        // if(!input.firstname || !input.lastname || !input.nickname  ){
+        //     alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
+            
+        // }
+        // else{
+        //     setinput({
+        //         firstname:'',
+        //         lastname:'',
+        //         nickname:'',
+        //     });
+        // }
+        // // router.push('/');
     };
 
     return (
@@ -39,8 +71,8 @@ export default function AddUser() {
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
         {/* <Forminput label = 'Lastname'placeholder='lastname...'values ={input.lastname}></Forminput>
         <Forminput label = 'Nickname'placeholder='Nickname...'values ={input.nickname}></Forminput> */}
-        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Add User'></CustomButton>
-        <CustomButton Onpress={handleSubmit} title='Check'></CustomButton>
+        <CustomButton Onpress={handleSubmit} title='Add User'></CustomButton>
+        <CustomButton Onpress={handleClear} title='Check'></CustomButton>
     </SafeAreaView>
     </ImageBackground>
     </View>
