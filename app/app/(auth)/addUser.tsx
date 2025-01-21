@@ -35,7 +35,13 @@ export default function AddUser() {
                     lastname:input.lastname,
                     nickname:input.nickname
                 })
-            }).then(respond => respond.json()).then(result => result).catch(err => console.error)
+            }).then(respond => respond.json()).then(result => {
+                if(result){
+                    alert('Success to  Add New User');
+                    return result;
+                }
+                }).catch(err => console.error);
+            
             setinput({
                 firstname:'',
                 lastname:'',
@@ -43,21 +49,7 @@ export default function AddUser() {
             });
         }
     }
-    const handleClear = () => {
-        // console.log("ค่าที่กรอกในฟอร์ม: ", input); 
-        // if(!input.firstname || !input.lastname || !input.nickname  ){
-        //     alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
-            
-        // }
-        // else{
-        //     setinput({
-        //         firstname:'',
-        //         lastname:'',
-        //         nickname:'',
-        //     });
-        // }
-        // // router.push('/');
-    };
+
 
     return (
     <View style={style.container}>
@@ -72,7 +64,7 @@ export default function AddUser() {
         {/* <Forminput label = 'Lastname'placeholder='lastname...'values ={input.lastname}></Forminput>
         <Forminput label = 'Nickname'placeholder='Nickname...'values ={input.nickname}></Forminput> */}
         <CustomButton Onpress={handleSubmit} title='Add User'></CustomButton>
-        <CustomButton Onpress={handleClear} title='Check'></CustomButton>
+        <CustomButton Onpress={() => {router.push('/')}} title='Back'></CustomButton>
     </SafeAreaView>
     </ImageBackground>
     </View>
