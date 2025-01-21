@@ -1,7 +1,7 @@
 import { View, Text,StyleSheet, Button } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
+import { router } from 'expo-router'
 interface userCompoProps{
     name : string,
     lastname: string,
@@ -14,8 +14,8 @@ const userCompo = ({name,lastname,nickname}:userCompoProps) => {
     <View >
         <Text>Name: {name} {lastname} | {nickname}</Text>
     </View>
-    <Button title="edit"></Button>
-    <Button title="delete"></Button>
+    <Button title="edit" onPress={()=> router.push(`/(auth)/editUser`) }></Button>
+    <Button title="delete" ></Button>
 
     </SafeAreaView>
  

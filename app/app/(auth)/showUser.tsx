@@ -37,6 +37,7 @@ export default function showUser() {
         
         <Text style={style.titletext} >ดูข้อมูล User</Text>
         <FlatList 
+            scrollEnabled = {false}
             data = {datauser}   
             renderItem={({ item }) => <UserCompo name={item.firstname} lastname={item.lastname} nickname={item.nickname} />}
             ItemSeparatorComponent={() => <View style={{height: 20}}/>}
