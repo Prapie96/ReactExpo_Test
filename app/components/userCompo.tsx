@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet, Button } from 'react-native'
+import { View, Text,StyleSheet, Button,Alert } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -12,6 +12,16 @@ interface userCompoProps{
 }
 
 const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
+    const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
+            {
+                text: 'ยืนยัน',
+                onPress: () => deleteuser(userId),
+            },
+            {
+                text:'ยกเลิก',
+                onPress: () => console.log('Cancel Pressed'),
+            }
+        ]);
     
     const deleteuser = (id:number) =>{
         const getid = {userid: id}
@@ -37,7 +47,7 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
         <Text>Name: {firstname} {lastname} | {nickname}</Text>
     </View>
     <Button title="edit" onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}}) }></Button>
-    <Button title="delete" onPress={() => deleteuser(userId)}></Button>
+    <Button title="delete" onPress={deleteAlert}></Button>
 
     </SafeAreaView>
  
