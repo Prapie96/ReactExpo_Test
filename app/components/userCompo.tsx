@@ -1,8 +1,8 @@
-import { View, Text,StyleSheet, Button,Alert } from 'react-native'
+import { View, Text,StyleSheet, Button,Alert, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-
+import CustomButton from './CustomButton'
 interface userCompoProps{
     firstname : string,
     lastname: string,
@@ -43,13 +43,20 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
   
     return (
     <SafeAreaView style={style.container}>
-    <View >
-        <Text>{nickname}</Text>
+    <View style={style.viewcontainer}>
+        <Text style={style.textnickname}>{nickname}</Text>
         <Text>Name: {firstname} {lastname} </Text>
     </View>
-    <Button title="edit" onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}}) }></Button>
-    <Button title="delete" onPress={deleteAlert}></Button>
-
+    <View style={style.viewbutton}>
+    <TouchableOpacity style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
+        <Text> EDIT </Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={style.buttoncontainer} onPress={deleteAlert}>
+        <Text> delete </Text>
+    </TouchableOpacity>
+    </View>
+    
+    
     </SafeAreaView>
  
   )
@@ -57,18 +64,36 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
 
 const style = StyleSheet.create({
     container:{
-        backgroundColor:'#C5BAFF',
-        paddingBottom:20,
-        paddingHorizontal:9,
-        alignItems:'center',
-        borderRadius:21,
-        flexDirection: 'row',
-        gap:10,
+       
+       backgroundColor:'#C5BAFF',
+       borderRadius:20,
+       paddingBottom:30,
+       paddingHorizontal:20,
+       flex:2,
+       flexDirection:'row',
+       justifyContent: 'space-between',
+       flexWrap: 'wrap'
     },
     viewcontainer:{
-        flex: 1,
+        width: '50%',
+    },
+    viewbutton:{
+        width: '50%',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
         
-    }
+    },
+    buttoncontainer:{
+        backgroundColor: '#C4D9FF',
+        padding: 10,
+        justifyContent:'center',
+        borderRadius: 5
+    },
+    textnickname:{
+        fontSize:16,
+        
+    },
+    
 });
 
 

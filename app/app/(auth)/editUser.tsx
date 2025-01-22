@@ -75,7 +75,7 @@ const style = StyleSheet.create({
         paddingLeft:30,
         paddingRight:30,
         flexDirection: 'column',
-        gap: 2
+        
     },
     titletext:{
         fontSize: 32,

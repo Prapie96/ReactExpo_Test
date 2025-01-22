@@ -12,7 +12,7 @@ export default function index() {
       <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 
       <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
-        <Text style={styles.titleText}>Welcome,Pie</Text>
+        <Text style={styles.titleText}>Welcome,Admin</Text>
         <Text>Welcome to applicion to handle users in systems</Text>
         <Text>select the button to choose menu.</Text>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     gap: 10,
     height: '100%',
+    paddingHorizontal:20
   },
   titleText:{
     fontSize:34,
@@ -46,14 +47,6 @@ const styles = StyleSheet.create({
 
 
 
-  // Circle:{
-  //   backgroundColor:'#c4d9ff',
-  //   width: 100,
-  //   height: 100,
-  //   borderRadius: 50,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   marginBottom: 20,
-  // }
+
 
 })
