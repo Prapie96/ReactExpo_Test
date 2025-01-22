@@ -2,14 +2,16 @@ import { View, Text,StyleSheet, Button } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
+
 interface userCompoProps{
-    name : string,
+    firstname : string,
     lastname: string,
     nickname: string,
     userId: number,
+    fecthdata: () => void;
 }
 
-const userCompo = ({name,lastname,nickname,userId}:userCompoProps) => {
+const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
     
     const deleteuser = (id:number) =>{
         const getid = {userid: id}
@@ -23,17 +25,18 @@ const userCompo = ({name,lastname,nickname,userId}:userCompoProps) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(getid)
-        }).then(response => response.json()).then(result =>result).catch(err => console.error(err));
-        
+        }).then(response => response.json()).then(result =>{
+        }).catch(err => console.error(err));
+        fecthdata();
     }
   
   
     return (
     <SafeAreaView style={style.container}>
     <View >
-        <Text>Name: {name} {lastname} | {nickname}</Text>
+        <Text>Name: {firstname} {lastname} | {nickname}</Text>
     </View>
-    <Button title="edit" onPress={()=> router.push(`/(auth)/editUser`) }></Button>
+    <Button title="edit" onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}}) }></Button>
     <Button title="delete" onPress={() => deleteuser(userId)}></Button>
 
     </SafeAreaView>

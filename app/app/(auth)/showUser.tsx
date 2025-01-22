@@ -14,10 +14,14 @@ export default function showUser() {
         lastname: string;
         nickname: string;
     }
-
-    const [datauser,setdatauser] = useState<User[]>([]);
     
+    const [datauser,setdatauser] = useState<User[]>([]);
+    // const [datauser,setdatauser] = useState<User>({userid : 0,firstname:'',lastname:'',nickname:'',});
     useEffect(() => {
+        fecthdata(); //call fecthdata
+    },[])
+    //Create function to callback 
+    function fecthdata(){
         const api = 'http://192.168.1.106:3000/';
         fetch(api,{
             method:'GET',
@@ -26,8 +30,7 @@ export default function showUser() {
                 setdatauser(result);
             }
         }).catch(err => console.error(err));
-    },[])
-  
+    }
   
     return (
     <ScrollView style={style.container}>
@@ -39,11 +42,12 @@ export default function showUser() {
         <FlatList 
             scrollEnabled = {false}
             data = {datauser}   
-            renderItem={({ item }) => <UserCompo name={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} />}
+            renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} fecthdata={fecthdata} />}
             ItemSeparatorComponent={() => <View style={{height: 20}}/>}
         />
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
         <CustomButton Onpress={() => router.push('/')} title='Back'></CustomButton>
+        
     </SafeAreaView>
    
     </ScrollView>

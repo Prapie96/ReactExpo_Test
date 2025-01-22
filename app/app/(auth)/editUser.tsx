@@ -1,20 +1,58 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View,KeyboardAvoidingView } from 'react-native'
+import React, { useState,useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
-import { router } from 'expo-router'
+import { router,useLocalSearchParams } from 'expo-router'
 
 export default function editUser() {
+    const  params = useLocalSearchParams();
+
+    useEffect(()=>{ 
+        setinput((prevState) => ({
+            ...prevState, firstname: params.firstname.toString(),
+            lastname: params.lastname.toString(),nickname: params.nickname.toString(),
+            userid:params.userId as unknown as number,
+        }))
+    },[]);
+
+const [input,setinput] = useState({
+         firstname:'',
+         lastname:'',
+         nickname:'',
+         userid: 0,
+     });
+
+   
+    const handleChange = (fieldinput:string) =>(text:string)=>{
+        setinput((prevState) => ({
+            ...prevState,
+            [fieldinput]: text,
+          }));
+    }
+    const editpress = async() =>{
+        console.log(input.userid);
+        const api = `http://192.168.1.106:3000/edit/`
+        await fetch(api,{
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(input)
+        }).then(response => response.json()).then(result => console.log('edit change success')).catch(err => console.error(err));
+        router.push('/(auth)/showUser');
+    }
+
   return (
     <SafeAreaView>
         <View>
         <Text style={style.titletext} >แก้ไขข้อมูล User</Text>
-        {/* <Forminput label='Firstname' placeholder='firstname...'></Forminput>
-        <Forminput label = 'Lastname'placeholder='lastname...'></Forminput>
-        <Forminput label = 'Nickname'placeholder='Nickname...'></Forminput> */}
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Back'></CustomButton>
+        <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
+        <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
+        <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
+        <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
+        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back'></CustomButton>
         </View>
     </SafeAreaView>
   )

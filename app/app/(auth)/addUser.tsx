@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
@@ -31,7 +31,7 @@ export default function AddUser() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                result
+                body: JSON.stringify(input)
             }).then(respond => respond.json()).then(result => {
                 if(result){
                     alert('Success to  Add New User');
@@ -48,6 +48,7 @@ export default function AddUser() {
 
 
     return (
+        
     <View style={style.container}>
         
     <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={style.bgimg}>  
