@@ -90,7 +90,7 @@ const style = StyleSheet.create({
         textAlign:'center',
     },
     bgimg:{
-        backgroundAttachment: 'fixed',
+       
         width: '100%',
         height:'100%',
         

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
@@ -45,8 +45,10 @@ const [input,setinput] = useState({
     }
 
   return (
-    <SafeAreaView>
-        <View>
+    
+    <View>
+        <ImageBackground source={require('@/assets/images/Frame1.jpg')}> 
+        <View style={style.viewcontain}>
         <Text style={style.titletext} >แก้ไขข้อมูล User</Text>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
@@ -54,7 +56,8 @@ const [input,setinput] = useState({
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
         <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back'></CustomButton>
         </View>
-    </SafeAreaView>
+        </ImageBackground>
+    </View>
   )
 }
 
