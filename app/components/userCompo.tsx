@@ -44,7 +44,8 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
     return (
     <SafeAreaView style={style.container}>
     <View >
-        <Text>Name: {firstname} {lastname} | {nickname}</Text>
+        <Text>{nickname}</Text>
+        <Text>Name: {firstname} {lastname} </Text>
     </View>
     <Button title="edit" onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}}) }></Button>
     <Button title="delete" onPress={deleteAlert}></Button>

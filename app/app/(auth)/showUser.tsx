@@ -43,7 +43,7 @@ export default function showUser() {
             scrollEnabled = {false}
             data = {datauser}   
             renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} fecthdata={fecthdata} />}
-            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
+            ItemSeparatorComponent={() => <View style={{height: 15}}/>}
         />
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
         <CustomButton Onpress={() => router.push('/')} title='Back'></CustomButton>
@@ -57,29 +57,20 @@ export default function showUser() {
 
 const style = StyleSheet.create({
     container:{
-        flex:1,
-        width:'100%',
-        height:'100%',
+       
         backgroundColor: '#E8F9FF',
     },
     viewcontain:{
         backgroundColor: '#FFFFFF',
-        
-        paddingHorizontal:20,
-        marginTop:100,
-        alignItems:'center',
-        gap:10,
-        
+        marginHorizontal: 15,
+        marginVertical:50,
+        padding:10,
+        borderRadius:10
     },
     titletext:{
         fontSize: 32,
         textAlign:'center',
-    },
-    bgimg:{
-        flex:1,
-        
-        paddingTop:36,
-        paddingHorizontal:13
+        marginBottom:25,
     },
    
 })
