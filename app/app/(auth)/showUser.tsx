@@ -39,7 +39,7 @@ export default function showUser() {
         <FlatList 
             scrollEnabled = {false}
             data = {datauser}   
-            renderItem={({ item }) => <UserCompo name={item.firstname} lastname={item.lastname} nickname={item.nickname} />}
+            renderItem={({ item }) => <UserCompo name={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} />}
             ItemSeparatorComponent={() => <View style={{height: 20}}/>}
         />
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>

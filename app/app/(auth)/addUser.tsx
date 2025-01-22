@@ -31,10 +31,7 @@ export default function AddUser() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({firstname:input.firstname,
-                    lastname:input.lastname,
-                    nickname:input.nickname
-                })
+                result
             }).then(respond => respond.json()).then(result => {
                 if(result){
                     alert('Success to  Add New User');
@@ -60,8 +57,6 @@ export default function AddUser() {
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
-        {/* <Forminput label = 'Lastname'placeholder='lastname...'values ={input.lastname}></Forminput>
-        <Forminput label = 'Nickname'placeholder='Nickname...'values ={input.nickname}></Forminput> */}
         <CustomButton Onpress={handleSubmit} title='Add User'></CustomButton>
         <CustomButton Onpress={() => {router.push('/')}} title='Back'></CustomButton>
     </SafeAreaView>
