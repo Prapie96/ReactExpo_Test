@@ -40,7 +40,12 @@ const [input,setinput] = useState({
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify(input)
-        }).then(response => response.json()).then(result => console.log('edit change success')).catch(err => console.error(err));
+        }).then(response => response.json()).then(result => {
+            if(result){
+                console.log("Success Edit User")
+            }})
+            .catch(err => console.error(err)
+        );
         router.push('/(auth)/showUser');
     }
 

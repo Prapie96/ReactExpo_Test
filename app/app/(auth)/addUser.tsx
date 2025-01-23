@@ -1,11 +1,11 @@
-import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView, Alert, ScrollView } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView, Alert, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
 import { useState } from 'react'
-
+import * as ImagePicker from 'expo-image-picker';
 interface adduserprop{
     style ?: React.ComponentProps<typeof View>['style'],
 
@@ -64,28 +64,55 @@ export default function AddUser() {
             onPress: () => console.log('Stay at to addUserPage'),
         }
     ])
-    return (
+    const [status, requestPermission] = ImagePicker.useCameraPermissions();
+    const [image,setImage] = useState<string | null>(null);
+    const pickImage = async() =>{
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images','videos'],
+        allowsEditing: false,
+        aspect : [4,3],
+        quality: 1
+    });
+    console.log(result);
+    if(!result.canceled){
+        setImage(result.assets[0].uri)
+    }
     
+    }
+
+    return (
+        // {image && <Image source={{uri: image}}style={styles.image}/>}
     <KeyboardAvoidingView style={styles.container}>
     <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={styles.bgimg}>  
     <SafeAreaView style={styles.viewcontain} >
         <Text style={styles.titletext} >กรอกข้อมูล User</Text>
+        <View style={styles.containerimgpick} onTouchStart={pickImage}>
+            {image && <Image style={styles.image} source={{uri : image}}/>}
+        </View>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
-      
-        <CustomButton Onpress={handleSubmit} title='Add User' style={{
+        <CustomButton Onpress={handleSubmit} title='Add User' textstyle={{
+          color:'#FFFFFF',
+          
+        }}
+        style={{
+            backgroundColor: '#C5BAFF',
             
-        }}></CustomButton>
-        <CustomButton Onpress={() => {router.push('/')}} title='Back'
-            style={{
-                backgroundColor: '#FFFFFF',
-                borderWidth:1,
-        }}>
+    }}  >
         </CustomButton>
+        <CustomButton Onpress={() => {router.push('/')}} title='Back'
+            
+        textstyle={{
+            color:'#FFFFFF',
+          }} >
+        </CustomButton>
+        {/* <CustomButton Onpress={pickImage} title='Picture'></CustomButton> */}
+        
+        
     </SafeAreaView>
     </ImageBackground>
-    </KeyboardAvoidingView  >
+    </KeyboardAvoidingView>
     
   )
 }
@@ -99,23 +126,37 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        marginTop: 130,
+        marginTop: 100,
         width: '100%',
         height: '100%',
         paddingTop:5,
         paddingLeft:30,
         paddingRight:30,
-        gap: 2
+        gap: 2,
         
+    },
+    containerimgpick:{
+        borderWidth:1,
+        width: '50%',
+        height:'20%',
+        alignItems:'center',
+        marginTop:20,
+        marginHorizontal: '25%',
+        backgroundColor:'#EAEAEA',
     },
     titletext:{
         fontSize: 32,
         textAlign:'center',
+        
     },
     bgimg:{
-       
         width: '100%',
         height:'100%',
+       
+    },
+    image: {
+        width:'100%',
+        height:'100%'
         
-    }
+      },
 })

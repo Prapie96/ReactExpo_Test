@@ -45,7 +45,9 @@ export default function showUser() {
             renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} fecthdata={fecthdata} />}
             ItemSeparatorComponent={() => <View style={{height: 15}}/>}
         />
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
+        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User' textstyle={{
+          color:'#FFFFFF',
+        }}></CustomButton>
         <CustomButton Onpress={() => router.push('/')} title='Back' style={{
             backgroundColor: '#FFFFF',
             borderWidth:1,

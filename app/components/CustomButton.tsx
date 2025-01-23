@@ -1,14 +1,15 @@
-import { View,ViewStyle, Text, TouchableOpacity,StyleSheet, StyleProp } from 'react-native'
+import { View, Text, TouchableOpacity,StyleSheet, StyleProp } from 'react-native'
 import React from 'react'
 
 interface CustomButtonProps{
     Onpress: () => void; //Event Press
     title: string, // text on button
     style ?: React.ComponentProps<typeof View>['style'];
+    textstyle ? : React.ComponentProps<typeof Text>['style'];
 }
 
 
-const CustomButton = ({Onpress,title,style}:CustomButtonProps) => {
+const CustomButton = ({Onpress,title,style,textstyle}:CustomButtonProps) => {
   return (
     <TouchableOpacity activeOpacity={0.7} 
       style={[
@@ -16,7 +17,7 @@ const CustomButton = ({Onpress,title,style}:CustomButtonProps) => {
         style
       ]}
       onPress={Onpress} >
-      <Text style={styles.buttontext}>{title}</Text>
+      <Text style={[styles.buttontext,textstyle]}>{title}</Text>
       
     </TouchableOpacity>
   );
