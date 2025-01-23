@@ -13,6 +13,7 @@ export default function showUser() {
         firstname: string;
         lastname: string;
         nickname: string;
+        img: string;
     }
     
     const [datauser,setdatauser] = useState<User[]>([]);
@@ -42,7 +43,7 @@ export default function showUser() {
         <FlatList 
             scrollEnabled = {false}
             data = {datauser}   
-            renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} fecthdata={fecthdata} />}
+            renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid} img={item.img} fecthdata={fecthdata} />}
             ItemSeparatorComponent={() => <View style={{height: 15}}/>}
         />
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User' textstyle={{

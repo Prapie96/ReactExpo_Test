@@ -6,26 +6,36 @@ import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
-interface adduserprop{
-    style ?: React.ComponentProps<typeof View>['style'],
-
-}
-
+import * as FileSystem from 'expo-file-system';
 export default function AddUser() {
-  const [input,setinput] = useState({
+    const [input,setinput] = useState({
         firstname:'',
         lastname:'',
         nickname:'',
+        img:'',
     });
+    const [image,setImage] = useState<string | null>(null);
+    const setfileimg = (assets: ImagePicker.ImagePickerAsset[]) => {
+        if (assets.length > 0) {
+            setinput((prevState) => ({
+                ...prevState,
+                img: assets[0].uri,
+            }));
+        }
+        else{
+            console.log('Where img')
+        }
+    }
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
             ...prevState,
             [fieldinput]: text,
           }));
     }
+
     const handleSubmit=async () =>{
         console.log("ค่าที่กรอกในฟอร์ม: ", input);  
-        if(!input.firstname || !input.lastname || !input.nickname  ){
+        if(!input.firstname || !input.lastname || !input.nickname ||!input.img ){
             alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
         }
         else{
@@ -48,6 +58,7 @@ export default function AddUser() {
                 firstname:'',
                 lastname:'',
                 nickname:'',
+                img:''
             });
         }
     }
@@ -64,8 +75,8 @@ export default function AddUser() {
             onPress: () => console.log('Stay at to addUserPage'),
         }
     ])
-    const [status, requestPermission] = ImagePicker.useCameraPermissions();
-    const [image,setImage] = useState<string | null>(null);
+   
+   
     const pickImage = async() =>{
     let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images','videos'],
@@ -76,10 +87,11 @@ export default function AddUser() {
     console.log(result);
     if(!result.canceled){
         setImage(result.assets[0].uri)
+        setfileimg(result.assets);
     }
-    
+   
     }
-
+   
     return (
         // {image && <Image source={{uri: image}}style={styles.image}/>}
     <KeyboardAvoidingView style={styles.container}>

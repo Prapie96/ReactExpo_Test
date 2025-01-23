@@ -1,17 +1,19 @@
-import { View, Text,StyleSheet, Button,Alert, TouchableOpacity } from 'react-native'
+import { View, Text,StyleSheet, Button,Alert, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import CustomButton from './CustomButton'
+import * as ImagePicker from 'expo-image-picker';
 interface userCompoProps{
     firstname : string,
     lastname: string,
     nickname: string,
     userId: number,
+    img: string,
     fecthdata: () => void;
 }
 
-const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
+const userCompo = ({firstname,lastname,nickname,userId,img,fecthdata}:userCompoProps) => {
     const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
             {
                 text: 'ยืนยัน',
@@ -44,8 +46,10 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
     return (
     <SafeAreaView style={style.container}>
     <View style={style.viewcontainer}>
+    <View>{img && <Image source={{uri: img}} style={style.image} />}</View>
         <Text style={style.textnickname}>{nickname}</Text>
         <Text>Name: {firstname} {lastname} </Text>
+        
     </View>
     <View style={style.viewbutton}>
     <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
@@ -97,7 +101,11 @@ const style = StyleSheet.create({
     textnickname:{
         fontSize:16,
         
-    },
+    },image: {
+        width:'100%',
+        height:'100%'
+        
+      }
     
 });
 
