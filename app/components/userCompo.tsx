@@ -48,10 +48,10 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
         <Text>Name: {firstname} {lastname} </Text>
     </View>
     <View style={style.viewbutton}>
-    <TouchableOpacity style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
+    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
         <Text> EDIT </Text>
     </TouchableOpacity>
-    <TouchableOpacity style={style.buttoncontainer} onPress={deleteAlert}>
+    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={deleteAlert}>
         <Text> delete </Text>
     </TouchableOpacity>
     </View>
@@ -80,14 +80,19 @@ const style = StyleSheet.create({
     viewbutton:{
         width: '50%',
         flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        gap: 10
         
     },
     buttoncontainer:{
-        backgroundColor: '#C4D9FF',
-        padding: 10,
+        backgroundColor: '#FFFFFF',
         justifyContent:'center',
-        borderRadius: 5
+        borderRadius: 5,
+        borderWidth:1,
+        width: '50%',
+         height:'100%',
+         textAlign:'center',
+         alignItems:'center',
+    
     },
     textnickname:{
         fontSize:16,

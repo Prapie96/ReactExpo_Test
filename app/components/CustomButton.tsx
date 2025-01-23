@@ -1,23 +1,29 @@
-import { View, Text, TouchableOpacity,StyleSheet } from 'react-native'
+import { View,ViewStyle, Text, TouchableOpacity,StyleSheet, StyleProp } from 'react-native'
 import React from 'react'
 
 interface CustomButtonProps{
     Onpress: () => void; //Event Press
     title: string, // text on button
-    // containerStyles? : string, //css 
+    style ?: React.ComponentProps<typeof View>['style'];
 }
 
 
-const CustomButton = ({Onpress,title}:CustomButtonProps) => {
+const CustomButton = ({Onpress,title,style}:CustomButtonProps) => {
   return (
-    <TouchableOpacity activeOpacity={0.7} style={style.containbutton} onPress={Onpress}>
-      <Text style={style.buttontext}>{title}</Text>
+    <TouchableOpacity activeOpacity={0.7} 
+      style={[
+        styles.containbutton,
+        style
+      ]}
+      onPress={Onpress} >
+      <Text style={styles.buttontext}>{title}</Text>
+      
     </TouchableOpacity>
   );
 }
 
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     containbutton:{
         color: '#FFFFFF',
         padding: 10,

@@ -46,7 +46,10 @@ export default function showUser() {
             ItemSeparatorComponent={() => <View style={{height: 15}}/>}
         />
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/')} title='Back'></CustomButton>
+        <CustomButton Onpress={() => router.push('/')} title='Back' style={{
+            backgroundColor: '#FFFFF',
+            borderWidth:1,
+        }}></CustomButton>
         
     </SafeAreaView>
    

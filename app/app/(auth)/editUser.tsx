@@ -54,7 +54,10 @@ const [input,setinput] = useState({
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back'></CustomButton>
+        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{
+            backgroundColor: '#FFFFFF',
+            borderWidth:1,
+        }}></CustomButton>
         </View>
         </ImageBackground>
     </View>
