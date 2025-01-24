@@ -9,11 +9,10 @@ interface userCompoProps{
     lastname: string,
     nickname: string,
     userId: number,
-    img: string,
     fecthdata: () => void;
 }
 
-const userCompo = ({firstname,lastname,nickname,userId,img,fecthdata}:userCompoProps) => {
+const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
     const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
             {
                 text: 'ยืนยัน',
@@ -46,7 +45,6 @@ const userCompo = ({firstname,lastname,nickname,userId,img,fecthdata}:userCompoP
     return (
     <SafeAreaView style={style.container}>
     <View style={style.viewcontainer}>
-    <View>{img && <Image source={{uri: img}} style={style.image} />}</View>
         <Text style={style.textnickname}>{nickname}</Text>
         <Text>Name: {firstname} {lastname} </Text>
         

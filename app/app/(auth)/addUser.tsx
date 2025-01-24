@@ -12,20 +12,20 @@ export default function AddUser() {
         firstname:'',
         lastname:'',
         nickname:'',
-        img:'',
+        
     });
     const [image,setImage] = useState<string | null>(null);
-    const setfileimg = (assets: ImagePicker.ImagePickerAsset[]) => {
-        if (assets.length > 0) {
-            setinput((prevState) => ({
-                ...prevState,
-                img: assets[0].uri,
-            }));
-        }
-        else{
-            console.log('Where img')
-        }
-    }
+    // const setfileimg = (assets: ImagePicker.ImagePickerAsset[]) => {
+    //     if (assets.length > 0) {
+    //         setinput((prevState) => ({
+    //             ...prevState,
+    //             img: assets[0].uri,
+    //         }));
+    //     }
+    //     else{
+    //         console.log('Where img')
+    //     }
+    // }
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
             ...prevState,
@@ -35,7 +35,7 @@ export default function AddUser() {
 
     const handleSubmit=async () =>{
         console.log("ค่าที่กรอกในฟอร์ม: ", input);  
-        if(!input.firstname || !input.lastname || !input.nickname ||!input.img ){
+        if(!input.firstname || !input.lastname || !input.nickname){
             alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
         }
         else{
@@ -58,7 +58,7 @@ export default function AddUser() {
                 firstname:'',
                 lastname:'',
                 nickname:'',
-                img:''
+                
             });
         }
     }
@@ -87,7 +87,7 @@ export default function AddUser() {
     console.log(result);
     if(!result.canceled){
         setImage(result.assets[0].uri)
-        setfileimg(result.assets);
+        // setfileimg(result.assets);
     }
    
     }
