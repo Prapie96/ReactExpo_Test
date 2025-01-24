@@ -23,16 +23,16 @@ export default function showUser() {
     },[])
     //Create function to callback 
     function fecthdata(){
-        const api = 'http://192.168.1.106:3000/';
+        const api = 'http://192.168.1.106:3000/getuser';
         fetch(api,{
-            method:'GET',
+            method:'POST',
         }).then(response => response.json()).then(result => {
             if(result){
                 setdatauser(result);
             }
         }).catch(err => console.error(err));
     }
-  
+    
     return (
     <ScrollView style={style.container}>
         

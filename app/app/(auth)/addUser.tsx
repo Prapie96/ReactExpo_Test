@@ -1,31 +1,52 @@
-import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView, Alert, TouchableOpacity, Image } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView, Alert, TouchableOpacity, Image, ImageProps } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+
 export default function AddUser() {
     const [input,setinput] = useState({
         firstname:'',
         lastname:'',
         nickname:'',
-        
+        img:'',
     });
-    const [image,setImage] = useState<string | null>(null);
+     const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult >();
     // const setfileimg = (assets: ImagePicker.ImagePickerAsset[]) => {
     //     if (assets.length > 0) {
     //         setinput((prevState) => ({
     //             ...prevState,
-    //             img: assets[0].uri,
+    //             img:{
+    //                 uri: assets[0].uri,
+    //                 name: assets[0].fileName || '',
+    //                 type: assets[0].type || '',
+    //             },
     //         }));
     //     }
     //     else{
     //         console.log('Where img')
     //     }
     // }
+
+    // const handleImagePicker =(option: ImagePicker.ImagePickerResult)=>{
+    //         if (option.assets && option.assets.length > 0) {
+    //             setinput((prevState) => ({
+    //                 ...prevState,
+    //                 img:{
+    //                     uri: option.assets[0].uri,
+    //                     name: option.assets[0].fileName || option.assets[0].uri.split("/").pop() || "default_name.jpg"  ,
+    //                     type: option.assets[0].type || "image/jpeg",
+    //                 },
+    //             }));
+    //         }
+           
+    //     }
+
+
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
             ...prevState,
@@ -34,20 +55,32 @@ export default function AddUser() {
     }
 
     const handleSubmit=async () =>{
-        console.log("ค่าที่กรอกในฟอร์ม: ", input);  
+         console.log(image);  
         if(!input.firstname || !input.lastname || !input.nickname){
             alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
         }
         else{
-            console.log("Into else to fect")
+            const formdata = new FormData();
+            const fileName = image?.assets[0].uri.split('/').pop();
+            formdata.append("firstname",input.firstname);
+            formdata.append("lastname",input.lastname);
+            formdata.append("nickname",input.nickname);
+            formdata.append("img",{
+                uri:image?.assets[0].uri,
+                name: fileName,
+                type: image?.assets[0].mimeType,
+            }as any)
+            console.log("Into else to fect");
+            console.log(formdata);
             const api = 'http://192.168.1.106:3000/regisuser';
             await fetch(api,{
                 method:'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/json'
+                      "Content-Type": "multipart/form-data",
                 },
-                body: JSON.stringify(input)
+                body: formdata
             }).then(respond => respond.json()).then(result => {
                 if(result){
                     alertShow();
@@ -58,7 +91,7 @@ export default function AddUser() {
                 firstname:'',
                 lastname:'',
                 nickname:'',
-                
+                img:'',
             });
         }
     }
@@ -86,8 +119,13 @@ export default function AddUser() {
     });
     console.log(result);
     if(!result.canceled){
-        setImage(result.assets[0].uri)
+        setinput((prevState) => ({
+            ...prevState,
+           img: result.assets[0].uri,
+          }));
+         setImage(result);
         // setfileimg(result.assets);
+       // handleImagePicker(result)
     }
    
     }
@@ -99,7 +137,7 @@ export default function AddUser() {
     <SafeAreaView style={styles.viewcontain} >
         <Text style={styles.titletext} >กรอกข้อมูล User</Text>
         <View style={styles.containerimgpick} onTouchStart={pickImage}>
-            {image && <Image style={styles.image} source={{uri : image}}/>}
+            {input.img && <Image style={styles.image} source={{uri : input.img}}/>}
         </View>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
