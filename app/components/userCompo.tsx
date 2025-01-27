@@ -10,19 +10,11 @@ interface userCompoProps{
     nickname: string,
     userId: number,
     fecthdata: () => void;
+  
 }
 
 const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
-    const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
-            {
-                text: 'ยืนยัน',
-                onPress: () => deleteuser(userId),
-            },
-            {
-                text:'ยกเลิก',
-                onPress: () => console.log('Cancel Pressed'),
-            }
-        ]);
+    
     
     const deleteuser = (id:number) =>{
         const getid = {userid: id}
@@ -41,7 +33,7 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
         fecthdata();
     }
   
-  
+    const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userId}
     return (
     <SafeAreaView style={style.container}>
     <View style={style.viewcontainer}>
@@ -50,11 +42,14 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
         
     </View>
     <View style={style.viewbutton}>
-    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
+    {/* <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
         <Text> EDIT </Text>
-    </TouchableOpacity>
-    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={deleteAlert}>
+    </TouchableOpacity> */}
+    {/* <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={deleteAlert}>
         <Text> delete </Text>
+    </TouchableOpacity> */}
+    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={() =>router.push({pathname:'/(auth)/seeDetail',params:userinfo})}>
+        <Text> see details </Text>
     </TouchableOpacity>
     </View>
     

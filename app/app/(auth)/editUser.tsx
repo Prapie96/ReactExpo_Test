@@ -12,18 +12,18 @@ export default function editUser() {
         setinput((prevState) => ({
             ...prevState, firstname: params.firstname.toString(),
             lastname: params.lastname.toString(),nickname: params.nickname.toString(),
-            userid:params.userId as unknown as number,
+            userid:params.userid as unknown as number,
         }))
     },[]);
 
 const [input,setinput] = useState({
-         firstname:'',
-         lastname:'',
-         nickname:'',
-         userid: 0,
-     });
+    firstname: '',
+    lastname: '',
+    nickname: '',
+    userid: 0,
+});
 
-   
+    
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
             ...prevState,
@@ -32,7 +32,7 @@ const [input,setinput] = useState({
     }
     const editpress = async() =>{
         console.log(input.userid);
-        const api = `http://192.168.1.106:3000/edit/`
+        const api = `http://192.168.1.106:3000/edit`
         await fetch(api,{
             method: 'PUT',
             headers: {
@@ -42,11 +42,13 @@ const [input,setinput] = useState({
             body:JSON.stringify(input)
         }).then(response => response.json()).then(result => {
             if(result){
-                console.log("Success Edit User")
+                console.log(result.firstname),
+                setinput(result);
+                router.push({pathname:'/(auth)/seeDetail',params:input})
             }})
             .catch(err => console.error(err)
         );
-        router.push('/(auth)/showUser');
+        
     }
 
   return (
@@ -54,7 +56,7 @@ const [input,setinput] = useState({
     <View>
         <ImageBackground source={require('@/assets/images/Frame1.jpg')}> 
         <View style={style.viewcontain}>
-        <Text style={style.titletext} >แก้ไขข้อมูล User</Text>
+        <Text style={style.titletext} >แก้ไขข้อมูล User{input.userid}</Text>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>

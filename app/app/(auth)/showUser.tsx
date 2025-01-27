@@ -22,9 +22,9 @@ export default function showUser() {
         fecthdata(); //call fecthdata
     },[])
     //Create function to callback 
-    function fecthdata(){
+   async function fecthdata(){
         const api = 'http://192.168.1.106:3000/getuser';
-        fetch(api,{
+      await  fetch(api,{
             method:'POST',
         }).then(response => response.json()).then(result => {
             if(result){

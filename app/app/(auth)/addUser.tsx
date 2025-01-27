@@ -124,8 +124,6 @@ export default function AddUser() {
            img: result.assets[0].uri,
           }));
          setImage(result);
-        // setfileimg(result.assets);
-       // handleImagePicker(result)
     }
    
     }
