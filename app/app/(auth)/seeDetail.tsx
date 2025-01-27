@@ -1,21 +1,37 @@
 import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 
+interface userimg{
+  uri: string;
+}
 export default function seeDetail() {
-  const params = useLocalSearchParams();
-  console.log(params);
-  const [userdata,setuserdata] =useState();
+
+  const {user} = useLocalSearchParams();
+  const [userdata, setuserdata] = useState<userimg>();
+  console.log(JSON.parse(user.toString()));
+  const params = JSON.parse(user.toString())
+  console.log(`userdata : ${userdata?.uri}`);
   const fecthdata =async () =>{
-    const api = 'http://192.168.1.106:3000getuserbyid';
+    const api = 'http://192.168.1.106:3000/img';
     await fetch(api,{
       method:'POST',
       headers:{'Accept': 'application/json','Content-Type': 'application/json'},
-      body: JSON.stringify(params.userid)
+      body: JSON.stringify({userid:params.userid})
     }).then(response => response.json())
-      .then(result => setuserdata(result))
+      .then(result => {
+        if(result){
+          console.log(result);
+          setuserdata(result);
+        }
+      })
       .catch(err => console.error(err));
   }
+ 
+  useEffect(()=>{
+    fecthdata();
+  },[])
+
   const deleteuser = () =>{
     const getid = {userid: params.userid}
     console.log("userid :"+ getid.userid);
@@ -28,7 +44,13 @@ export default function seeDetail() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(getid)
-    }).then(response => response.json()).then(result =>{router.push('/(auth)/showUser')
+    }).then(response => response.json()).then(result =>{
+      if(result){
+      router.push('/(auth)/showUser');
+      }
+      else{
+        console.log('Something Error result != true');
+      }
     }).catch(err => console.error(err));
 }
 const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
@@ -49,7 +71,7 @@ const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้อง�
         </View>
          <SafeAreaView style={styles.container}>
           <View style={styles.profile}>
-            <Image source={require('@/assets/images/Monster.png')}></Image>
+            {userdata && <Image style={styles.bgimg} source={{uri: userdata.uri}} ></Image>}
           </View>
           <View >
             <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
@@ -80,17 +102,17 @@ const styles = StyleSheet.create({
     alignItems:'center',
     flexDirection:'column',
     gap:10,
-    marginTop:50,
+    marginTop:80,
   },
   profile:{
     borderWidth:1,
-    width:'50%',
+    width:'80%',
     height:'50%',
     backgroundColor:'#EAEAEA',
     alignItems:'center'  
   },
   font:{
-    fontSize:18
+    fontSize:18,
   },
   buttoncontainer:{
     backgroundColor: '#FFFFFF',

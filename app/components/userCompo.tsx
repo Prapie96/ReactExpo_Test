@@ -14,32 +14,13 @@ interface userCompoProps{
 }
 
 const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
-    
-    
-    const deleteuser = (id:number) =>{
-        const getid = {userid: id}
-        console.log("userid :"+ getid.userid);
-        const api = `http://192.168.1.106:3000/deleteuser`;
-
-        fetch(api,{
-            method:'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(getid)
-        }).then(response => response.json()).then(result =>{
-        }).catch(err => console.error(err));
-        fecthdata();
-    }
-  
+      
     const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userId}
     return (
     <SafeAreaView style={style.container}>
     <View style={style.viewcontainer}>
         <Text style={style.textnickname}>{nickname}</Text>
         <Text>Name: {firstname} {lastname} </Text>
-        
     </View>
     <View style={style.viewbutton}>
     {/* <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
@@ -48,12 +29,10 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
     {/* <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={deleteAlert}>
         <Text> delete </Text>
     </TouchableOpacity> */}
-    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={() =>router.push({pathname:'/(auth)/seeDetail',params:userinfo})}>
+    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={() =>router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
         <Text> see details </Text>
     </TouchableOpacity>
     </View>
-    
-    
     </SafeAreaView>
  
   )
@@ -61,15 +40,15 @@ const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps
 
 const style = StyleSheet.create({
     container:{
-       
-       backgroundColor:'#C5BAFF',
-       borderRadius:20,
-       paddingBottom:30,
-       paddingHorizontal:20,
-       flex:2,
-       flexDirection:'row',
-       justifyContent: 'space-between',
-       flexWrap: 'wrap'
+        
+        borderRadius:20,
+        paddingBottom:30,
+        paddingHorizontal:20,
+        flex:2,
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        borderWidth:1
     },
     viewcontainer:{
         width: '50%',

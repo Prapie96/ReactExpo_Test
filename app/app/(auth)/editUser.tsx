@@ -10,7 +10,8 @@ export default function editUser() {
 
     useEffect(()=>{ 
         setinput((prevState) => ({
-            ...prevState, firstname: params.firstname.toString(),
+            ...prevState, 
+            firstname: params.firstname.toString(),
             lastname: params.lastname.toString(),nickname: params.nickname.toString(),
             userid:params.userid as unknown as number,
         }))
