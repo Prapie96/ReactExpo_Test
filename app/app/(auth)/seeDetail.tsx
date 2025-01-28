@@ -12,7 +12,7 @@ export default function seeDetail() {
   const [loading,setloading] = useState(false);
   const {user} = useLocalSearchParams();
   const [userdata, setuserdata] = useState<userimg>();
-  console.log(JSON.parse(user.toString()));
+  // console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString())
 
   useEffect(()=>{
@@ -21,7 +21,7 @@ export default function seeDetail() {
 
   const fecthdata =async () =>{
     setloading(true);
-    const api = 'http://192.168.1.106:3000/img';
+    const api = 'http://192.168.1.57:3000/img';
     await fetch(api,{
       method:'POST',
       headers:{'Accept': 'application/json','Content-Type': 'application/json'},
@@ -42,7 +42,7 @@ export default function seeDetail() {
     setloading(true);
     const getid = {userid: params.userid}
     console.log("userid :"+ getid.userid);
-    const api = `http://192.168.1.106:3000/deleteuser`;
+    const api = `http://192.168.1.57:3000/deleteuser`;
 
     fetch(api,{
         method:'DELETE',
@@ -75,11 +75,6 @@ export default function seeDetail() {
   return (
       <View>
         <ImageBackground source={require('@/assets/images/bg-expoproject.png')} style={styles.bgimg}> 
-        <Spinner
-          visible={loading}
-          textContent={'Loading Fecth All User...'}
-          textStyle={{ color: '#FFF'}}
-        />
         <View style={{position:'relative'}}>
         <Text style={[styles.xsymbol,{fontSize:46}]} onPress={()=>{router.push('/(auth)/showUser')}} >{'\u2717'}</Text>
         </View>
@@ -90,7 +85,8 @@ export default function seeDetail() {
           textStyle={styles.spinnerTextStyle}
         />
           <View style={styles.profile}>
-            {userdata && <Image style={styles.bgimg}source={userdata?.uri ? { uri: userdata.uri } : require('@/assets/images/react-logo.png')}>
+            {userdata && <Image style={styles.bgimg} 
+            source={userdata?.uri ? { uri: userdata.uri} : require('@/assets/images/Frame1.jpg')} >
             </Image>}
           </View>
 

@@ -61,7 +61,7 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
                 type: image?.assets[0].mimeType,
             }as any)
             setloading(true);
-            const api = `http://192.168.1.106:3000/edit`
+            const api = `http://192.168.1.57:3000/edit`
             await fetch(api,{
                 method: 'PUT',
                 headers: {

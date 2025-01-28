@@ -44,7 +44,7 @@ export default function AddUser() {
             console.log("Into else to fect");
             console.log(formdata);
             setloading(true);
-            const api = 'http://192.168.1.106:3000/regisuser';
+            const api = 'http://192.168.1.57:3000/regisuser';
             await fetch(api,{
                 method:'POST',
                 headers: {
