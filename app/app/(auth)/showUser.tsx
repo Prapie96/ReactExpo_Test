@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View,ScrollView,FlatList } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,ScrollView,FlatList, RefreshControl } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
@@ -6,40 +6,52 @@ import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
 import UserCompo from '@/components/userCompo'
 import { useState,useEffect } from 'react'
+import Spinner from 'react-native-loading-spinner-overlay'
+interface User {
+    userid:number,
+    firstname: string;
+    lastname: string;
+    nickname: string;
+    
+}
 
 export default function showUser() {
-    interface User {
-        userid:number,
-        firstname: string;
-        lastname: string;
-        nickname: string;
-        
-    }
-    
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [loading,setloading] = useState(false);
     const [datauser,setdatauser] = useState<User[]>([]);
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+          fecthdata();
+    },[]);
     // const [datauser,setdatauser] = useState<User>({userid : 0,firstname:'',lastname:'',nickname:'',});
     useEffect(() => {
         fecthdata(); //call fecthdata
     },[])
     //Create function to callback 
    async function fecthdata(){
+
+        setloading(true);
         const api = 'http://192.168.1.106:3000/getuser';
-      await  fetch(api,{
-            method:'POST',
-        }).then(response => response.json()).then(result => {
-            if(result){
-                setdatauser(result);
-            }
-        }).catch(err => console.error(err));
+        await  fetch(api,{
+                method:'POST',
+            }).then(response => response.json()).then(result => {
+                if(result){
+                    setdatauser(result);
+                    setloading(false);
+                    setRefreshing(false);
+                }
+            }).catch(err => console.error(err));
     }
     
     return (
-    <ScrollView style={style.container}>
-        
-    
-    <SafeAreaView style={style.viewcontain} >
-        
-        <Text style={style.titletext} >ดูข้อมูล User</Text>
+    <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing ={refreshing} onRefresh={onRefresh}  progressBackgroundColor={'#C5BAFF'} />}>
+    <SafeAreaView style={styles.viewcontain} >
+    <Spinner
+          visible={loading}
+          textContent={'Loading Fecth All User...'}
+          textStyle={styles.spinnerTextStyle}
+        />
+        <Text style={styles.titletext} >ดูข้อมูล User</Text>
         <FlatList 
             scrollEnabled = {false}
             data = {datauser}   
@@ -61,7 +73,7 @@ export default function showUser() {
   )
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
        
         backgroundColor: '#E8F9FF',
@@ -78,5 +90,7 @@ const style = StyleSheet.create({
         textAlign:'center',
         marginBottom:25,
     },
-   
+    spinnerTextStyle: {
+        color: '#FFF'
+      },
 })

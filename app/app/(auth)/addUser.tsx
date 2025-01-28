@@ -7,6 +7,7 @@ import { router } from 'expo-router'
 import { useState,useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import Spinner from 'react-native-loading-spinner-overlay'
 
 export default function AddUser() {
     const [input,setinput] = useState({
@@ -15,38 +16,8 @@ export default function AddUser() {
         nickname:'',
         img:'',
     });
-     const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult >();
-    // const setfileimg = (assets: ImagePicker.ImagePickerAsset[]) => {
-    //     if (assets.length > 0) {
-    //         setinput((prevState) => ({
-    //             ...prevState,
-    //             img:{
-    //                 uri: assets[0].uri,
-    //                 name: assets[0].fileName || '',
-    //                 type: assets[0].type || '',
-    //             },
-    //         }));
-    //     }
-    //     else{
-    //         console.log('Where img')
-    //     }
-    // }
-
-    // const handleImagePicker =(option: ImagePicker.ImagePickerResult)=>{
-    //         if (option.assets && option.assets.length > 0) {
-    //             setinput((prevState) => ({
-    //                 ...prevState,
-    //                 img:{
-    //                     uri: option.assets[0].uri,
-    //                     name: option.assets[0].fileName || option.assets[0].uri.split("/").pop() || "default_name.jpg"  ,
-    //                     type: option.assets[0].type || "image/jpeg",
-    //                 },
-    //             }));
-    //         }
-           
-    //     }
-
-
+    const [loading,setloading] = useState(false);
+    const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult >();
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
             ...prevState,
@@ -72,6 +43,7 @@ export default function AddUser() {
             }as any)
             console.log("Into else to fect");
             console.log(formdata);
+            setloading(true);
             const api = 'http://192.168.1.106:3000/regisuser';
             await fetch(api,{
                 method:'POST',
@@ -86,8 +58,9 @@ export default function AddUser() {
                     alertShow();
                     return result;
                 }
-                }).catch(err => console.error(err));
-            setinput({
+                }).catch(err => console.error(err)).finally(()=>{setloading(false)});
+            
+                setinput({
                 firstname:'',
                 lastname:'',
                 nickname:'',
@@ -133,6 +106,11 @@ export default function AddUser() {
     <KeyboardAvoidingView style={styles.container}>
     <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={styles.bgimg}>  
     <SafeAreaView style={styles.viewcontain} >
+    <Spinner
+          visible={loading}
+          textContent={'Loading Fecth All User...'}
+          textStyle={{ color: '#FFF'}}
+        />
         <Text style={styles.titletext} >กรอกข้อมูล User</Text>
         <View style={styles.containerimgpick} onTouchStart={pickImage}>
             {input.img && <Image style={styles.image} source={{uri : input.img}}/>}

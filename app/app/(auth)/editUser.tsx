@@ -1,29 +1,42 @@
-import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground, Image } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
 import { router,useLocalSearchParams } from 'expo-router'
-
+import * as ImagePicker from 'expo-image-picker';
+import Spinner from 'react-native-loading-spinner-overlay'
+interface userdata{
+    firstname: string,
+    lastname: string,
+    nickname: string,
+    userid: string,
+    uri: string,
+}
 export default function editUser() {
-    const  params = useLocalSearchParams();
-
-    useEffect(()=>{ 
-        setinput((prevState) => ({
-            ...prevState, 
-            firstname: params.firstname.toString(),
-            lastname: params.lastname.toString(),nickname: params.nickname.toString(),
-            userid:params.userid as unknown as number,
-        }))
-    },[]);
-
-const [input,setinput] = useState({
-    firstname: '',
-    lastname: '',
-    nickname: '',
-    userid: 0,
-});
-
+    const [loading,setloading] = useState(false);
+    const  {user} = useLocalSearchParams();
+    const params = JSON.parse(user.toString())
+    const [input,setinput] = useState<userdata>({
+        firstname: '',
+        lastname: '',
+        nickname: '',
+        userid: '',
+        uri: '',
+    });
+    
+useEffect(()=>{ 
+    setinput((prevState) => ({
+        ...prevState, 
+        firstname: params.firstname,
+        lastname: params.lastname,
+        nickname: params.nickname,
+        userid:params.userid,
+        uri: params.uri,
+    }))
+},[]);
+const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
+console.log(`Got uri from seeDetailed : ${params.uri}`);
     
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
@@ -32,32 +45,76 @@ const [input,setinput] = useState({
           }));
     }
     const editpress = async() =>{
-        console.log(input.userid);
-        const api = `http://192.168.1.106:3000/edit`
-        await fetch(api,{
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify(input)
-        }).then(response => response.json()).then(result => {
-            if(result){
-                console.log(result.firstname),
-                setinput(result);
-                router.push({pathname:'/(auth)/seeDetail',params:input})
-            }})
-            .catch(err => console.error(err)
-        );
+        if(!input.firstname|| !input.lastname || !input.nickname){
+            alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
+        }
+        else{
+            const formdata = new FormData();
+            const fileName = image?.assets[0].uri.split('/').pop();
+            formdata.append("firstname",input.firstname);
+            formdata.append("lastname",input.lastname);
+            formdata.append("nickname",input.nickname);
+            formdata.append("userid", input.userid);
+            formdata.append("img",{
+                uri:image?.assets[0].uri,
+                name: fileName,
+                type: image?.assets[0].mimeType,
+            }as any)
+            setloading(true);
+            const api = `http://192.168.1.106:3000/edit`
+            await fetch(api,{
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                   // 'Content-Type': 'application/json'
+                    "Content-Type": "multipart/form-data",
+                },
+                body: formdata
+                }).then(response => response.json()).then(result => {
+                if(result){
+                    console.log('Success'),
+                    setinput(result);
+                    router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(input)}})
+                }})
+                .catch(err => console.error(err))
+                .finally(() => { setloading(false); });
+        }
+        
         
     }
+
+    const pickImage = async() =>{
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images','videos'],
+            allowsEditing: false,
+            aspect : [4,3],
+            quality: 1
+        });
+        console.log(result);
+        if(!result.canceled){
+            setinput((prevState) => ({
+                ...prevState,
+               uri: result.assets[0].uri,
+              }));
+            setImage(result);
+        }
+       
+        }
 
   return (
     
     <View>
         <ImageBackground source={require('@/assets/images/Frame1.jpg')}> 
-        <View style={style.viewcontain}>
-        <Text style={style.titletext} >แก้ไขข้อมูล User{input.userid}</Text>
+        <View style={styles.viewcontain}>
+        <Spinner
+          visible={loading}
+          textContent={'Loading Fecth All User...'}
+          textStyle={{ color: '#FFF'}}
+        />
+        <Text style={styles.titletext} >แก้ไขข้อมูล User{input.userid}</Text>
+         <View style={styles.containerimgpick} onTouchStart={pickImage}>
+                    {input && <Image style={styles.image} source={{uri : input.uri}}/>}
+                </View>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
@@ -72,7 +129,7 @@ const [input,setinput] = useState({
   )
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
         backgroundColor: '#E8F9FF',
         
@@ -95,4 +152,18 @@ const style = StyleSheet.create({
         fontSize: 32,
         textAlign:'center',
     },
+    containerimgpick:{
+        borderWidth:1,
+        width: '50%',
+        height:'20%',
+        alignItems:'center',
+        marginTop:20,
+        marginHorizontal: '25%',
+        backgroundColor:'#EAEAEA',
+    },
+    image: {
+        width:'100%',
+        height:'100%'
+        
+      },
 })

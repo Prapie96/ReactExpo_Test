@@ -1,18 +1,26 @@
 import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 interface userimg{
   uri: string;
 }
-export default function seeDetail() {
 
+
+export default function seeDetail() {
+  const [loading,setloading] = useState(false);
   const {user} = useLocalSearchParams();
   const [userdata, setuserdata] = useState<userimg>();
   console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString())
-  console.log(`userdata : ${userdata?.uri}`);
+
+  useEffect(()=>{
+    fecthdata();
+  },[])
+
   const fecthdata =async () =>{
+    setloading(true);
     const api = 'http://192.168.1.106:3000/img';
     await fetch(api,{
       method:'POST',
@@ -25,14 +33,13 @@ export default function seeDetail() {
           setuserdata(result);
         }
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(()=> {setloading(false)});
   }
  
-  useEffect(()=>{
-    fecthdata();
-  },[])
 
   const deleteuser = () =>{
+    setloading(true);
     const getid = {userid: params.userid}
     console.log("userid :"+ getid.userid);
     const api = `http://192.168.1.106:3000/deleteuser`;
@@ -47,39 +54,53 @@ export default function seeDetail() {
     }).then(response => response.json()).then(result =>{
       if(result){
       router.push('/(auth)/showUser');
+      setloading(false);
       }
       else{
         console.log('Something Error result != true');
       }
     }).catch(err => console.error(err));
 }
-const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
-  {
-      text: 'ยืนยัน',
-      onPress: () => deleteuser(),
-  },
-  {
-      text:'ยกเลิก',
-      onPress: () => console.log('Cancel Pressed'),
-  }
-]);
+  const deleteAlert = ()=>Alert.alert('Warnning Delete !!','คุณต้องการลบข้อมูลUser คนนี้ออกจากระบบหรือไม่',[
+    {
+        text: 'ยืนยัน',
+        onPress: () => deleteuser(),
+    },
+    {
+        text:'ยกเลิก',
+        onPress: () => console.log('Cancel Pressed'),
+    }
+  ]);
+
   return (
       <View>
         <ImageBackground source={require('@/assets/images/bg-expoproject.png')} style={styles.bgimg}> 
+        <Spinner
+          visible={loading}
+          textContent={'Loading Fecth All User...'}
+          textStyle={{ color: '#FFF'}}
+        />
         <View style={{position:'relative'}}>
         <Text style={[styles.xsymbol,{fontSize:46}]} onPress={()=>{router.push('/(auth)/showUser')}} >{'\u2717'}</Text>
         </View>
          <SafeAreaView style={styles.container}>
+         <Spinner
+          visible={loading}
+          textContent={'Loading User info...'}
+          textStyle={styles.spinnerTextStyle}
+        />
           <View style={styles.profile}>
-            {userdata && <Image style={styles.bgimg} source={{uri: userdata.uri}} ></Image>}
+            {userdata && <Image style={styles.bgimg}source={userdata?.uri ? { uri: userdata.uri } : require('@/assets/images/react-logo.png')}>
+            </Image>}
           </View>
+
           <View >
             <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
             <Text style={styles.font}>Nickname:{params.nickname}</Text>
             <Text style={styles.font}>UserId:{params.userid}</Text>
-
           </View>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttoncontainer,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:params})}>
+
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttoncontainer,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
             <Text> EDIT </Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttoncontainer,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
@@ -128,6 +149,8 @@ const styles = StyleSheet.create({
     top:30,
     right:20
     
-  }
+  },spinnerTextStyle: {
+    color: '#FFF'
+  },
 
 })
