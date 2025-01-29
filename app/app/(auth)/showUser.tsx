@@ -12,7 +12,7 @@ interface User {
     firstname: string;
     lastname: string;
     nickname: string;
-    
+    img:string,
 }
 
 export default function showUser() {
@@ -39,34 +39,41 @@ export default function showUser() {
                     setdatauser(result);
                     setloading(false);
                     setRefreshing(false);
+                   
                 }
-            }).catch(err => console.error(err));
+            }).catch(err => console.error(err))
     }
-    
+  
     return (
-    <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing ={refreshing} onRefresh={onRefresh}  progressBackgroundColor={'#C5BAFF'} />}>
-    <SafeAreaView style={styles.viewcontain} >
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} progressBackgroundColor={'#FFFFFF'} />}>
+    <View style={styles.container} >
     <Spinner
           visible={loading}
           textContent={'Loading Fecth All User...'}
           textStyle={styles.spinnerTextStyle}
         />
-        <Text style={styles.titletext} >ดูข้อมูล User</Text>
+        <View style={styles.viewcontain}>
+            <Text style={styles.titletext} >ดูข้อมูล User</Text>
+        </View>
         <FlatList 
             scrollEnabled = {false}
             data = {datauser}   
-            renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userId={item.userid}  fecthdata={fecthdata} />}
+            renderItem={({ item }) => <UserCompo firstname={item.firstname} lastname={item.lastname} nickname={item.nickname} userid={item.userid} img={item.img} fecthdata={fecthdata} />}
             ItemSeparatorComponent={() => <View style={{height: 15}}/>}
+            style={styles.userontainer}
         />
-        <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User' textstyle={{
+        <View style={styles.buttoncontainer}>
+              <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User' textstyle={{
           color:'#FFFFFF',
         }}></CustomButton>
         <CustomButton Onpress={() => router.push('/')} title='Back' style={{
-            backgroundColor: '#FFFFF',
+            backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>
+        </View>
+      
         
-    </SafeAreaView>
+    </View>
    
     </ScrollView>
     
@@ -75,20 +82,32 @@ export default function showUser() {
 
 const styles = StyleSheet.create({
     container:{
-       
-        backgroundColor: '#E8F9FF',
+         backgroundColor: '#F8F8F8',
+         gap:10,
+        
     },
     viewcontain:{
         backgroundColor: '#FFFFFF',
-        marginHorizontal: 15,
-        marginVertical:50,
-        padding:10,
-        borderRadius:10
+        borderBottomWidth:4,
+        borderColor:'#C4D9FF'
+       
+    },
+    userontainer:{
+        marginTop:10,
+        paddingHorizontal:20,
+        
+
+    },
+    buttoncontainer:{
+        marginHorizontal:25,
+        marginBottom:30
     },
     titletext:{
         fontSize: 32,
         textAlign:'center',
         marginBottom:25,
+        justifyContent:'center',
+        paddingTop:30
     },
     spinnerTextStyle: {
         color: '#FFF'

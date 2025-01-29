@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet, Button,Alert, TouchableOpacity, Image } from 'react-native'
+import { View, Text,StyleSheet, Button,Alert, TouchableOpacity, Image, ImageBackground } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -8,50 +8,66 @@ interface userCompoProps{
     firstname : string,
     lastname: string,
     nickname: string,
-    userId: number,
+    userid: number,
+    img: string,
     fecthdata: () => void;
   
 }
 
-const userCompo = ({firstname,lastname,nickname,userId,fecthdata}:userCompoProps) => {
-      
-    const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userId}
+const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoProps) => {
+    const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userid}
     return (
-    <SafeAreaView style={style.container}>
-    <View style={style.viewcontainer}>
-        <Text style={style.textnickname}>{nickname}</Text>
-        <Text>Name: {firstname} {lastname} </Text>
-    </View>
-    <View style={style.viewbutton}>
-    {/* <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={()=> router.push({pathname:'/(auth)/editUser',params:{firstname,lastname,nickname,userId}})}>
-        <Text> EDIT </Text>
-    </TouchableOpacity> */}
-    {/* <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={deleteAlert}>
-        <Text> delete </Text>
-    </TouchableOpacity> */}
-    <TouchableOpacity activeOpacity={0.7} style={style.buttoncontainer} onPress={() =>router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
+    <TouchableOpacity activeOpacity={0.7} onPress={()=> router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
+    <SafeAreaView style={styles.container}>
+        <View style={styles.viewcontainer}>
+        <Image source={{ uri: `http://192.168.1.57:3000/img/${img}` }} style={styles.containerimg} />
+        </View>
+        <View style={styles.textcontainer}>
+        <Text style={styles.text}>{nickname}</Text>
+        <Text style={styles.text}>
+            {/* {nickname}{'\n'} */}
+            Name: {firstname} {lastname} </Text>
+        </View>
+    
+        
+ 
+    <View style={styles.viewbutton}>
+    {/* <TouchableOpacity activeOpacity={0.7} style={styles.buttoncontainer} onPress={() =>router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
         <Text> see details </Text>
-    </TouchableOpacity>
+    </TouchableOpacity> */}
     </View>
     </SafeAreaView>
- 
+  </TouchableOpacity>
   )
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
-        
-        borderRadius:20,
-        paddingBottom:30,
-        paddingHorizontal:20,
-        flex:2,
         flexDirection:'row',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        borderWidth:1
+        gap:15,
+        backgroundColor:'#FFFFFF',
+        flexWrap:'nowrap',
+        paddingBottom:20,
+        borderLeftWidth:5,
+        borderColor:'#C5BAFF',
+        shadowColor:'#C4D9FF',
+        shadowOpacity:0.7,
+        elevation: 10,
+       
+
+       
     },
     viewcontainer:{
-        width: '50%',
+        width: '30%',
+        // borderWidth:1,
+        alignItems:'center'
+    },
+    textcontainer:{
+        // borderWidth:1,
+        width:'60%',
+        gap:5,
+        justifyContent:'center'
+        
     },
     viewbutton:{
         width: '50%',
@@ -70,14 +86,17 @@ const style = StyleSheet.create({
          alignItems:'center',
     
     },
-    textnickname:{
+    text:{
         fontSize:16,
+    
         
-    },image: {
-        width:'100%',
-        height:'100%'
+    },containerimg:{
+        width:70,
+        height:70,
+        borderRadius: 40,
         
-      }
+       
+    }
     
 });
 

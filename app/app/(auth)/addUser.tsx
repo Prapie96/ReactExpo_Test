@@ -127,7 +127,7 @@ export default function AddUser() {
             
     }}  >
         </CustomButton>
-        <CustomButton Onpress={() => {router.push('/')}} title='Back'
+        <CustomButton Onpress={() => {router.back()}} title='Back'
             
         textstyle={{
             color:'#FFFFFF',
