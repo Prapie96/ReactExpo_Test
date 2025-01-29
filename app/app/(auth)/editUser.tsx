@@ -112,14 +112,14 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
           textStyle={{ color: '#FFF'}}
         />
         <Text style={styles.titletext} >แก้ไขข้อมูล User{input.userid}</Text>
-         <View style={styles.containerimgpick} onTouchStart={pickImage}>
-                    {input && <Image style={styles.image} source={{uri : input.uri}}/>}
-                </View>
+        <View style={styles.containerimgpick} onTouchStart={pickImage}>
+            {input && <Image style={styles.image} source={{uri : input.uri}}/>}
+        </View>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{
+        <CustomButton Onpress={() => router.back()} title='Back' style={{
             backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>

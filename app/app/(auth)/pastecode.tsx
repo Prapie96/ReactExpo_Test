@@ -84,30 +84,27 @@ export default function seeDetail() {
           textContent={'Loading User info...'}
           textStyle={styles.spinnerTextStyle}
         />
+        <View>
+          
+        </View>
           <View style={styles.profile}>
             {userdata && <Image style={styles.bgimg} 
             source={userdata?.uri ? { uri: userdata.uri} : require('@/assets/images/Frame1.jpg')} >
             </Image>}
           </View>
 
-          <View style={styles.fontContainer}>
-            <Text style={styles.font}>UserId:{params.userid}</Text>
+          <View >
             <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
             <Text style={styles.font}>Nickname:{params.nickname}</Text>
-
+            <Text style={styles.font}>UserId:{params.userid}</Text>
           </View>
-          <View style={styles.buttoncontainer}>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
+
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttoncontainer,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
             <Text> EDIT </Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttoncontainer,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
             <Text> delete </Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>router.back()}>
-            <Text>Back </Text>
-          </TouchableOpacity>
-          </View>
-          
          </SafeAreaView>
       </ImageBackground>
       
@@ -126,40 +123,25 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     gap:10,
     marginTop:80,
+ 
   },
   profile:{
     borderWidth:1,
     width:'80%',
     height:'50%',
     backgroundColor:'#EAEAEA',
-    alignSelf: 'center',
   },
-  fontContainer:{
-    paddingHorizontal:'10%',
-    gap:10,
-    marginTop:'5%'
-  },
-
   font:{
-    fontSize:20,
-    
+    fontSize:18,
   },
   buttoncontainer:{
-    // borderWidth:1,
-    flexDirection:'row',
-    justifyContent:'center',
-    gap:20,
-    marginTop:'5%'
-
-  },
-  buttonStlye:{
     backgroundColor: '#FFFFFF',
     justifyContent:'center',
     borderRadius: 5,
+
     textAlign:'center',
     alignItems:'center',
-    padding:20,
-    
+    padding:20
   },
   xsymbol:{
     position:'absolute',
