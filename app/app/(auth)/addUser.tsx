@@ -85,7 +85,7 @@ export default function AddUser() {
    
     const pickImage = async() =>{
     let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images','videos'],
+        mediaTypes: ['images'],
         allowsEditing: false,
         aspect : [4,3],
         quality: 1

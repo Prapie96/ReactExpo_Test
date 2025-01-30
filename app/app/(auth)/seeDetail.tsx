@@ -103,7 +103,7 @@ export default function seeDetail() {
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
             <Text> delete </Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>router.back()}>
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>router.push('/(auth)/showUser')}>
             <Text>Back </Text>
           </TouchableOpacity>
           </View>

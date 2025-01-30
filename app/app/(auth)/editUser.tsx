@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground, Image } from 'react-native'
+import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground, Image, Modal, Button, PermissionsAndroid, Linking, Alert } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
-import { router,useLocalSearchParams } from 'expo-router'
+import { Link, router,useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker';
-import Spinner from 'react-native-loading-spinner-overlay'
+import Spinner from 'react-native-loading-spinner-overlay';
+
 interface userdata{
     firstname: string,
     lastname: string,
@@ -14,6 +15,7 @@ interface userdata{
     uri: string,
 }
 export default function editUser() {
+    const [isModalVisible,SetisModalVisible] = useState(false);
     const [loading,setloading] = useState(false);
     const  {user} = useLocalSearchParams();
     const params = JSON.parse(user.toString())
@@ -82,8 +84,45 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
         
         
     }
+    const openCamera = async()=>{
+        const  granted  = await ImagePicker.requestCameraPermissionsAsync();
+        console.log(`result permission : ${granted.status}`);
+        if(granted.granted){
+            let result = await ImagePicker.launchCameraAsync({
+                mediaTypes:['images','videos'],
+                aspect : [4,3],
+                quality:1,
+            });
+            if(!result.canceled){
+                setinput((prevState) => ({
+                    ...prevState,
+                   uri: result.assets[0].uri,
+                  }));
+                  setImage(result);
+            }
+        }
+        else{
+            Alert.alert('Permission was denined','If uou want to use Camera, Please Go to Setting to give permission of Camera',[
+                {
+                    text: 'ยืนยัน',
+                    onPress: () =>  Linking.openSettings(),
+                },
+                {
+                    text:'ยกเลิก',
+                    onPress: () => console.log('Cancel Pressed'),
+                }
+            ]
+            );
+           
+        }
+        SetisModalVisible(false);
+    }
 
     const pickImage = async() =>{
+        const permissionlibrary = await ImagePicker.requestMediaLibraryPermissionsAsync();
+ 
+        if(permissionlibrary.granted){
+            console.log(`result permision can ask again : ${permissionlibrary.canAskAgain}`)
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images','videos'],
             allowsEditing: false,
@@ -98,7 +137,22 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
               }));
             setImage(result);
         }
-       
+        }
+        else{
+            Alert.alert('Permission was denined','If uou want to use Camera, Please Go to Setting to give permission of Camera',[
+                {
+                    text: 'ยืนยัน',
+                    onPress: () =>  Linking.openSettings(),
+                },
+                {
+                    text:'ยกเลิก',
+                    onPress: () => console.log('Cancel Pressed'),
+                }
+            ]
+            );
+        }
+        
+       SetisModalVisible(false);
         }
 
   return (
@@ -112,14 +166,21 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
           textStyle={{ color: '#FFF'}}
         />
         <Text style={styles.titletext} >แก้ไขข้อมูล User{input.userid}</Text>
-        <View style={styles.containerimgpick} onTouchStart={pickImage}>
+        <View style={styles.containerimgpick} onTouchStart={()=>SetisModalVisible(true)}>
             {input && <Image style={styles.image} source={{uri : input.uri}}/>}
         </View>
+        <Modal visible = {isModalVisible}  transparent ={true} >
+            <View style={{flex:1,backgroundColor:'#E8F9FF',padding:20,marginTop:'150%',gap:30}}>
+                <Button title='Take a Picture' onPress={openCamera}></Button>
+                <Button title='Choose from Library' onPress={pickImage}></Button>
+            </View>
+        </Modal>
+
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
-        <CustomButton Onpress={() => router.back()} title='Back' style={{
+        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{
             backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>
