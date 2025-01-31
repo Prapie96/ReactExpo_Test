@@ -2,7 +2,7 @@ import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableO
 import React, { Component, useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import Spinner from 'react-native-loading-spinner-overlay'
-
+import AntDesign from '@expo/vector-icons/AntDesign';
 interface userimg{
   uri: string;
 }
@@ -103,10 +103,10 @@ export default function seeDetail() {
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
             <Text> delete </Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>router.push('/(auth)/showUser')}>
-            <Text>Back </Text>
-          </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={()=>router.push('/(auth)/showUser')} style={{alignItems:'center',marginTop:'5%'}}>
+                    <AntDesign name="close" size={34} color="black" />
+          </TouchableOpacity>
           
          </SafeAreaView>
       </ImageBackground>
