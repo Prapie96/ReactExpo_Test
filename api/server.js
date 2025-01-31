@@ -121,53 +121,60 @@ app.post('/regisuser', upload.single("img"),async (req, res) => {
 });
 
 
-app.put('/edit', upload.single("img"), async(req,res)=>{
-    const {firstname,lastname,nickname,userid} = req.body;
-    const img = req.file.filename;
-    if(firstname && lastname && nickname && userid &&img){
+app.put('/edit', upload.single("img"), async (req, res) => {
+  const { firstname, lastname, nickname, userid, uri } = req.body;
+  const img = req.file ? req.file.filename : null; // ตรวจสอบว่ามีการอัปโหลดรูปใหม่หรือไม่
 
-      console.log("Getuserinput",firstname,lastname,nickname,userid,img);
-      const selectoldimg = "SELECT img FROM userinfo WHERE userid = ?";
-        con.query(selectoldimg,[userid],(err,result)=>{
-            if(err){
-                console.error(`Error fetching old image: ${err}`);
-            }
-            else{
-                const filepath = path.join(__dirname,'img',result[0].img);
-                console.log(`filepath :${filepath}`);
-                 if(filepath){
-                    fs.unlink(filepath,(err)=>{
-                        if(err){
-                            console.error(`Error removing file: ${err}`);
-                        }
-                        else{
-                             console.log(`File has been successfully removed.`);
-                        }
-                       
-                    })
-                }
-            }
-        });
-      const changeuser = "UPDATE userinfo SET firstname = ?,lastname = ?,nickname = ? ,img = ? WHERE userid = ? ";
-      con.query(changeuser,[firstname,lastname,nickname,img,userid],(err,result)=>{
+  if (firstname && lastname && nickname && userid) {
+      console.log("Get user input:", firstname, lastname, nickname, userid, img);
 
-      if(err){
-        throw(err);
+      if (img) {
+          // ถ้ามีการอัปโหลดรูปใหม่ ให้ลบรูปเก่า
+          const selectOldImg = "SELECT img FROM userinfo WHERE userid = ?";
+          con.query(selectOldImg, [userid], (err, result) => {
+              if (err) {
+                  console.error(`Error fetching old image: ${err}`);
+              } else {
+                  const filePath = path.join(__dirname, 'img', result[0].img);
+                  console.log(`File path: ${filePath}`);
+                  if (fs.existsSync(filePath)) {
+                      fs.unlink(filePath, (err) => {
+                          if (err) {
+                              console.error(`Error removing file: ${err}`);
+                          } else {
+                              console.log(`File has been successfully removed.`);
+                          }
+                      });
+                  }
+              }
+          });
       }
-      if(result.affectedRows === 1){  
-        console.log('Success Edit');
-        res.status(200).json(result);
-      }else{
-        console.error("Can't Edit User")
-        res.status(400).json({messsage: false});
-      }
-     });
-     
-    }
-    else{
-      console.error('firstname or lastname or nickname or userid not value')
-    }
-  
+
+      // อัปเดตข้อมูลผู้ใช้
+      const changeUser = img 
+          ? "UPDATE userinfo SET firstname = ?, lastname = ?, nickname = ?, img = ? WHERE userid = ?"
+          : "UPDATE userinfo SET firstname = ?, lastname = ?, nickname = ? WHERE userid = ?";
+      
+      const queryParams = img 
+          ? [firstname, lastname, nickname, img, userid]
+          : [firstname, lastname, nickname, userid];
+
+      con.query(changeUser, queryParams, (err, result) => {
+          if (err) {
+              throw err;
+          }
+          if (result.affectedRows === 1) {
+              console.log('Success Edit');
+              res.status(200).json(result);
+          } else {
+              console.error("Can't Edit User");
+              res.status(400).json({ message: false });
+          }
+      });
+  } else {
+      console.error('firstname, lastname, nickname, or userid is missing');
+      res.status(400).json({ message: 'Missing required fields' });
+  }
 });
 
 app.delete('/deleteuser',async(req,res)=>{

@@ -57,18 +57,23 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
             formdata.append("lastname",input.lastname);
             formdata.append("nickname",input.nickname);
             formdata.append("userid", input.userid);
-            formdata.append("img",{
-                uri:image?.assets[0].uri,
-                name: fileName,
-                type: image?.assets[0].mimeType,
-            }as any)
+            if (image) {
+                formdata.append("img",{
+                    uri:image.assets[0].uri,
+                    name: fileName,
+                    type: image.assets[0].mimeType,
+                } as any);
+            } 
+            else {
+                formdata.append("img", input.uri);
+                console.log(`Show input.uri: ${input.uri}`)
+            }
             setloading(true);
             const api = `http://192.168.1.57:3000/edit`
             await fetch(api,{
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
-                   // 'Content-Type': 'application/json'
                     "Content-Type": "multipart/form-data",
                 },
                 body: formdata
@@ -87,6 +92,8 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
     const openCamera = async()=>{
         const  granted  = await ImagePicker.requestCameraPermissionsAsync();
         console.log(`result permission : ${granted.status}`);
+        const a = await ImagePicker.getCameraPermissionsAsync();
+        console.log(`Result a : ${a.canAskAgain}`);
         if(granted.granted){
             let result = await ImagePicker.launchCameraAsync({
                 mediaTypes:['images','videos'],
@@ -120,7 +127,7 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
 
     const pickImage = async() =>{
         const permissionlibrary = await ImagePicker.requestMediaLibraryPermissionsAsync();
- 
+        
         if(permissionlibrary.granted){
             console.log(`result permision can ask again : ${permissionlibrary.canAskAgain}`)
         let result = await ImagePicker.launchImageLibraryAsync({
