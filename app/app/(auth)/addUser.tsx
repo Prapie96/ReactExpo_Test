@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView, Alert, TouchableOpacity, Image, ImageProps } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,KeyboardAvoidingView, Alert, TouchableOpacity, Image, ImageProps, Modal } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
@@ -8,6 +8,9 @@ import { useState,useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import Spinner from 'react-native-loading-spinner-overlay'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function AddUser() {
     const [input,setinput] = useState({
@@ -17,6 +20,7 @@ export default function AddUser() {
         img:'',
     });
     const [loading,setloading] = useState(false);
+     const [isModalVisible,SetisModalVisible] = useState(false);
     const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult >();
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
@@ -82,7 +86,28 @@ export default function AddUser() {
         }
     ])
    
-   
+   const openCamera = async()=>{
+           const  granted  = await ImagePicker.requestCameraPermissionsAsync();
+           console.log(`result permission : ${granted.status}`);
+           const a = await ImagePicker.getCameraPermissionsAsync();
+           console.log(`Result a : ${a.canAskAgain}`);
+           if(granted.granted){
+               let result = await ImagePicker.launchCameraAsync({
+                   mediaTypes:['images','videos'],
+                   aspect : [4,3],
+                   quality:1,
+               });
+               if(!result.canceled){
+                   setinput((prevState) => ({
+                       ...prevState,
+                      img: result.assets[0].uri,
+                     }));
+                     setImage(result);
+               }
+           }
+           SetisModalVisible(false);
+        }
+
     const pickImage = async() =>{
     let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
@@ -98,7 +123,7 @@ export default function AddUser() {
           }));
          setImage(result);
     }
-   
+    SetisModalVisible(false);
     }
    
     return (
@@ -112,9 +137,25 @@ export default function AddUser() {
           textStyle={{ color: '#FFF'}}
         />
         <Text style={styles.titletext} >กรอกข้อมูล User</Text>
-        <View style={styles.containerimgpick} onTouchStart={pickImage}>
+        <View style={styles.containerimgpick} onTouchStart={()=>SetisModalVisible(true)}>
             {input.img && <Image style={styles.image} source={{uri : input.img}}/>}
         </View>
+        <Modal visible = {isModalVisible}  transparent ={true} animationType='slide' >
+            <View style={styles.viewModal}>
+                <TouchableOpacity onPress={openCamera}style={[styles.buttonstyle,{borderBottomWidth:0.5,paddingBottom:10}]}>
+                <Fontisto name="camera" size={34} color="black" />
+                    <Text style={{fontSize:16}}>Talke a Picture</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={pickImage}style={styles.buttonstyle}>
+                <Ionicons name="images" size={34} color="black" />
+                    <Text style={{fontSize:16}}>Choose a Picture from Library</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>SetisModalVisible(false)} style={{position:'absolute',top:'10%', right:'5%'}}>
+                    <AntDesign name="close" size={34} color="black" />
+                </TouchableOpacity>
+            </View>
+           
+        </Modal>
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
@@ -133,7 +174,6 @@ export default function AddUser() {
             color:'#FFFFFF',
           }} >
         </CustomButton>
-        {/* <CustomButton Onpress={pickImage} title='Picture'></CustomButton> */}
         
         
     </SafeAreaView>
@@ -185,4 +225,22 @@ const styles = StyleSheet.create({
         height:'100%'
         
       },
+      viewModal:{
+        backgroundColor:'#C5BAFF',
+        paddingVertical:'8%',
+        marginHorizontal:'2%',
+        gap:20,
+        borderRadius:20,
+        marginTop:'155%',
+        elevation:5,
+        
+        
+    },
+
+    buttonstyle:{
+        alignItems:'center',
+        flexDirection:'row',
+        gap:'20%',
+        paddingHorizontal: '10%',
+    }
 })
