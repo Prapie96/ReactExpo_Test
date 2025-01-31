@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground, Image, Modal, Button, PermissionsAndroid, Linking, Alert } from 'react-native'
+import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground, Image, Modal, Button, PermissionsAndroid, Linking, Alert, TouchableOpacity } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
@@ -6,7 +6,9 @@ import Forminput from '@/components/Forminput'
 import { Link, router,useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Ionicons from '@expo/vector-icons/Ionicons';
 interface userdata{
     firstname: string,
     lastname: string,
@@ -176,11 +178,21 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
         <View style={styles.containerimgpick} onTouchStart={()=>SetisModalVisible(true)}>
             {input && <Image style={styles.image} source={{uri : input.uri}}/>}
         </View>
-        <Modal visible = {isModalVisible}  transparent ={true} >
-            <View style={{flex:1,backgroundColor:'#E8F9FF',padding:20,marginTop:'150%',gap:30}}>
-                <Button title='Take a Picture' onPress={openCamera}></Button>
-                <Button title='Choose from Library' onPress={pickImage}></Button>
+        <Modal visible = {isModalVisible}  transparent ={true} animationType='slide' >
+            <View style={styles.viewModal}>
+                <TouchableOpacity onPress={openCamera}style={[styles.buttonstyle,{borderBottomWidth:0.5,paddingBottom:10}]}>
+                <Fontisto name="camera" size={34} color="black" />
+                    <Text style={{fontSize:16}}>Talke a Picture</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={pickImage}style={styles.buttonstyle}>
+                <Ionicons name="images" size={34} color="black" />
+                    <Text style={{fontSize:16}}>Choose a Picture from Library</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>SetisModalVisible(false)} style={{position:'absolute',top:'10%', right:'5%'}}>
+                    <AntDesign name="close" size={34} color="black" />
+                </TouchableOpacity>
             </View>
+           
         </Modal>
 
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
@@ -232,6 +244,23 @@ const styles = StyleSheet.create({
     image: {
         width:'100%',
         height:'100%'
-        
       },
+      viewModal:{
+        backgroundColor:'#C5BAFF',
+        paddingVertical:'8%',
+        marginHorizontal:'2%',
+        gap:20,
+        borderRadius:20,
+        marginTop:'155%',
+        elevation:5,
+        
+        
+    },
+
+    buttonstyle:{
+        alignItems:'center',
+        flexDirection:'row',
+        gap:'20%',
+        paddingHorizontal: '10%',
+    }
 })
