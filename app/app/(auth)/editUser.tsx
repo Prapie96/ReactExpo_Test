@@ -1,14 +1,11 @@
-import { StyleSheet, Text, View,KeyboardAvoidingView, ImageBackground, Image, Modal, Button, PermissionsAndroid, Linking, Alert, TouchableOpacity } from 'react-native'
-import React, { useState,useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomButton from "@/components/CustomButton"
-import Forminput from '@/components/Forminput'
-import { Link, router,useLocalSearchParams } from 'expo-router'
+import { StyleSheet, Text, View, ImageBackground, Image, Modal,Linking, Alert, TouchableOpacity } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import CustomButton from "@/components/CustomButton";
+import Forminput from '@/components/Forminput';
+import { router,useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import ModalChoose from '@/components/modalChoose';
 interface userdata{
     firstname: string,
     lastname: string,
@@ -40,7 +37,7 @@ useEffect(()=>{
     }))
 },[]);
 const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
-console.log(`Got uri from seeDetailed : ${params.uri}`);
+// console.log(`Got uri from seeDetailed : ${params.uri}`);
     
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
@@ -124,7 +121,7 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
             );
            
         }
-        SetisModalVisible(false);
+        closeModal();
     }
 
     const pickImage = async() =>{
@@ -161,8 +158,11 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
             );
         }
         
-       SetisModalVisible(false);
+        closeModal();
         }
+        const closeModal = () => {
+            SetisModalVisible(false); 
+          };
 
   return (
     
@@ -178,22 +178,13 @@ console.log(`Got uri from seeDetailed : ${params.uri}`);
         <View style={styles.containerimgpick} onTouchStart={()=>SetisModalVisible(true)}>
             {input && <Image style={styles.image} source={{uri : input.uri}}/>}
         </View>
-        <Modal visible = {isModalVisible}  transparent ={true} animationType='slide' >
-            <View style={styles.viewModal}>
-                <TouchableOpacity onPress={openCamera}style={[styles.buttonstyle,{borderBottomWidth:0.5,paddingBottom:10}]}>
-                <Fontisto name="camera" size={34} color="black" />
-                    <Text style={{fontSize:16}}>Talke a Picture</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={pickImage}style={styles.buttonstyle}>
-                <Ionicons name="images" size={34} color="black" />
-                    <Text style={{fontSize:16}}>Choose a Picture from Library</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>SetisModalVisible(false)} style={{position:'absolute',top:'10%', right:'5%'}}>
-                    <AntDesign name="close" size={34} color="black" />
-                </TouchableOpacity>
-            </View>
-           
-        </Modal>
+        <ModalChoose 
+            visible={isModalVisible} 
+            texttitle1={['Take a Picture','Choose a Picture from Library']} 
+            openCamera={openCamera} 
+            pickImage={pickImage} 
+            closeModal={closeModal}>
+        </ModalChoose>
 
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
@@ -244,23 +235,5 @@ const styles = StyleSheet.create({
     image: {
         width:'100%',
         height:'100%'
-      },
-      viewModal:{
-        backgroundColor:'#C5BAFF',
-        paddingVertical:'8%',
-        marginHorizontal:'2%',
-        gap:20,
-        borderRadius:20,
-        marginTop:'155%',
-        elevation:5,
-        
-        
-    },
-
-    buttonstyle:{
-        alignItems:'center',
-        flexDirection:'row',
-        gap:'20%',
-        paddingHorizontal: '10%',
-    }
+      }
 })

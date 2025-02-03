@@ -1,12 +1,17 @@
-import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
+import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert, Modal, Linking } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import ModalChoose from '@/components/modalChoose';
 interface userimg{
   uri: string;
 }
-
 
 export default function seeDetail() {
   const [loading,setloading] = useState(false);
@@ -14,7 +19,7 @@ export default function seeDetail() {
   const [userdata, setuserdata] = useState<userimg>();
   // console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString())
-
+  const [isModalVisible,SetisModalVisible] = useState(false);
   useEffect(()=>{
     fecthdata();
   },[])
@@ -72,28 +77,89 @@ export default function seeDetail() {
     }
   ]);
 
+  const sharingImage = async () => {
+    console.log("Into sharing");
+    if (userdata && userdata.uri) {
+      try {
+        console.log(`userdata uri: ${userdata.uri}`);
+        const fileUri = `${FileSystem.cacheDirectory}shared-image.jpg`; // path cache directory
+        const { uri } = await FileSystem.downloadAsync(userdata.uri, fileUri); // dowload image to cache directory
+         console.log(`File saved to: ${uri}`);
+        await Sharing.shareAsync(uri); // share image
+      } catch (error) {
+        console.log("Error during sharing: ", error);
+      }
+    } else {
+      console.log("Image uri missing");
+    }
+    closeModal();
+  };
+
+  const saveimage = async() =>{
+    const {status} = await MediaLibrary.requestPermissionsAsync();
+    console.log(`userdata uri: ${userdata?.uri}`);
+    try{
+      if(status === 'granted'){
+        if(userdata && userdata.uri) {
+          const fileUri = `${FileSystem.cacheDirectory}saved-image.jpg`; 
+          const { uri } = await FileSystem.downloadAsync(userdata.uri, fileUri);
+          console.log(`File saved to: ${uri}`);
+
+          const asset = await MediaLibrary.createAssetAsync(uri);
+          const album = await MediaLibrary.getAlbumAsync("MonsterApp");
+          if(!album){
+            await MediaLibrary.createAlbumAsync("MonsterApp",asset,false);
+            console.log("create album success");
+            alert('Dowload img success');
+          }
+          else{
+            await MediaLibrary.addAssetsToAlbumAsync([asset],album,false);
+            alert('Dowload img success');
+          }
+        }
+      }
+      else{
+        Alert.alert('Permission was denined','If uou want to use Camera, Please Go to Setting to give permission of Camera',[
+                        {
+                            text: 'ยืนยัน',
+                            onPress: () =>  Linking.openSettings(),
+                        },
+                        {
+                            text:'ยกเลิก',
+                            onPress: () => console.log('Cancel Pressed'),
+                        }
+                    ]
+                    );
+      }   
+    }catch(error){
+      console.log("Error during saving: ", error);
+    }
+    closeModal();
+  }
+  const closeModal = () => {
+    SetisModalVisible(false); 
+  };
+
   return (
     <View>
         <ImageBackground source={require('@/assets/images/bg-expoproject.png')} style={styles.bgimg}> 
-        <View style={{position:'relative'}}>
-        <Text style={[styles.xsymbol,{fontSize:46}]} onPress={()=>{router.push('/(auth)/showUser')}} >{'\u2717'}</Text>
-        </View>
          <SafeAreaView style={styles.container}>
          <Spinner
           visible={loading}
           textContent={'Loading User info...'}
           textStyle={styles.spinnerTextStyle}
         />
-          <View style={styles.profile}>
+          <TouchableOpacity style={styles.profile} activeOpacity={0.8} onPress={()=>{SetisModalVisible(true)}}>
             {userdata && <Image style={styles.bgimg} 
             source={userdata?.uri ? { uri: userdata.uri} : require('@/assets/images/Frame1.jpg')} >
             </Image>}
-          </View>
-
+          </TouchableOpacity>
+          <ModalChoose visible={isModalVisible} texttitle1={['Share the Picture','Save Picture to Library']} 
+          openCamera={sharingImage} pickImage={saveimage} closeModal={closeModal}></ModalChoose>
           <View style={styles.fontContainer}>
             <Text style={styles.font}>UserId:{params.userid}</Text>
             <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
-            <Text style={styles.font}>Nickname:{params.nickname}</Text>
+            <Text style={styles.font}>Nickname: {params.nickname}</Text>
 
           </View>
           <View style={styles.buttoncontainer}>
@@ -104,8 +170,8 @@ export default function seeDetail() {
             <Text> delete </Text>
           </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={()=>router.push('/(auth)/showUser')} style={{alignItems:'center',marginTop:'5%'}}>
-                    <AntDesign name="close" size={34} color="black" />
+          <TouchableOpacity activeOpacity={0.7} onPress={()=>router.push('/(auth)/showUser')} style={{alignItems:'center',marginTop:'5%'}}>
+                    <AntDesign name="close" size={40} color="black" />
           </TouchableOpacity>
           
          </SafeAreaView>
@@ -160,14 +226,26 @@ const styles = StyleSheet.create({
     alignItems:'center',
     padding:20,
     
-  },
-  xsymbol:{
-    position:'absolute',
-    top:30,
-    right:20
-    
   },spinnerTextStyle: {
     color: '#FFF'
   },
+  viewModal:{
+    backgroundColor:'#C5BAFF',
+    paddingVertical:'8%',
+    marginHorizontal:'2%',
+    gap:20,
+    borderRadius:20,
+    marginTop:'155%',
+    elevation:5,
+    
+    
+},
+
+buttonstyle:{
+    alignItems:'center',
+    flexDirection:'row',
+    gap:'20%',
+    paddingHorizontal: '10%',
+}
 
 })
