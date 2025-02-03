@@ -1,9 +1,8 @@
-import { View, Text,StyleSheet, Button,Alert, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { View, Text,StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import CustomButton from './CustomButton'
-import * as ImagePicker from 'expo-image-picker';
+
 interface userCompoProps{
     firstname : string,
     lastname: string,
@@ -11,7 +10,6 @@ interface userCompoProps{
     userid: number,
     img: string,
     fecthdata: () => void;
-  
 }
 
 const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoProps) => {
@@ -28,13 +26,7 @@ const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoP
             {/* {nickname}{'\n'} */}
             Name: {firstname} {lastname} </Text>
         </View>
-    
-        
- 
     <View style={styles.viewbutton}>
-    {/* <TouchableOpacity activeOpacity={0.7} style={styles.buttoncontainer} onPress={() =>router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
-        <Text> see details </Text>
-    </TouchableOpacity> */}
     </View>
     </SafeAreaView>
   </TouchableOpacity>
@@ -53,9 +45,6 @@ const styles = StyleSheet.create({
         shadowColor:'#C4D9FF',
         shadowOpacity:0.7,
         elevation: 10,
-       
-
-       
     },
     viewcontainer:{
         width: '30%',
@@ -88,18 +77,12 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:16,
-    
-        
     },containerimg:{
         width:70,
         height:70,
         borderRadius: 40,
-        
-       
     }
-    
 });
-
 
 
 export default userCompo

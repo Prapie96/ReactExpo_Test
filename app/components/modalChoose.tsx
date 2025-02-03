@@ -6,20 +6,20 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 interface modalchooseprops{
 visible : boolean;
 texttitle1: string[];
-openCamera?: () => void; //Event Press
-pickImage?:() => void;
-closeModal?:()=> void;
+Onpress1?: () => void; //Event Press
+Onpress2?:() => void;
+closeModal:()=> void;
 }
-const ModalChoose = ({visible,texttitle1,openCamera,pickImage,closeModal}:modalchooseprops) => {
+const ModalChoose = ({visible,texttitle1,Onpress1,Onpress2,closeModal}:modalchooseprops) => {
     
     return (
     <Modal visible = {visible}  transparent ={true} animationType='slide' >
             <View style={styles.viewModal}>
-                <TouchableOpacity onPress={openCamera}style={[styles.buttonstyle,{borderBottomWidth:0.5,paddingBottom:10}]} activeOpacity={0.5}>
+                <TouchableOpacity onPress={Onpress1}style={[styles.buttonstyle,{borderBottomWidth:0.5,paddingBottom:10}]} activeOpacity={0.5}>
                 <Fontisto name="camera" size={34} color="black" />
                     <Text style={{fontSize:16}}>{texttitle1[0]}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={pickImage}style={styles.buttonstyle } activeOpacity={0.5} >
+                <TouchableOpacity onPress={Onpress2}style={styles.buttonstyle } activeOpacity={0.5} >
                 <Ionicons name="images" size={34} color="black" />
                     <Text style={{fontSize:16}}>{texttitle1[1]}</Text>
                 </TouchableOpacity>

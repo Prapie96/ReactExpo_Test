@@ -40,7 +40,7 @@ export default function showUser() {
                     setloading(false);
                     setRefreshing(false);
                    
-                }
+                }   
             }).catch(err => console.error(err))
     }
   

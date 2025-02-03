@@ -28,9 +28,9 @@ export default function index() {
           style={{
             backgroundColor: '#FFFFF',
             borderWidth:1,
-
           }}>
         </CustomButton>
+      <CustomButton Onpress={()=>router.push('/(auth)/attendenceUser')} title='Attendence'></CustomButton>
       </SafeAreaView>
       </ImageBackground>
       

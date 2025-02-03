@@ -1,13 +1,11 @@
 import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert, Modal, Linking } from 'react-native'
-import React, { Component, useEffect, useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import ModalChoose from '@/components/modalChoose';
 interface userimg{
   uri: string;
@@ -154,13 +152,15 @@ export default function seeDetail() {
             source={userdata?.uri ? { uri: userdata.uri} : require('@/assets/images/Frame1.jpg')} >
             </Image>}
           </TouchableOpacity>
-          <ModalChoose visible={isModalVisible} texttitle1={['Share the Picture','Save Picture to Library']} 
-          openCamera={sharingImage} pickImage={saveimage} closeModal={closeModal}></ModalChoose>
+          <ModalChoose 
+          visible={isModalVisible} 
+          texttitle1={['Share the Picture','Save Picture to Library']} 
+          Onpress1={sharingImage} 
+          Onpress2={saveimage} closeModal={closeModal}></ModalChoose>
           <View style={styles.fontContainer}>
             <Text style={styles.font}>UserId:{params.userid}</Text>
             <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
             <Text style={styles.font}>Nickname: {params.nickname}</Text>
-
           </View>
           <View style={styles.buttoncontainer}>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>

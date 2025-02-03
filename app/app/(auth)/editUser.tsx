@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, Image, Modal,Linking, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image,Linking, Alert} from 'react-native';
 import React, { useState,useEffect } from 'react';
 import CustomButton from "@/components/CustomButton";
 import Forminput from '@/components/Forminput';
@@ -181,8 +181,8 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
         <ModalChoose 
             visible={isModalVisible} 
             texttitle1={['Take a Picture','Choose a Picture from Library']} 
-            openCamera={openCamera} 
-            pickImage={pickImage} 
+            Onpress1={openCamera} 
+            Onpress2={pickImage} 
             closeModal={closeModal}>
         </ModalChoose>
 
