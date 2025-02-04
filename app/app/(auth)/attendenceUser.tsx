@@ -15,18 +15,17 @@ interface User {
 
 export default function attendenceUser() {
     const [datauser,setdatauser] = useState<User[]>([]);
-
+    const [totalstatus,setTotalstatus] = useState<string>('');
     async function fecthdata(){
 
-        // setloading(true);
+    
         const api = 'http://192.168.1.57:3000/getuser';
         await  fetch(api,{
                 method:'POST',
             }).then(response => response.json()).then(result => {
                 if(result){
                     setdatauser(result);
-                    // setloading(false);
-                    // setRefreshing(false);
+              
                    
                 }   
             }).catch(err => console.error(err))
@@ -34,23 +33,22 @@ export default function attendenceUser() {
      useEffect(() => {
             fecthdata(); //call fecthdata
         },[]);
-        // console.log(datauser);
+    
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headContainer}>
-        <Text style={{color:'white'}}>เช็คชื่อผู้ใช้งาน</Text>
+        <Text style={{color:'white'}}>เช็คชื่อนักเรียน</Text>
       </View>
-
-    <View style={styles.iconBack}>
-    <AntDesign name="left" size={34} color="white" />
-    </View>
+    <TouchableOpacity onPress={router.back} style={styles.iconBack}>
+            <AntDesign name="left" size={34} color="white" />
+    </TouchableOpacity>
 
       <SafeAreaView style={styles.bodycontainer}>
         <View style={styles.controlcontainer}>
             <View style={{borderWidth:1,justifyContent:'center',padding:5,width:'15%'}}>
                 <Text style={{fontSize:12}}>Total</Text>
             </View>
-            <Controlattendence></Controlattendence>
+            <Controlattendence selectedtotalstatus={totalstatus} onSelect={setTotalstatus} ></Controlattendence>
         </View>
         <View>
             {datauser.map((user)=>(
@@ -60,7 +58,10 @@ export default function attendenceUser() {
                     lastname={user.lastname} 
                     nickname={user.nickname} 
                     img={user.img} 
-                    fecthdata={fecthdata}>
+                    userid={user.userid}
+                    totalStatus={totalstatus}
+
+                    >
                  </UserAttendence>
             ))}
         </View>
@@ -89,11 +90,12 @@ const styles = StyleSheet.create({
     },
     bodycontainer:{
         marginBottom:'20%',
+        
     },
     controlcontainer:{
         backgroundColor:'#FFFFFF',
         paddingVertical:'5%',
-        paddingRight:'10%',
+        paddingRight:'5%',
         paddingLeft:'4%',
         margin:'5%',
         flexDirection:'row',
