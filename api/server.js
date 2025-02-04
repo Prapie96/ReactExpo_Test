@@ -227,3 +227,31 @@ app.delete('/deleteuser',async(req,res)=>{
 
 
 });
+
+app.post('/checkuser',async(req,res) =>{
+  const sql ='SELECT * FROM attendance';
+  con.query(sql,(err,result)=>{
+    if(err)throw err;
+    res.send(result);
+  })
+});
+
+app.post('/attendance',async(req,res)=>{
+  const {userid,statususer} = req.body;
+  const insertsql = 'INSERT INTO attendance (userid,statususer) VALUES (?,?)';
+  if(userid && statususer){
+    con.query(insertsql,[userid,statususer],(err,result)=>{
+      if(err){
+        console.error("Someting error while insert into sql",err);
+      }
+      else{
+        res.json({result})
+      }
+    })
+  }
+  else{
+    console.log("Missing");
+    console.log(userid,statususer)
+  }
+ 
+})

@@ -18,10 +18,26 @@ const UserAttendence = ({firstname,lastname,nickname,img,totalStatus,userid}:use
     setUserstatus(totalStatus); 
   }, [totalStatus]);
   const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userid}
+
+  // console.log(userid+userStatus);
+  const insertattendence = async() => {
+    const api = 'http://192.168.1.57:3000/attendance';
+    await fetch(api,{
+      method:'POST',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify(userStatus)
+    }).then(response => response.json())
+      .then(result =>{console.log(result)}).catch(err => console.error(err))
+  }
+  console.log(userStatus);
   return (
     <View style={styles.userContainer}>
         {/* <Image source={require('@/assets/images/Antony.jpeg')} style={styles.profile}></Image> */}
-        <TouchableOpacity  activeOpacity={0.7} onPress={()=> router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
+        {/* <TouchableOpacity  activeOpacity={0.7} onPress={()=> router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}> */}
+        <TouchableOpacity  activeOpacity={0.7} onPress={insertattendence}>
           <Image source={{ uri: `http://192.168.1.57:3000/img/${img}` }} style={styles.profile} />
         </TouchableOpacity>
         <View style={{gap:10}}>

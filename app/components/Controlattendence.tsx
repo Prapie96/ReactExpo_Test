@@ -37,6 +37,7 @@ const Controlattendence = ({selectedtotalstatus ='',onSelect}:ControlattendenceP
       return 'white' ;
     }
   }
+
   return (
     //  <View style={{flexDirection:'row',width:'70%'}}>
     //     <TouchableOpacity onPress={() => handlePress('มาเรียน')} 

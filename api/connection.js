@@ -15,6 +15,7 @@ con.connect((err) => {
 });
 
 
+
 export default con;
 // const con = mysql.createConnection({
 //   host: "localhost",

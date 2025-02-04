@@ -17,23 +17,18 @@ export default function attendenceUser() {
     const [datauser,setdatauser] = useState<User[]>([]);
     const [totalstatus,setTotalstatus] = useState<string>('');
     async function fecthdata(){
-
-    
         const api = 'http://192.168.1.57:3000/getuser';
         await  fetch(api,{
                 method:'POST',
             }).then(response => response.json()).then(result => {
                 if(result){
-                    setdatauser(result);
-              
-                   
+                    setdatauser(result)
                 }   
             }).catch(err => console.error(err))
     }
      useEffect(() => {
             fecthdata(); //call fecthdata
         },[]);
-    
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headContainer}>
