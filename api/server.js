@@ -236,6 +236,18 @@ app.post('/checkuser',async(req,res) =>{
   })
 });
 
+app.post('/statustext',async(req,res)=>{
+  
+  const {statusid} = req.body; 
+  console.log(req.body);
+  const getstatusname ='SELECT statusname FROM attendance INNER JOIN status ON attendance.statususer = status.statusid WHERE status.statusid = ? ';  
+  con.query(getstatusname,[statusid],(err,result)=>{
+    if(err)throw err;
+    res.status(200).json(result);
+  })
+})
+
+
 app.post('/attendance', upload.none(), async (req, res) => {
   console.log("Into attendance api");
 

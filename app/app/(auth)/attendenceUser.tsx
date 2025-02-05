@@ -14,12 +14,12 @@ interface User {
 }
 interface Status {
     userid: number;
-    statususer: string;
+    statususer: number;
 }
 
 export default function attendenceUser() {
     const [datauser,setdatauser] = useState<User[]>([]);
-    const [totalstatus,setTotalstatus] = useState<string>('');
+    const [totalstatus,setTotalstatus] = useState<number>(0);
      const [datastatus, setDatastatus] = useState<Status[]>([]);
     // const [datastatus, setDatastatus] = useState({userid:0,statususer:''});
     async function fecthdata(){
@@ -32,10 +32,10 @@ export default function attendenceUser() {
                 }   
             }).catch(err => console.error(err))
     }
-     useEffect(() => {
-            fecthdata(); //call fecthdata
-        },[]);
-
+    useEffect(() => {
+        fecthdata(); //call fecthdata
+    },[]);
+ 
     const savePress = async()=>{
         console.log("Into savePress");
         console.log(datastatus);
@@ -64,7 +64,7 @@ export default function attendenceUser() {
         }
     }
 
-    const handleDatafromuser = (userattendance:{userid:number,statususer:string})=>{
+    const handleDatafromuser = (userattendance:{userid:number,statususer:number})=>{
         setDatastatus(prevState => {
             const existingIndex = prevState.findIndex(item => item.userid === userattendance.userid);
             if (existingIndex !== -1) {
@@ -109,8 +109,8 @@ export default function attendenceUser() {
 
       <SafeAreaView style={styles.bodycontainer}>
         <View style={styles.controlcontainer}>
-            <View style={{borderWidth:1,justifyContent:'center',padding:5,width:'15%'}}>
-                <Text style={{fontSize:12}}>Total</Text>
+            <View style={{justifyContent:'center',padding:5,width:'15%'}}>
+                <Text style={{fontSize:14}}>Total</Text>
             </View>
             <Controlattendence selectedtotalstatus={totalstatus} onSelect={setTotalstatus} ></Controlattendence>
         </View>

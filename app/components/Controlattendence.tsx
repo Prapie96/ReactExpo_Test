@@ -2,36 +2,50 @@ import { View, Text, TouchableOpacity,StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 interface ControlattendenceProps{
-  selectedtotalstatus? : string,
-  onSelect?:(status:string) => void
+  selectedtotalstatus? : number,
+  onSelect?:(status:number) => void
 }
 
-const Controlattendence = ({selectedtotalstatus ='',onSelect}:ControlattendenceProps) => {
-  const [selected, setSelected] = useState('');
+const Controlattendence = ({selectedtotalstatus=0,onSelect}:ControlattendenceProps) => {
+  const [selected, setSelected] = useState<number>(0);
 
   useEffect(()=>{
     setSelected(selectedtotalstatus);
 
   },[selectedtotalstatus]);
   
-  const handlePress = (value: string) => {
+  const handlePress = (value: number) => {
     setSelected(value);
     if(onSelect){
       onSelect(value);
     }
   }
-  const selectedcolor =(status:string)=>{
+  const selectedcolor =(status:number)=>{
     return selected === status? getcolor(status) : 'white'
   };
-  const getcolor = (status: string) =>{
+  const changetostring = (status: number)=>{
     switch (status){
-      case 'มาเรียน':
+      case 1:
+      return 'มาเรียน' ;
+      case 2:
+      return 'มาสาย' ;
+      case 3:
+      return 'ลา';
+      case 4:
+      return 'ขาดเรียน' ;
+      default :
+      return 'error' ;
+    }
+  }
+  const getcolor = (status: number) =>{
+    switch (status){
+      case 1:
       return '#9EDF9C' ;
-      case 'มาสาย':
+      case 2:
       return '#40ADDC' ;
-      case 'ลา':
+      case 3:
       return '#FF9416' ;
-      case 'ขาดเรียน':
+      case 4:
       return '#ED4545' ;
       default :
       return 'white' ;
@@ -41,12 +55,12 @@ const Controlattendence = ({selectedtotalstatus ='',onSelect}:ControlattendenceP
   return (
 
     <View style={{flexDirection:'row',width:'70%'}}>
-    {['มาเรียน','มาสาย','ลา','ขาดเรียน'].map((status) => (
+    {[1,2,3,4].map((status) => (
       <TouchableOpacity activeOpacity={0.7} 
         key={status} 
         onPress={() => handlePress(status)} 
         style={[styles.container,{ backgroundColor: selectedcolor(status) }]}>
-        <Text style={[{fontSize:12,color: selected === status ? 'white' : 'black' }]}>{status}</Text>
+        <Text style={[{fontSize:12,color: selected === status ? 'white' : 'black' }]}>{(changetostring(status))}</Text>
       </TouchableOpacity>
     ))}
 

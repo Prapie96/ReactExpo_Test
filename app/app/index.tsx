@@ -31,6 +31,7 @@ export default function index() {
           }}>
         </CustomButton>
       <CustomButton Onpress={()=>router.push('/(auth)/attendenceUser')} title='Attendence'></CustomButton>
+      <CustomButton Onpress={()=>router.push('/(auth)/dashboard')} title='Dashboard'></CustomButton>
       </SafeAreaView>
       </ImageBackground>
       
