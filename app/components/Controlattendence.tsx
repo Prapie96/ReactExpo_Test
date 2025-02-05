@@ -39,24 +39,7 @@ const Controlattendence = ({selectedtotalstatus ='',onSelect}:ControlattendenceP
   }
 
   return (
-    //  <View style={{flexDirection:'row',width:'70%'}}>
-    //     <TouchableOpacity onPress={() => handlePress('มาเรียน')} 
-    //       style={[styles.container,{ backgroundColor: selectedcolor('มาเรียน') }]}>
-    //       <Text style={{fontSize:12}}>มาเรียน</Text>
-    //     </TouchableOpacity>
-    //     <TouchableOpacity onPress={() => handlePress('มาสาย')} 
-    //       style={[styles.container,{ backgroundColor:selectedcolor('มาสาย') }]}>
-    //       <Text style={{fontSize:12}}>มาสาย </Text>
-    //     </TouchableOpacity>
-    //     <TouchableOpacity onPress={() => handlePress('ลา')} 
-    //       style={[styles.container,{ backgroundColor: selectedcolor('ลา')}]}>
-    //       <Text style={{fontSize:12}}> ลา </Text>
-    //     </TouchableOpacity>
-    //     <TouchableOpacity onPress={() => handlePress('ขาดเรียน')} 
-    //       style={[styles.container,{ backgroundColor: selectedcolor('ขาดเรียน')}]}>
-    //       <Text style={{fontSize:12}}>ขาดเรียน</Text>
-    //     </TouchableOpacity>
-    // </View>
+
     <View style={{flexDirection:'row',width:'70%'}}>
     {['มาเรียน','มาสาย','ลา','ขาดเรียน'].map((status) => (
       <TouchableOpacity activeOpacity={0.7} 

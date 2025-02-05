@@ -236,22 +236,31 @@ app.post('/checkuser',async(req,res) =>{
   })
 });
 
-app.post('/attendance',async(req,res)=>{
-  const {userid,statususer} = req.body;
-  const insertsql = 'INSERT INTO attendance (userid,statususer) VALUES (?,?)';
-  if(userid && statususer){
-    con.query(insertsql,[userid,statususer],(err,result)=>{
-      if(err){
-        console.error("Someting error while insert into sql",err);
-      }
-      else{
-        res.json({result})
-      }
-    })
+app.post('/attendance', upload.none(), async (req, res) => {
+  console.log("Into attendance api");
+
+  // รับข้อมูลที่ถูกส่งเป็น string ของ JSON
+  const { attendanceData } = req.body;
+  if (attendanceData) {
+      const attendanceArray = JSON.parse(attendanceData); // แปลงจาก string เป็น array ของ object
+      console.log('Received data:', attendanceArray);
+
+      // Loop ข้อมูลและทำการบันทึกลงฐานข้อมูล
+      attendanceArray.forEach(status => {
+          const { userid, statususer } = status;
+          if (userid && statususer) {
+              const insertsql = 'INSERT INTO attendance (userid, statususer) VALUES (?, ?)';
+              con.query(insertsql, [userid, statususer], (err, result) => {
+                  if (err) {
+                      console.error("Something error while inserting into SQL", err);
+                      res.status(500).json({ error: 'Database insert failed' });
+                  }
+              });
+          }
+      });
+
+      res.json({ message: 'Attendance saved successfully' });
+  } else {
+      res.status(400).json({ error: 'No attendance data provided' });
   }
-  else{
-    console.log("Missing");
-    console.log(userid,statususer)
-  }
- 
-})
+});

@@ -10,40 +10,34 @@ interface userAttendenceProps{
   img: string,
   totalStatus: string,
   userid: number,
+  handledatauser:(data: {userid: number, statususer: string}) => void;
 }
 
-const UserAttendence = ({firstname,lastname,nickname,img,totalStatus,userid}:userAttendenceProps) => {
+const UserAttendence = ({firstname,lastname,nickname,img,totalStatus,userid,handledatauser}:userAttendenceProps) => {
   const [userStatus,setUserstatus] =useState<string>(totalStatus);
+  const userattendance = {userid:userid,statususer:userStatus};
+
   useEffect(() => {
     setUserstatus(totalStatus); 
   }, [totalStatus]);
-  const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userid}
+  
+  useEffect(()=>{
+    handledatauser(userattendance);
+  },[userStatus])
 
-  // console.log(userid+userStatus);
-  const insertattendence = async() => {
-    const api = 'http://192.168.1.57:3000/attendance';
-    await fetch(api,{
-      method:'POST',
-      headers:{
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(userStatus)
-    }).then(response => response.json())
-      .then(result =>{console.log(result)}).catch(err => console.error(err))
-  }
-  console.log(userStatus);
+  const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userid}
+  // console.log(`Result userstatus : ${userattendance.userid} ||${userattendance.statususer} `);
   return (
     <View style={styles.userContainer}>
         {/* <Image source={require('@/assets/images/Antony.jpeg')} style={styles.profile}></Image> */}
         {/* <TouchableOpacity  activeOpacity={0.7} onPress={()=> router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}> */}
-        <TouchableOpacity  activeOpacity={0.7} onPress={insertattendence}>
+        <TouchableOpacity  activeOpacity={0.7}>
           <Image source={{ uri: `http://192.168.1.57:3000/img/${img}` }} style={styles.profile} />
         </TouchableOpacity>
         <View style={{gap:10}}>
         <Text>Nickname: {nickname}</Text>
         <Text>{firstname} {lastname}</Text>
-        <Controlattendence key={userStatus} selectedtotalstatus={userStatus} onSelect={setUserstatus}></Controlattendence>
+        <Controlattendence key={userStatus} selectedtotalstatus={userStatus} onSelect={(status) => { setUserstatus(status)}} ></Controlattendence>
         </View>
     </View>
   )
