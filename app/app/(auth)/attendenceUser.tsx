@@ -21,7 +21,6 @@ export default function attendenceUser() {
     const [datauser,setdatauser] = useState<User[]>([]);
     const [totalstatus,setTotalstatus] = useState<number>(0);
      const [datastatus, setDatastatus] = useState<Status[]>([]);
-    // const [datastatus, setDatastatus] = useState({userid:0,statususer:''});
     async function fecthdata(){
         const api = 'http://192.168.1.57:3000/getuser';
         await  fetch(api,{
@@ -32,8 +31,10 @@ export default function attendenceUser() {
                 }   
             }).catch(err => console.error(err))
     }
+    
     useEffect(() => {
         fecthdata(); //call fecthdata
+       
     },[]);
  
     const savePress = async()=>{
@@ -47,7 +48,7 @@ export default function attendenceUser() {
         {
             const formdata = new FormData();
             formdata.append("attendanceData", JSON.stringify(datastatus));
-            console.log(formdata);
+            // console.log(formdata);
             console.log("Into savePress fecth");
             const api = 'http://192.168.1.57:3000/attendance';
             await fetch(api,{

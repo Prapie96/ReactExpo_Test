@@ -1,5 +1,5 @@
 import { View, Text,StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
@@ -9,11 +9,13 @@ interface userCompoProps{
     nickname: string,
     userid: number,
     img: string,
-    fecthdata: () => void;
+    fecthdata?: () => void;
+   
 }
 
 const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoProps) => {
     const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userid}
+    const [statusname,setStatusName] = useState<string>('');
     return (
     <TouchableOpacity activeOpacity={0.7} onPress={()=> router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
     <SafeAreaView style={styles.container}>
@@ -25,6 +27,7 @@ const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoP
         <Text style={styles.text}>
             {/* {nickname}{'\n'} */}
             Name: {firstname} {lastname} </Text>
+        <Text>{statusname}</Text>
         </View>
     <View style={styles.viewbutton}>
     </View>

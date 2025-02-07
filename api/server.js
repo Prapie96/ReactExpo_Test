@@ -229,20 +229,58 @@ app.delete('/deleteuser',async(req,res)=>{
 });
 
 app.post('/checkuser',async(req,res) =>{
+  const sql ='SELECT * FROM status';
+  try{
+    con.query(sql,(err,result)=>{
+      if(err)throw err;
+      res.status(200).json(result);
+    })
+  }catch(err){
+    console.error("Something Error when fetching from /checkuser",err);
+  }
+  
+});
+app.post('/checkattendance',async(req,res) =>{
   const sql ='SELECT * FROM attendance';
-  con.query(sql,(err,result)=>{
-    if(err)throw err;
-    res.send(result);
-  })
+  try{
+    con.query(sql,(err,result)=>{
+      if(err)throw err;
+      res.status(200).json(result);
+    })
+  }catch(err){
+    console.error("Something Error when fetching from /checkattendence",err);
+  }
+  
+});
+app.post('/dashboarddata', async (req, res) => {
+  const sql = `
+    SELECT 
+      (SELECT COUNT(*) FROM userinfo) AS totalStudents,
+      (SELECT COUNT(*) FROM attendance WHERE statususer = 1) AS presentStudents,
+      (SELECT COUNT(*) FROM attendance WHERE statususer = 2) AS lateStudents,
+      (SELECT COUNT(*) FROM attendance WHERE statususer = 3) AS leavStudents,
+      (SELECT COUNT(*) FROM attendance WHERE statususer = 4) AS absentStudents
+  `;
+  
+  try {
+    con.query(sql, (err, result) => {
+      if (err) throw err;
+      res.status(200).json(result[0]);
+    });
+  } catch (err) {
+    console.error("Error fetching dashboard data", err);
+    res.status(500).json({ error: 'Error fetching data' });
+  }
 });
 
+
 app.post('/statustext',async(req,res)=>{
-  
   const {statusid} = req.body; 
-  console.log(req.body);
+  console.log(`status id: ${statusid}`);
   const getstatusname ='SELECT statusname FROM attendance INNER JOIN status ON attendance.statususer = status.statusid WHERE status.statusid = ? ';  
   con.query(getstatusname,[statusid],(err,result)=>{
     if(err)throw err;
+    console.log(result);
     res.status(200).json(result);
   })
 })
@@ -251,23 +289,39 @@ app.post('/statustext',async(req,res)=>{
 app.post('/attendance', upload.none(), async (req, res) => {
   console.log("Into attendance api");
 
-  // รับข้อมูลที่ถูกส่งเป็น string ของ JSON
   const { attendanceData } = req.body;
   if (attendanceData) {
       const attendanceArray = JSON.parse(attendanceData); // แปลงจาก string เป็น array ของ object
       console.log('Received data:', attendanceArray);
-
-      // Loop ข้อมูลและทำการบันทึกลงฐานข้อมูล
       attendanceArray.forEach(status => {
           const { userid, statususer } = status;
           if (userid && statususer) {
-              const insertsql = 'INSERT INTO attendance (userid, statususer) VALUES (?, ?)';
+              const checkexistdata = "SELECT * FROM attendance WHERE userid = ?";
+              con.query(checkexistdata,[userid],(err,result)=>{
+                if(err){
+                  console.error(err);
+                  res.status(500).json({ error: 'Database Select failed' });
+                }
+
+                if(result.length > 0){
+                  const updatesql = "UPDATE attendance SET statususer = ? WHERE userid = ? ";
+                  con.query(updatesql,[status,userid]),(err,result) =>{
+                    if(err){
+                      console.error(err);
+                      res.status(500).json({ error: 'Database Update failed' });
+                    }
+                  }
+                }
+                else{
+                  const insertsql = 'INSERT INTO attendance (userid, statususer) VALUES (?, ?)';
               con.query(insertsql, [userid, statususer], (err, result) => {
                   if (err) {
                       console.error("Something error while inserting into SQL", err);
                       res.status(500).json({ error: 'Database insert failed' });
                   }
               });
+                }
+              })
           }
       });
 

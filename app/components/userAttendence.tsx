@@ -36,7 +36,7 @@ const UserAttendence = ({firstname,lastname,nickname,img,totalStatus,userid,hand
         <View style={{gap:10}}>
         <Text>Nickname: {nickname}</Text>
         <Text>{firstname} {lastname}</Text>
-        <Controlattendence key={userStatus} selectedtotalstatus={userStatus} onSelect={(status) => { setUserstatus(status)}} ></Controlattendence>
+        <Controlattendence  selectedtotalstatus={userStatus} onSelect={(status) => { setUserstatus(status)}} ></Controlattendence>
         </View>
     </View>
   )
