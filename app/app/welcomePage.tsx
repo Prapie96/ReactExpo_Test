@@ -7,18 +7,16 @@ import { Redirect, router, useLocalSearchParams } from 'expo-router';
 
 
 export default function welcomePage() {
-      const {user} = useLocalSearchParams();
-      console.log(JSON.parse(user.toString()));
-      const params = JSON.parse(user.toString())
+      // const {user} = useLocalSearchParams();
+      // console.log(JSON.parse(user.toString()));
+      // const params = JSON.parse(user.toString());
   return (
     <View >
       
       <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 
       <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
-        <Text style={styles.titleText}>Welcome, Admin: {params.firstname}</Text>
-
-
+        <Text style={styles.titleText}>Welcome, Admin:</Text>
         <Text>Welcome to applicion to handle users in systems</Text>
         <Text>select the button to choose menu.</Text>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'textstyle={{
@@ -40,7 +38,7 @@ export default function welcomePage() {
       {/* <CustomButton Onpress={()=>router.push('/(auth)/dashboard')} title='Dashboard'></CustomButton> */}
       </SafeAreaView>
       </ImageBackground>
-      
+          
 
     
     </View>

@@ -8,6 +8,7 @@ export default function login_layout() {
    <>
     <Stack>
       <Stack.Screen name='loginUser'options={{headerShown: false}}/>
+      <Stack.Screen name='registerUser'options={{headerShown: false}}/>
       
 
     </Stack>

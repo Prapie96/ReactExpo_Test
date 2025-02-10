@@ -354,7 +354,7 @@ app.post('/loginuser',upload.none(),async(req,res)=>{
   }
 })
 
-app.post('/registeruser',async(req,res)=>{
+app.post('/registeruser',upload.none(),async(req,res)=>{
   const {username,password} = req.body;
   console.log(username,password);
   if(username&&password){

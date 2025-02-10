@@ -106,7 +106,6 @@ export default function loginUser() {
     
   return (
     <View>
-        <Text>loginUser</Text>
         <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')}></Forminput>
         <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')}></Forminput>
         <CustomButton title='Login' Onpress={login}></CustomButton>

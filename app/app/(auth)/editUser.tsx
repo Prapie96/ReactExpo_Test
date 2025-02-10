@@ -167,7 +167,6 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
   return (
     
     <View>
-        <ImageBackground source={require('@/assets/images/Frame1.jpg')}> 
         <View style={styles.viewcontain}>
         <Spinner
           visible={loading}
@@ -189,13 +188,14 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
+        <Forminput label='Username' placeholder='username...'values ={'' } handleonchange={handleChange('username')}></Forminput>
+        <Forminput label='Password' placeholder='password...'values ={''} handleonchange={handleChange('password')}></Forminput>
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
         <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{
             backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>
         </View>
-        </ImageBackground>
     </View>
   )
 }
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 10,
-        marginTop: 100,
+       
         width: '100%',
         height: '100%',
         paddingTop:30,
