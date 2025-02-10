@@ -128,7 +128,7 @@ export default function AddUser() {
    
     return (
         // {image && <Image source={{uri: image}}style={styles.image}/>}
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView>
     <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={styles.bgimg}>  
     <SafeAreaView style={styles.viewcontain} >
     <Spinner
@@ -184,10 +184,7 @@ export default function AddUser() {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        
-        
-    },
+   
     viewcontain:{
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 30,

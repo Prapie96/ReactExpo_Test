@@ -60,7 +60,12 @@ export default function attendenceUser() {
             },
             body: formdata,
             }).then(response => response.json())
-            .then(result =>{console.log(result)})
+            .then(result =>{
+                if(result){
+                    console.log(`result from attendance data: ${result}`);
+                    router.push('/(auth)/dashboard');
+                }
+            })
             .catch(err => console.error(err))
         }
     }
@@ -84,6 +89,7 @@ export default function attendenceUser() {
             onPress: () => {
                 alert('บันทึกการเช้าเรียนของนักเรียนเสร็จสิ้น'),
                 savePress();
+                
             }
         },
         {

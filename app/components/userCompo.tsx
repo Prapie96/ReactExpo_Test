@@ -15,7 +15,7 @@ interface userCompoProps{
 
 const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoProps) => {
     const userinfo = {firstname:firstname,lastname:lastname,nickname:nickname,userid:userid}
-    const [statusname,setStatusName] = useState<string>('');
+   
     return (
     <TouchableOpacity activeOpacity={0.7} onPress={()=> router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userinfo)}})}>
     <SafeAreaView style={styles.container}>
@@ -27,7 +27,6 @@ const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoP
         <Text style={styles.text}>
             {/* {nickname}{'\n'} */}
             Name: {firstname} {lastname} </Text>
-        <Text>{statusname}</Text>
         </View>
     <View style={styles.viewbutton}>
     </View>

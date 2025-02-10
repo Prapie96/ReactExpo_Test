@@ -17,6 +17,18 @@ app.use(cors());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const storage = multer.diskStorage({
+  destination: function(req,file,cb){
+    cb(null,'img')
+  },
+  filename: function(req,file,cb){
+    const uniqueSuffix = Date.now();
+    cb(null,file.fieldname +"_"+uniqueSuffix+file.originalname);
+    
+  }
+});
+const upload = multer({storage: storage});
+
 app.post("/getuser", async(req,res)=>{
   const sql = "SELECT * FROM userinfo";
   try{
@@ -27,27 +39,26 @@ app.post("/getuser", async(req,res)=>{
     console.error("Something Wrong with sql database");
   }
   });
-  app.post("/getuserbyid", async(req,res)=>{
+  app.post("/getuserbyid",upload.none(),async(req,res)=>{
     const {userid} = req.body;
+    console.log(`User id by: ${userid}`);
     const sql = "SELECT * FROM userinfo WHERE userid = ?";
-    try{
-          con.query(sql,[userid],(err,data)=>{
-            res.status(200).json(data);
+    if(userid){
+          con.query(sql,[userid],(err,result)=>{
+            if(err)throw err;
+            if(result.length === 0){
+              res.status(404).json({message: 'User not found'});
+            }
+            else{
+              console.log("Get user by id",result);
+              res.status(200).json(result);
+            }
         })
-    }catch(error){
-      console.error("Something Wrong with sql database");
+    }else{
+      console.error("User id is missing");
     }
     });
-  const storage = multer.diskStorage({
-    destination: function(req,file,cb){
-      cb(null,'img')
-    },
-    filename: function(req,file,cb){
-      const uniqueSuffix = Date.now();
-      cb(null,file.fieldname +"_"+uniqueSuffix+file.originalname);
-      
-    }
-  })
+  
   app.post("/img",async(req,res)=>{
     const {userid} = req.body;
     const filenameimg = "SELECT img FROM userinfo WHERE userid = ? ";
@@ -77,9 +88,6 @@ app.post("/getuser", async(req,res)=>{
     }
 
   })
-  const upload = multer({storage: storage})
-
-
 
   app.post("/find", async(req,res)=>{
     const {firstname,lastname,nickname} = req.body;
@@ -330,3 +338,33 @@ app.post('/attendance', upload.none(), async (req, res) => {
       res.status(400).json({ error: 'No attendance data provided' });
   }
 });
+
+app.post('/loginuser',upload.none(),async(req,res)=>{
+  const {username,password} = req.body;
+  console.log(`username : ${username} password : ${password}`);
+  if(username&&password){
+    const sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+  con.query(sql,[username,password],(err,result)=>{
+    if(err)throw err;
+    res.status(200).json({message: true,result});
+  }
+  )
+  }else{
+    console.error("username or password is missing"); 
+  }
+})
+
+app.post('/registeruser',async(req,res)=>{
+  const {username,password} = req.body;
+  console.log(username,password);
+  if(username&&password){
+    const sql = "INSERT INTO account (username,password) VALUES (?,?)";
+    con.query(sql,[username,password,(err,result)=>{
+      if(err)throw err;
+      res.status(200).json({message: true,result});
+    }])
+  }
+  else{
+    console.error("username or password is missing");
+  }
+})
