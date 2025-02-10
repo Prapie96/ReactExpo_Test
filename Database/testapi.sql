@@ -19,6 +19,24 @@
 CREATE DATABASE IF NOT EXISTS `testapi` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `testapi`;
 
+-- Dumping structure for table testapi.account
+CREATE TABLE IF NOT EXISTS `account` (
+  `accountid` int NOT NULL AUTO_INCREMENT,
+  `userid` int DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `usertype` int DEFAULT '2' COMMENT '1=Admin,2=user',
+  PRIMARY KEY (`accountid`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Dumping data for table testapi.account: ~5 rows (approximately)
+INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`) VALUES
+	(1, 1, 'John', '123', 1),
+	(2, 277, 'Prapie', '1', 2),
+	(3, 278, 'test', 'qwe', 1),
+	(4, NULL, 'pop', 'pap', NULL),
+	(5, NULL, 'pop1', 'pap1', 2);
+
 -- Dumping structure for table testapi.attendance
 CREATE TABLE IF NOT EXISTS `attendance` (
   `attendanceid` int NOT NULL AUTO_INCREMENT,
@@ -29,17 +47,17 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   CONSTRAINT `FK_useridattendance` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.attendance: ~11 rows (approximately)
+-- Dumping data for table testapi.attendance: ~9 rows (approximately)
 INSERT INTO `attendance` (`attendanceid`, `userid`, `statususer`) VALUES
 	(1, 1, 1),
 	(2, 277, 2),
 	(3, 278, 4),
-	(4, 279, 2),
+	(4, 279, 3),
 	(5, 281, 4),
-	(6, 282, 1),
-	(7, 283, 2),
+	(6, 282, 4),
+	(7, 283, 3),
 	(8, 284, 3),
-	(9, 286, 1);
+	(9, 286, 2);
 
 -- Dumping structure for table testapi.status
 CREATE TABLE IF NOT EXISTS `status` (
@@ -63,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `testattend` (
   PRIMARY KEY (`attendid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.testattend: ~11 rows (approximately)
+-- Dumping data for table testapi.testattend: ~12 rows (approximately)
 INSERT INTO `testattend` (`attendid`, `userid`, `statususer`) VALUES
 	(1, 1, 1),
 	(2, 277, 4),
@@ -88,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `userinfo` (
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=291 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table testapi.userinfo: ~11 rows (approximately)
+-- Dumping data for table testapi.userinfo: ~9 rows (approximately)
 INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VALUES
 	(1, 'John', 'Doe', 'Antony', 'img_173831585812796c564e4-789a-433c-82e7-cfb67dbfa4cd.jpeg'),
 	(277, 'Pongsapat​', 'Intaratoot', 'Prapie Angry', 'img_17381387767297f52ab29-6770-4a4d-a797-b2b18fcc5ab7.webp'),
