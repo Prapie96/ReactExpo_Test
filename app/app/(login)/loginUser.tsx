@@ -100,7 +100,7 @@ export default function loginUser() {
         }
         else{
             console.log(`User:${userdata.firstname}`);
-            router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(userdata)}});
+            router.push({pathname:'/(user)/detailUser',params:{user:JSON.stringify(userdata)}});
         }
     }
     

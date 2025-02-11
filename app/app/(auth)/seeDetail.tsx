@@ -10,18 +10,36 @@ import ModalChoose from '@/components/modalChoose';
 interface userimg{
   uri: string;
 }
-
+interface seeDetailprops{
+  username:string,
+  password:string,
+  firstname:string,
+  lastname:string,
+  nickname:string,
+  userid:number,
+}
 export default function seeDetail() {
   const [loading,setloading] = useState(false);
   const {user} = useLocalSearchParams();
   const [userdata, setuserdata] = useState<userimg>();
+  const [detailuser,setDetailuser] = useState<seeDetailprops>({username:'',password:'',firstname:'',lastname:'',nickname:'',userid:0} );
   // console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString())
   const [isModalVisible,SetisModalVisible] = useState(false);
   useEffect(()=>{
-    fecthdata();
+    setDetailuser((prevState) => ({
+      ...prevState,
+      firstname:params.firstname,
+      lastname:params.lastname,
+      nickname:params.nickname,
+      userid:params.userid
+    }))
   },[])
-
+  useEffect(()=>{
+    fecthdata();
+    getaccountuserinfo();
+  },[])
+  
   const fecthdata =async () =>{
     setloading(true);
     const api = 'http://192.168.1.57:3000/img';
@@ -32,14 +50,33 @@ export default function seeDetail() {
     }).then(response => response.json())
       .then(result => {
         if(result){
-          console.log(result);
+          // console.log(result);
           setuserdata(result);
         }
       })
       .catch(err => console.error(err))
       .finally(()=> {setloading(false)});
   }
- 
+  
+    const getaccountuserinfo = async() =>{
+      const formdata = new FormData();
+      formdata.append("userid",params.userid);
+      const api = 'http://192.168.1.57:3000/getaccountuser';
+      await fetch(api,{
+        method:'POST',
+        headers:{'Accept': 'application/json'},
+        body: formdata
+      }).then(response=>response.json())
+        .then(result =>{
+          console.log(result);
+          setDetailuser((prevState) => ({
+            ...prevState,
+            username: result.result[0].username,
+            password: result.result[0].password
+          }))
+        })
+        .catch(err => console.error(err));    
+    }
 
   const deleteuser = () =>{
     setloading(true);
@@ -158,12 +195,13 @@ export default function seeDetail() {
           Onpress1={sharingImage} 
           Onpress2={saveimage} closeModal={closeModal}></ModalChoose>
           <View style={styles.fontContainer}>
-            <Text style={styles.font}>UserId:{params.userid}</Text>
-            <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
-            <Text style={styles.font}>Nickname: {params.nickname}</Text>
+            <Text style={styles.font}>UserId:{detailuser.userid}</Text>
+            <Text style={styles.font}>Name1: {[detailuser.firstname,` `,detailuser.lastname]}</Text>
+            <Text style={styles.font}>Nickname: {detailuser.nickname}</Text>
+
           </View>
           <View style={styles.buttoncontainer}>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...detailuser, uri: userdata?.uri})}})}>
             <Text> EDIT </Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>

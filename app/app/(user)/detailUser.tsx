@@ -158,12 +158,13 @@ export default function detailUser() {
           Onpress1={sharingImage} 
           Onpress2={saveimage} closeModal={closeModal}></ModalChoose>
           <View style={styles.fontContainer}>
+          <Text style={styles.font}>Detailed User</Text>
             <Text style={styles.font}>UserId:{params.userid}</Text>
             <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
             <Text style={styles.font}>Nickname: {params.nickname}</Text>
           </View>
           <View style={styles.buttoncontainer}>
-          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(user)/editPage',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
             <Text> EDIT </Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>

@@ -7,7 +7,8 @@ export default function user_layout() {
   return (
    <>
     <Stack>
-      <Stack.Screen name='loginUser'options={{headerShown: false}}/>
+      <Stack.Screen name='detailUser'options={{headerShown: false}}/>
+      <Stack.Screen name='editPage'options={{headerShown: false}}/>
       
 
     </Stack>

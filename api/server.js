@@ -368,3 +368,18 @@ app.post('/registeruser',upload.none(),async(req,res)=>{
     console.error("username or password is missing");
   }
 })
+
+app.post('/getaccountuser',upload.none(),async(req,res)=>{
+  const {userid} = req.body;
+  console.log(`Userid get account: ${userid}`);
+  if(userid){
+    const sql = "SELECT (username),(password) FROM account WHERE userid = ?";
+    con.query(sql,[userid],(err,result)=>{
+      if(err)throw err;
+      res.status(200).json({message:"Success",result});
+    })
+  }
+  else{
+    console.error("Userid is missing");
+  }
+})
