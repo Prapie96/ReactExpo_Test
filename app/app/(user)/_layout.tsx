@@ -10,7 +10,6 @@ export default function user_layout() {
       <Stack.Screen name='detailUser'options={{headerShown: false}}/>
       <Stack.Screen name='editPage'options={{headerShown: false}}/>
       
-
     </Stack>
    </>
   )

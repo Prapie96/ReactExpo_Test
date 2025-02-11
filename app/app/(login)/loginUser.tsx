@@ -105,7 +105,7 @@ export default function loginUser() {
     }
     
   return (
-    <View>
+    <View style={styles.container}>
         <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')}></Forminput>
         <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')}></Forminput>
         <CustomButton title='Login' Onpress={login}></CustomButton>
@@ -114,4 +114,10 @@ export default function loginUser() {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+       
+        backgroundColor:'#fff',
+    }
+})

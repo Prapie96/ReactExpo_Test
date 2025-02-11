@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import Forminput from '@/components/Forminput'
 import CustomButton from '@/components/CustomButton'
+import { router } from 'expo-router';
 
 interface regisProps{
     username:string;
@@ -42,8 +43,11 @@ export default function registerUser() {
                 }).then(response =>response.json())
                     .then(result =>{
                         if(result){
-                            console.log(result[0]);
+                            console.log(result);
+                           
+                        
                         }
+                       
                     }).catch((error)=>{
                         console.log(error);
                     });
@@ -55,16 +59,25 @@ export default function registerUser() {
         }else{
            alert("Please fill all the form");
         }
+        
     }
   return (
-    <View>
+    <View style={styles.container}>
         <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')}></Forminput>
         <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')}></Forminput>
         <Forminput label='Confirmed-Password' placeholder='Confirmed-Password...'values ={input.confirmed_password } handleonchange={handleChange('confirmed_password')}></Forminput>
-        <CustomButton title='Register' Onpress={registerPress}></CustomButton>
+        <CustomButton title='Register' Onpress={()=>{  router.push({pathname:'/(auth)/addUser'});}}></CustomButton>
         <CustomButton title='Back' Onpress={()=>{console.log(input)}}></CustomButton>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container:{
+        justifyContent:'center',
+        gap: 10,
+        height: '100%',
+        paddingHorizontal:20,
+        backgroundColor: '#FFFFFF',
+    }
+})

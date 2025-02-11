@@ -110,49 +110,101 @@ app.post("/getuser", async(req,res)=>{
   })
 
 
-app.post('/regisuser', upload.single("img"),async (req, res) => {
-  let { firstname,lastname,nickname} = req.body;
-   const img = req.file.filename;
-  // console.log(firstname, lastname,nickname,img);
-  console.dir(img,{depth:null});
-  if(firstname && lastname && nickname && img){
-    const insert = "INSERT INTO userinfo (firstname, lastname,nickname,img) VALUES (?,?,?,?)";
-  con.query(insert, [firstname, lastname,nickname,img], (err, result) => {
-    if (err) throw err;
-    res.json(result);
-  });
-  }
-  else{
-    console.log('firstname lastname  nickname img something missing)');
-  }
+  app.post('/regisuser', upload.single("img"), async (req, res) => {
+    const { firstname, lastname, nickname } = req.body;
+    const img = req.file ? req.file.filename : null;
+    
+    if (!firstname || !lastname || !nickname || !img) {
+      return res.status(400).json({ message: 'Missing required fields.' });
+    }
   
-});
-
+    const insertUserInfoQuery = "INSERT INTO userinfo (firstname, lastname, nickname, img) VALUES (?, ?, ?, ?)";
+    
+    try {
+      // Insert user info ลงในตาราง userinfo
+      const resultInsertUser = await new Promise((resolve, reject) => {
+        con.query(insertUserInfoQuery, [firstname, lastname, nickname, img], (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+  
+      if (resultInsertUser.affectedRows !== 1) {
+        console.error("Failed to insert user info.");
+        return res.status(400).json({ message: 'Failed to insert user info.' });
+      } else {
+        console.log('Success Insert User Info with userId:', resultInsertUser.insertId);
+      }
+  
+      // ดึง account ล่าสุดที่ยังไม่มี userid
+      const selectAccountQuery = `SELECT accountid FROM account WHERE userid IS NULL ORDER BY accountid DESC LIMIT 1`;
+      
+      const accountRows = await new Promise((resolve, reject) => {
+        con.query(selectAccountQuery, (err, results) => {
+          if (err) return reject(err);
+          resolve(results);
+        });
+      });
+      
+      if (accountRows.length === 0) {
+        console.error("No account record found to update.");
+        return res.status(400).json({ message: 'No account record found.' });
+      }
+      
+      const latestAccountId = accountRows[0].accountid;
+      console.log('Latest account id:', latestAccountId);
+  
+      // Update account โดยใช้ accountid ที่ได้จาก SELECT
+      const updateAccountQuery = "UPDATE account SET userid = ? WHERE accountid = ?";
+      const resultUpdateAccount = await new Promise((resolve, reject) => {
+        con.query(updateAccountQuery, [resultInsertUser.insertId, latestAccountId], (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+  
+      if (resultUpdateAccount.affectedRows !== 1) {
+        console.error("Failed to update account info.");
+        return res.status(400).json({ message: 'Failed to update account info.' });
+      } else {
+        console.log('Success Update Account Info');
+      }
+      
+      res.status(200).json({ message: 'User information inserted and account updated successfully.' });
+      
+    } catch (err) {
+      console.error("Error during user registration:", err);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+  
+  
+  
 
 app.put('/edit', upload.single("img"), async (req, res) => {
-  const { firstname, lastname, nickname, userid, uri } = req.body;
+  const { firstname, lastname, nickname, userid, username, password } = req.body;
   const img = req.file ? req.file.filename : null; // ตรวจสอบว่ามีการอัปโหลดรูปใหม่หรือไม่
 
   if (firstname && lastname && nickname && userid) {
       console.log("Get user input:", firstname, lastname, nickname, userid, img);
+      console.log("Get user input2:", username, password);
 
+      // ลบรูปเก่าหากมีการอัปโหลดใหม่
       if (img) {
-          // ถ้ามีการอัปโหลดรูปใหม่ ให้ลบรูปเก่า
           const selectOldImg = "SELECT img FROM userinfo WHERE userid = ?";
-          con.query(selectOldImg, [userid], (err, result) => {
+          con.query(selectOldImg, [userid], async (err, result) => {
               if (err) {
                   console.error(`Error fetching old image: ${err}`);
               } else {
-                  const filePath = path.join(__dirname, 'img', result[0].img);
+                  const filePath = path.join(__dirname, 'img', result[0].img);// ระบุที่อยู่ของไฟล์เก่า
                   console.log(`File path: ${filePath}`);
-                  if (fs.existsSync(filePath)) {
-                      fs.unlink(filePath, (err) => {
-                          if (err) {
-                              console.error(`Error removing file: ${err}`);
-                          } else {
-                              console.log(`File has been successfully removed.`);
-                          }
-                      });
+                  if(fs.existsSync(filePath)) {// ตรวจสอบว่าไฟล์เก่ามีอยู่หรือไม่
+                      try{
+                          await fs.promises.unlink(filePath);//ลบไฟล์เก่า
+                          console.log('File has been successfully removed.');
+                      }catch(err){
+                          console.error(`Error removing file: ${err}`);
+                      }
                   }
               }
           });
@@ -162,28 +214,59 @@ app.put('/edit', upload.single("img"), async (req, res) => {
       const changeUser = img 
           ? "UPDATE userinfo SET firstname = ?, lastname = ?, nickname = ?, img = ? WHERE userid = ?"
           : "UPDATE userinfo SET firstname = ?, lastname = ?, nickname = ? WHERE userid = ?";
-      
+
       const queryParams = img 
           ? [firstname, lastname, nickname, img, userid]
           : [firstname, lastname, nickname, userid];
 
-      con.query(changeUser, queryParams, (err, result) => {
-          if (err) {
-              throw err;
-          }
+      try {
+          const updateUserInfo = new Promise((resolve, reject) => { //Promise รอการทำงานจนเสร็จมีโดยfucntionข้างใน
+              con.query(changeUser, queryParams, (err, result) => {
+                  if (err) reject(err);// หากเกิดข้อผิดพลาดให้ reject
+                  else resolve(result); // ส่งผลลัพธ์กลับ
+              });
+          });
+
+          const result = await updateUserInfo;//รอจน result ของ query changeUser ทำงานเสร็จ
           if (result.affectedRows === 1) {
-              console.log('Success Edit');
-              res.status(200).json(result);
+              console.log('Success Edit User Info');
           } else {
-              console.error("Can't Edit User");
-              res.status(400).json({ message: false });
+              console.error("Can't Edit User Info");
+              return res.status(400).json({ message: false });
           }
-      });
+
+          // หากมีการเปลี่ยนแปลง username และ password
+          if (username && password) {
+              const changeUserPass = "UPDATE account SET username=?, password=? WHERE userid=?"; 
+              const updateUserPass = new Promise((resolve, reject) => {//สร้าง promise เพื่อ update ข้อมูลในตาราง account
+                  con.query(changeUserPass, [username, password, userid], (err, result) => {
+                      if (err) reject(err);
+                      else resolve(result);
+                  });
+              });
+
+              const passResult = await updateUserPass; //รอจน result ของ query changeUserPass ทำงานเสร็จ
+              if (passResult.affectedRows === 1) {
+                  console.log('Success Edit User Password');
+              } else {
+                  console.error("Can't Edit User Password");
+                  return res.status(400).json({ message: false });
+              }
+          }
+
+          // ส่งผลลัพธ์หลังจากการอัปเดตข้อมูลทั้งหมดสำเร็จ
+          res.status(200).json({ message: "User information updated successfully." });//หลังจากทำ Promise ทั้งหมดเสร็จส่งข้อความกลับ
+
+      } catch (err) {
+          console.error(`Error: ${err}`);
+          res.status(500).json({ message: 'Internal Server Error' });
+      }
   } else {
       console.error('firstname, lastname, nickname, or userid is missing');
       res.status(400).json({ message: 'Missing required fields' });
   }
 });
+
 
 app.delete('/deleteuser',async(req,res)=>{
   const {userid} = req.body;
@@ -346,7 +429,7 @@ app.post('/loginuser',upload.none(),async(req,res)=>{
     const sql = "SELECT * FROM account WHERE username = ? AND password = ?";
   con.query(sql,[username,password],(err,result)=>{
     if(err)throw err;
-    res.status(200).json({message: true,result});
+    return res.status(200).json({message: true,result});
   }
   )
   }else{
@@ -373,10 +456,10 @@ app.post('/getaccountuser',upload.none(),async(req,res)=>{
   const {userid} = req.body;
   console.log(`Userid get account: ${userid}`);
   if(userid){
-    const sql = "SELECT (username),(password) FROM account WHERE userid = ?";
+    const sql = "SELECT * FROM account WHERE userid = ?";
     con.query(sql,[userid],(err,result)=>{
       if(err)throw err;
-      res.status(200).json({message:"Success",result});
+      return res.status(200).json({message:"Success",result});
     })
   }
   else{

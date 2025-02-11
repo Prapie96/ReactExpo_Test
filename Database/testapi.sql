@@ -26,16 +26,25 @@ CREATE TABLE IF NOT EXISTS `account` (
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `usertype` int DEFAULT '2' COMMENT '1=Admin,2=user',
-  PRIMARY KEY (`accountid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`accountid`),
+  KEY `FK_account_userinfo` (`userid`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.account: ~5 rows (approximately)
+-- Dumping data for table testapi.account: ~13 rows (approximately)
 INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`) VALUES
 	(1, 1, 'John', '123', 1),
-	(2, 277, 'Prapie', '1', 2),
-	(3, 278, 'test', 'qwe', 1),
-	(4, NULL, 'pop', 'pap', NULL),
-	(5, NULL, 'pop1', 'pap1', 2);
+	(2, 277, 'Pie', '1', 1),
+	(3, 278, 'D12', 'D11', 1),
+	(4, 279, 'tar234', 'kay', 2),
+	(5, 281, 'chin@', 'chin123', 2),
+	(6, 282, 'j3k', 'Qwe', 2),
+	(7, 283, 'bo47', '47yu', 2),
+	(8, 284, 't', 't1', 2),
+	(9, 286, 'Jin', 'ploy', 2),
+	(13, 312, 'qwe', '123', 2),
+	(14, 287, 'regis', 'ter', 2),
+	(15, 288, 'regis1', 'ter1', 2),
+	(16, 289, 'select', 'up', 2);
 
 -- Dumping structure for table testapi.attendance
 CREATE TABLE IF NOT EXISTS `attendance` (
@@ -45,19 +54,20 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   PRIMARY KEY (`attendanceid`),
   KEY `FK_useridattendance` (`userid`),
   CONSTRAINT `FK_useridattendance` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.attendance: ~9 rows (approximately)
+-- Dumping data for table testapi.attendance: ~10 rows (approximately)
 INSERT INTO `attendance` (`attendanceid`, `userid`, `statususer`) VALUES
 	(1, 1, 1),
-	(2, 277, 2),
-	(3, 278, 4),
-	(4, 279, 3),
-	(5, 281, 4),
-	(6, 282, 4),
-	(7, 283, 3),
-	(8, 284, 3),
-	(9, 286, 2);
+	(2, 277, 1),
+	(3, 278, 1),
+	(4, 279, 1),
+	(5, 281, 1),
+	(6, 282, 1),
+	(7, 283, 1),
+	(8, 284, 1),
+	(9, 286, 1),
+	(10, 287, 1);
 
 -- Dumping structure for table testapi.status
 CREATE TABLE IF NOT EXISTS `status` (
@@ -104,19 +114,22 @@ CREATE TABLE IF NOT EXISTS `userinfo` (
   `nickname` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=291 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=290 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table testapi.userinfo: ~9 rows (approximately)
+-- Dumping data for table testapi.userinfo: ~12 rows (approximately)
 INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VALUES
 	(1, 'John', 'Doe', 'Antony', 'img_173831585812796c564e4-789a-433c-82e7-cfb67dbfa4cd.jpeg'),
-	(277, 'Pongsapat​', 'Intaratoot', 'Prapie Angry', 'img_17381387767297f52ab29-6770-4a4d-a797-b2b18fcc5ab7.webp'),
-	(278, 'Ratti', 'Ketchchaiyo', 'Disc', 'img_1738118988411935577d8-5873-44f1-9aab-e225c42eb066.jpeg'),
-	(279, 'Kittipong', 'Pananon', 'Kitar', 'img_1738119737035ceac5fcc-cf01-4e21-8b23-6a72a424481d.jpeg'),
-	(281, 'Sukrit', 'Nilda', 'Ham', 'img_1738119991433e67f6495-c2f0-4ba4-abad-97f524a26ccc.jpeg'),
-	(282, 'Api​sit', 'Kittiruangaram', 'Khawoat', 'img_17381391015330b4dd8c9-bcad-4100-9b0d-b083a107f40a.jpeg'),
-	(283, 'Nontakorn', 'Ukong', 'Boongkeii', 'img_17381391982248b7f8d56-1cc7-4235-ab4e-64fecca3b3c6.jpeg'),
-	(284, 'Test', 'WithSis', 'Reine', 'img_1738308329691c01e99bc-aafa-4078-a032-7cfba71e87e1.jpeg'),
-	(286, 'Ploypuk', 'Uso', 'Ploy', 'img_1738319132888d3a2d0ee-4169-4235-9f9d-d01ad7cb9fc1.jpeg');
+	(277, 'La96', 'Yapie', 'P1e99', 'img_1739257839260ae888cf1-00c9-4c75-9aed-9a8c38760401.jpeg'),
+	(278, 'Rat56', 'KT-343', 'D13k', 'img_17392577697478ca2d889-1df5-45d4-98f4-a0900ea20c58.jpeg'),
+	(279, 'Kitti49', 'Panama', 'Karti345', 'img_1739257576780030ff785-e9f3-4237-bcf5-3ee8cac138ab.jpeg'),
+	(281, 'Shinnosuke', 'Nohara', 'Chinjung', 'img_1739256997798ce180bf3-b72d-4760-b5c8-5a40a9d112c6.jpeg'),
+	(282, 'Ap48', 'Kt12', 'O31j3k', 'img_1739257995036560bf5c3-7f8d-4f46-93ee-bc4119385523.jpeg'),
+	(283, 'No2345', 'Ur87', 'B47ok', 'img_1739257448661842fd0e0-4f28-445b-94e3-90c8b633e796.jpeg'),
+	(284, 'Li31', 'Weed', 'Pu334', 'img_1739258053715ca980995-563a-48b4-9492-a796409addf0.jpeg'),
+	(286, 'Pl_46', 'Uso932', 'Pl32', 'img_17392575016651f99aff5-a387-4f8d-82a6-839a7339db35.jpeg'),
+	(287, 'Register', 'AddAcount', 'Test', 'img_1739265584344d9ac89c0-da06-4250-bdc2-54e1e37cc214.jpeg'),
+	(288, 'ds', 'ds', 'Testrigger', 'img_1739268211286Screenshot 2023-07-24 101441.png'),
+	(289, 'iii', 'ii', 'iiiiiiiii', 'img_1739268418075Screenshot 2023-07-24 101441.png');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

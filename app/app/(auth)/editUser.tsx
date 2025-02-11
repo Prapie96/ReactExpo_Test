@@ -12,7 +12,7 @@ interface userdata{
     nickname: string,
     userid: string,
     uri: string,
-    usernamae: string,
+    username: string,
     password: string,
 }
 export default function editUser() {
@@ -26,7 +26,7 @@ export default function editUser() {
         nickname: '',
         userid: '',
         uri: '',
-        usernamae: '',
+        username: '',
         password: '',
     });
     
@@ -38,7 +38,7 @@ useEffect(()=>{
         nickname: params.nickname,
         userid:params.userid,
         uri: params.uri,
-        usernamae: params.username,
+        username: params.username,
         password: params.password,
     }))
 },[]);
@@ -62,7 +62,7 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
             formdata.append("lastname",input.lastname);
             formdata.append("nickname",input.nickname);
             formdata.append("userid", input.userid);
-            formdata.append("username", input.usernamae);
+            formdata.append("username", input.username);
             formdata.append("password", input.password);
             if (image) {
                 formdata.append("img",{
@@ -196,7 +196,7 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
         <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
-        <Forminput label='Username' placeholder='username...'values ={input.usernamae} handleonchange={handleChange('username')}></Forminput>
+        <Forminput label='Username' placeholder='username...'values ={input.username} handleonchange={handleChange('username')}></Forminput>
         <Forminput label='Password' placeholder='password...'values ={input.password} handleonchange={handleChange('password')}></Forminput>
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
         <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{

@@ -1,22 +1,27 @@
 import { StyleSheet, Text, View, Image, ImageBackground, } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import { StatusBar } from 'expo-status-bar';
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
 
-
+// interface adminInfoprops{
+//   firstname:string,
+//   lastname:string,
+//   nickname:string,
+//   userid:number,
+// }
 export default function welcomePage() {
-      // const {user} = useLocalSearchParams();
-      // console.log(JSON.parse(user.toString()));
-      // const params = JSON.parse(user.toString());
+      const {user} = useLocalSearchParams();
+      console.log(JSON.parse(user.toString()));
+      const params = JSON.parse(user.toString());
+      // const [admininfo,setAdmininfo] = useState<adminInfoprops>({firstname:'',lastname:'',nickname:'',userid:0});
   return (
     <View >
-      
       <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 
       <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
-        <Text style={styles.titleText}>Welcome, Admin:</Text>
+        <Text style={styles.titleText}>Welcome, Admin:{params.nickname}</Text>
         <Text>Welcome to applicion to handle users in systems</Text>
         <Text>select the button to choose menu.</Text>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'textstyle={{
@@ -55,7 +60,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:20
   },
   titleText:{
-    fontSize:34,
+    fontSize:28,
   },
   bgimg:{
   
