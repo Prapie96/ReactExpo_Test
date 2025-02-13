@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, ImageBackground, } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
-import { StatusBar } from 'expo-status-bar';
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
 
 // interface adminInfoprops{

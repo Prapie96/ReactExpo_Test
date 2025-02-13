@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, Image,Linking, Alert} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image,Linking, Alert, TouchableOpacity} from 'react-native';
 import React, { useState,useEffect } from 'react';
 import CustomButton from "@/components/CustomButton";
 import Forminput from '@/components/Forminput';
@@ -6,6 +6,7 @@ import { router,useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ModalChoose from '@/components/modalChoose';
+import AntDesign from '@expo/vector-icons/AntDesign';
 interface userdata{
     firstname: string,
     lastname: string,
@@ -175,13 +176,20 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
   return (
     
     <View>
+        <ImageBackground source={require('@/assets/images/Frame1.jpg')} style={styles.container}>
         <View style={styles.viewcontain}>
         <Spinner
           visible={loading}
           textContent={'Loading Fecth All User...'}
           textStyle={{ color: '#FFF'}}
         />
+        <View>
+        <TouchableOpacity onPress={router.back} style={{position:'absolute',left:'-5%'}}>
+            <AntDesign name="left" size={34} color="black" />
+        </TouchableOpacity>
         <Text style={styles.titletext} >แก้ไขข้อมูล User{input.userid}</Text>
+        </View>
+       
         <View style={styles.containerimgpick} onTouchStart={()=>SetisModalVisible(true)}>
             {input && <Image style={styles.image} source={{uri : input.uri}}/>}
         </View>
@@ -192,18 +200,21 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
             Onpress2={pickImage} 
             closeModal={closeModal}>
         </ModalChoose>
-
-        <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
-        <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
-        <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
-        <Forminput label='Username' placeholder='username...'values ={input.username} handleonchange={handleChange('username')}></Forminput>
-        <Forminput label='Password' placeholder='password...'values ={input.password} handleonchange={handleChange('password')}></Forminput>
+        <View style={styles.containerFormInput}>
+        <Forminput label='Firstname' placeholder='firstname...' values={input.firstname} handleonchange={handleChange('firstname')} showtoggle={false}></Forminput>
+        <Forminput label='Lasttname' placeholder='lastname...' values={input.lastname} handleonchange={handleChange('lastname')} showtoggle={false}></Forminput>
+        <Forminput label='Nickname' placeholder='nickname...' values={input.nickname} handleonchange={handleChange('nickname')} showtoggle={false}></Forminput>
+        <Forminput label='Username' placeholder='username...' values={input.username} handleonchange={handleChange('username')} showtoggle={false}></Forminput>
+        <Forminput label='Password' placeholder='password...' values={input.password} handleonchange={handleChange('password')} showtoggle={true}></Forminput>
+        </View>
+        
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
         <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{
             backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>
         </View>
+        </ImageBackground>
     </View>
   )
 }
@@ -218,7 +229,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 10,
-       
+        marginTop: '20%',
         width: '100%',
         height: '100%',
         paddingTop:30,
@@ -228,7 +239,7 @@ const styles = StyleSheet.create({
         
     },
     titletext:{
-        fontSize: 32,
+        fontSize: 24,
         textAlign:'center',
     },
     containerimgpick:{
@@ -243,5 +254,9 @@ const styles = StyleSheet.create({
     image: {
         width:'100%',
         height:'100%'
+      },
+      containerFormInput:{
+          gap:10,
+          marginTop:10
       }
 })

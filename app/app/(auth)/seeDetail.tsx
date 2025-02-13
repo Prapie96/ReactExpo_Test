@@ -131,9 +131,11 @@ export default function seeDetail() {
   };
 
   const saveimage = async() =>{
+    console.log('Into saveimage()');
     const {status} = await MediaLibrary.requestPermissionsAsync();
     console.log(`userdata uri: ${userdata?.uri}`);
     try{
+      console.log('Into try');
       if(status === 'granted'){
         if(userdata && userdata.uri) {
           const fileUri = `${FileSystem.cacheDirectory}saved-image.jpg`; 
@@ -193,7 +195,9 @@ export default function seeDetail() {
           visible={isModalVisible} 
           texttitle1={['Share the Picture','Save Picture to Library']} 
           Onpress1={sharingImage} 
-          Onpress2={saveimage} closeModal={closeModal}></ModalChoose>
+          Onpress2={saveimage} 
+          closeModal={closeModal}>
+          </ModalChoose>
           <View style={styles.fontContainer}>
             <Text style={styles.font}>UserId:{detailuser.userid}</Text>
             <Text style={styles.font}>Name1: {[detailuser.firstname,` `,detailuser.lastname]}</Text>

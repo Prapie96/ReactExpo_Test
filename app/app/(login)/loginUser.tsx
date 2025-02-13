@@ -106,10 +106,10 @@ export default function loginUser() {
     
   return (
     <View style={styles.container}>
-        <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')}></Forminput>
-        <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')}></Forminput>
+        <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')} showtoggle={false}></Forminput>
+        <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
         <CustomButton title='Login' Onpress={login}></CustomButton>
-        <CustomButton title='Back' Onpress={()=>{console.log(input)}}></CustomButton>
+        <CustomButton title='Back' Onpress={()=>{router.back()}}></CustomButton>
     </View>
   )
 }

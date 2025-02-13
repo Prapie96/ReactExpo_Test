@@ -6,73 +6,90 @@ import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
 import { useState,useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import Entypo from '@expo/vector-icons/Entypo';
 export default function AddUser() {
     const [input,setinput] = useState({
         firstname:'',
         lastname:'',
         nickname:'',
         img:'',
+        username:'',
+        password:'',
+        confirmpassword:'',
     });
+    
     const [loading,setloading] = useState(false);
      const [isModalVisible,SetisModalVisible] = useState(false);
     const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult >();
+
     const handleChange = (fieldinput:string) =>(text:string)=>{
         setinput((prevState) => ({
             ...prevState,
             [fieldinput]: text,
           }));
     }
-
+     //FECTH API 
+   
     const handleSubmit=async () =>{
-         console.log(image);  
-        if(!input.firstname || !input.lastname || !input.nickname){
-            alert('กรุณากรอกข้อมูลให้ครบทุกช่องด้วยครับ');
+        if(input.firstname && input.lastname && input.nickname && input.img && input.username && input.password && input.confirmpassword){
+            if(input.confirmpassword === input.password){
+                const formdata = new FormData();
+                const fileName = image?.assets[0].uri.split('/').pop();
+                formdata.append("firstname",input.firstname);
+                formdata.append("lastname",input.lastname);
+                formdata.append("nickname",input.nickname);
+                formdata.append("img",{
+                    uri:image?.assets[0].uri,
+                    name: fileName,
+                    type: image?.assets[0].mimeType,
+                }as any)
+                formdata.append("username",input.username);
+                formdata.append("password",input.password);
+                formdata.append("confirmpassword",input.confirmpassword);
+    
+                console.log("Into else to fect");
+                console.log(formdata);
+                setloading(true);
+                const api = 'http://192.168.1.57:3000/regisuser';
+                await fetch(api,{
+                    method:'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        // 'Content-Type': 'application/json'
+                          "Content-Type": "multipart/form-data",
+                    },
+                    body: formdata
+                }).then(respond => respond.json()).then(result => {
+                    if(result){
+                        alertShow();
+                        return result;
+                    }
+                    }).catch(err => console.error(err))
+                    .finally(()=>{setloading(false);
+                        setinput({
+                            firstname:'',
+                            lastname:'',
+                            nickname:'',
+                            img:'',
+                            username:'',
+                            password:'',
+                            confirmpassword:'',
+                        });
+                    });
+            }
+            else{
+                alert("Password not macth");
+            }
         }
         else{
-            const formdata = new FormData();
-            const fileName = image?.assets[0].uri.split('/').pop();
-            formdata.append("firstname",input.firstname);
-            formdata.append("lastname",input.lastname);
-            formdata.append("nickname",input.nickname);
-            formdata.append("img",{
-                uri:image?.assets[0].uri,
-                name: fileName,
-                type: image?.assets[0].mimeType,
-            }as any)
-            console.log("Into else to fect");
-            console.log(formdata);
-            setloading(true);
-            const api = 'http://192.168.1.57:3000/regisuser';
-            await fetch(api,{
-                method:'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    // 'Content-Type': 'application/json'
-                      "Content-Type": "multipart/form-data",
-                },
-                body: formdata
-            }).then(respond => respond.json()).then(result => {
-                if(result){
-                    alertShow();
-                    return result;
-                }
-                }).catch(err => console.error(err)).finally(()=>{setloading(false)});
-            
-                setinput({
-                firstname:'',
-                lastname:'',
-                nickname:'',
-                img:'',
-            });
-        }
+            alert("Please Fill all Filed Inputs")
+        }   
     }
-
+    //ALERT MODAL
     const alertShow = ()=>Alert. alert('Success to  Add New User','คุณต้องการไปหน้า Show All Userเลยหรือไม่',[
         {
             text: 'ยืนยัน',
@@ -85,7 +102,7 @@ export default function AddUser() {
             onPress: () => console.log('Stay at to addUserPage'),
         }
     ])
-   
+   //ABOUT CAMERA , SHARE IMG, 
    const openCamera = async()=>{
            const  granted  = await ImagePicker.requestCameraPermissionsAsync();
            console.log(`result permission : ${granted.status}`);
@@ -125,9 +142,8 @@ export default function AddUser() {
     }
     SetisModalVisible(false);
     }
-   
+ 
     return (
-        // {image && <Image source={{uri: image}}style={styles.image}/>}
     <KeyboardAvoidingView>
     <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={styles.bgimg}>  
     <SafeAreaView style={styles.viewcontain} >
@@ -136,7 +152,13 @@ export default function AddUser() {
           textContent={'Loading Fecth All User...'}
           textStyle={{ color: '#FFF'}}
         />
+        <View style={styles.headtitle}>
+        <TouchableOpacity onPress={router.back} style={{position:'absolute',left:'-5%'}}>
+            <AntDesign name="left" size={34} color="black" />
+        </TouchableOpacity>
         <Text style={styles.titletext} >กรอกข้อมูล User</Text>
+        </View>
+        
         <View style={styles.containerimgpick} onTouchStart={()=>SetisModalVisible(true)}>
             {input.img && <Image style={styles.image} source={{uri : input.img}}/>}
         </View>
@@ -156,24 +178,29 @@ export default function AddUser() {
             </View>
            
         </Modal>
-        <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
-        <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
-        <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
-        <CustomButton Onpress={handleSubmit} title='Add User' textstyle={{
-          color:'#FFFFFF',
-          
-        }}
-        style={{
-            backgroundColor: '#C5BAFF',
-            
-    }}  >
+        <View style={styles.containerFormInput}>
+        <Forminput label='Firstname' placeholder='firstname...' values={input.firstname} handleonchange={handleChange('firstname')} showtoggle={false}></Forminput>
+        <Forminput label='Lastname' placeholder='lastname...' values={input.lastname} handleonchange={handleChange('lastname')} showtoggle={false}></Forminput>
+        <Forminput label='Nickname' placeholder='nickname...' values={input.nickname} handleonchange={handleChange('nickname')} showtoggle={false}></Forminput>
+        <Forminput label='Username' placeholder='username...' values={input.username} handleonchange={handleChange('username')} showtoggle={false}></Forminput>
+        <View style={{}}>
+        <Forminput label='Password' placeholder='password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
+        {/* <TouchableOpacity onPress={togglePassword}>
+            {
+                showPasword?( <Entypo name="eye" size={24} color="black" style={{position:'absolute',right:'5%'}} />)
+                : ( <Entypo name="eye-with-line" size={24} color="black" style={{position:'absolute',right:'5%',top:'50%'}} />)
+            }
+       
+        </TouchableOpacity> */}
+        </View>
+       
+        <Forminput label='Confirmed-Password' placeholder='confirmed-Password...'values ={input.confirmpassword } 
+                    handleonchange={handleChange('confirmpassword')} showtoggle={true}></Forminput>
+        </View>
+        
+        <CustomButton Onpress={handleSubmit} title='Add User' textstyle={{color:'#FFFFFF',}}style={{backgroundColor: '#C5BAFF',}}>
         </CustomButton>
-        <CustomButton Onpress={() => {router.back()}} title='Back'
-            
-        textstyle={{
-            color:'#FFFFFF',
-          }} >
-        </CustomButton>
+      
         
         
     </SafeAreaView>
@@ -189,7 +216,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        marginTop: 100,
+        marginTop: '15%',
         width: '100%',
         height: '100%',
         paddingTop:5,
@@ -197,6 +224,11 @@ const styles = StyleSheet.create({
         paddingRight:30,
         gap: 2,
         
+    },headtitle:{
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+        gap:10
     },
     containerimgpick:{
         borderWidth:1,
@@ -208,7 +240,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#EAEAEA',
     },
     titletext:{
-        fontSize: 32,
+        fontSize: 24,
         textAlign:'center',
         
     },
@@ -239,5 +271,10 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         gap:'20%',
         paddingHorizontal: '10%',
+
+    },
+    containerFormInput:{
+        gap:10,
+        marginTop:10
     }
 })

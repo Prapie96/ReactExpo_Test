@@ -111,72 +111,47 @@ app.post("/getuser", async(req,res)=>{
 
 
   app.post('/regisuser', upload.single("img"), async (req, res) => {
-    const { firstname, lastname, nickname } = req.body;
+    const { firstname, lastname, nickname, username, password } = req.body;
     const img = req.file ? req.file.filename : null;
-    
-    if (!firstname || !lastname || !nickname || !img) {
-      return res.status(400).json({ message: 'Missing required fields.' });
+
+    if (!firstname || !lastname || !nickname || !username || !password) {
+        return res.status(400).json({ message: "Missing required fields" }); // Early return for missing fields
     }
-  
-    const insertUserInfoQuery = "INSERT INTO userinfo (firstname, lastname, nickname, img) VALUES (?, ?, ?, ?)";
-    
+
+    const insertuserinfo = "INSERT INTO userinfo (firstname, lastname, nickname, img) VALUES (?, ?, ?, ?)";
+
     try {
-      // Insert user info ลงในตาราง userinfo
-      const resultInsertUser = await new Promise((resolve, reject) => {
-        con.query(insertUserInfoQuery, [firstname, lastname, nickname, img], (err, result) => {
-          if (err) return reject(err);
-          resolve(result);
+        con.query(insertuserinfo, [firstname, lastname, nickname, img], (err, result) => {
+            if (err) {
+                console.error("Error while INSERT USERINFO", err);
+                return res.status(500).json({ message: "Error inserting user info" }); 
+            }
+
+            if (result.affectedRows !== 1) {
+                return res.status(400).json({ message: "Failed to insert user info" }); 
+            }
+
+            const insertaccount = "INSERT INTO account (userid, username, password) VALUES (?, ?, ?)";
+            con.query(insertaccount, [result.insertId, username, password], (err, data) => {
+                if (err) {
+                    console.error("Error while INSERT account", err);
+                    return res.status(500).json({ message: "Error inserting account" }); 
+                }
+
+                if (data.affectedRows !== 1) {
+                    return res.status(400).json({ message: "Failed to insert account" }); 
+                }
+
+                // Only send ONE success response after both inserts are successful
+                console.log(`Success to insert userinfo and account`)
+                return res.status(200).json({ message: "Success to insert userinfo and account", result: { userInfo: result, accountInfo: data } });
+            });
         });
-      });
-  
-      if (resultInsertUser.affectedRows !== 1) {
-        console.error("Failed to insert user info.");
-        return res.status(400).json({ message: 'Failed to insert user info.' });
-      } else {
-        console.log('Success Insert User Info with userId:', resultInsertUser.insertId);
-      }
-  
-      // ดึง account ล่าสุดที่ยังไม่มี userid
-      const selectAccountQuery = `SELECT accountid FROM account WHERE userid IS NULL ORDER BY accountid DESC LIMIT 1`;
-      
-      const accountRows = await new Promise((resolve, reject) => {
-        con.query(selectAccountQuery, (err, results) => {
-          if (err) return reject(err);
-          resolve(results);
-        });
-      });
-      
-      if (accountRows.length === 0) {
-        console.error("No account record found to update.");
-        return res.status(400).json({ message: 'No account record found.' });
-      }
-      
-      const latestAccountId = accountRows[0].accountid;
-      console.log('Latest account id:', latestAccountId);
-  
-      // Update account โดยใช้ accountid ที่ได้จาก SELECT
-      const updateAccountQuery = "UPDATE account SET userid = ? WHERE accountid = ?";
-      const resultUpdateAccount = await new Promise((resolve, reject) => {
-        con.query(updateAccountQuery, [resultInsertUser.insertId, latestAccountId], (err, result) => {
-          if (err) return reject(err);
-          resolve(result);
-        });
-      });
-  
-      if (resultUpdateAccount.affectedRows !== 1) {
-        console.error("Failed to update account info.");
-        return res.status(400).json({ message: 'Failed to update account info.' });
-      } else {
-        console.log('Success Update Account Info');
-      }
-      
-      res.status(200).json({ message: 'User information inserted and account updated successfully.' });
-      
     } catch (err) {
-      console.error("Error during user registration:", err);
-      res.status(500).json({ message: 'Internal Server Error' });
+        console.error("General error", err);
+        return res.status(500).json({ message: "An error occurred" });  // Catch any unexpected errors
     }
-  });
+});
   
   
   

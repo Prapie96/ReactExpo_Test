@@ -22,7 +22,7 @@ export default function index() {
         >
           
         </CustomButton>
-        <CustomButton Onpress={()=>router.push('/(login)/registerUser')}title='Register' 
+        <CustomButton Onpress={()=>router.push('/(auth)/addUser')}title='Register' 
           style={{
             backgroundColor: '#FFFFF',
             borderWidth:1,
