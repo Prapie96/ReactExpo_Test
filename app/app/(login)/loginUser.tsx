@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Forminput from '@/components/Forminput'
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router';
+import { storeData,getData } from '@/hooks/useAysnceStorage';
 interface Inputprops {
     username:string;
     password:string;
@@ -54,8 +55,12 @@ export default function loginUser() {
             .then(result =>{
                 if(result){
                     console.log(result);
-                    setinput(result.result[0]);
-                    getinfouser(result.result[0]);
+                    storeData(result).then(getData);
+                    // setinput(result.result[0]);
+                    // getinfouser(result.result[0]);
+                }
+                else{
+                    alert("Password wrong !!!");
                 }
             })
             .catch(err => console.error(err));

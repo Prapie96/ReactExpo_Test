@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, ImageBackground, } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, ImageBackground,BackHandler, Alert} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
@@ -11,10 +11,30 @@ import { Redirect, router, useLocalSearchParams } from 'expo-router';
 //   userid:number,
 // }
 export default function welcomePage() {
-      const {user} = useLocalSearchParams();
-      console.log(JSON.parse(user.toString()));
-      const params = JSON.parse(user.toString());
-      // const [admininfo,setAdmininfo] = useState<adminInfoprops>({firstname:'',lastname:'',nickname:'',userid:0});
+  const {user} = useLocalSearchParams();
+  console.log(JSON.parse(user.toString()));
+  const params = JSON.parse(user.toString());
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Warning!', 'If you continue will sign-out from app ,Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => router.push('/')},
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <View >
       <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 

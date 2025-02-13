@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS `account` (
   `usertype` int DEFAULT '2' COMMENT '1=Admin,2=user',
   PRIMARY KEY (`accountid`),
   KEY `FK_account_userinfo` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.account: ~13 rows (approximately)
+-- Dumping data for table testapi.account: ~19 rows (approximately)
 INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`) VALUES
 	(1, 1, 'John', '123', 1),
 	(2, 277, 'Pie', '1', 1),
@@ -44,7 +44,13 @@ INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`
 	(13, 312, 'qwe', '123', 2),
 	(14, 287, 'regis', 'ter', 2),
 	(15, 288, 'regis1', 'ter1', 2),
-	(16, 289, 'select', 'up', 2);
+	(16, 289, 'select', 'up', 2),
+	(40, 290, 'p1', 'pp1', 2),
+	(41, 291, 'c1', 'c2', 2),
+	(42, 292, 'v', 'c2v', 2),
+	(43, 293, 'Key', 'Dow', 2),
+	(44, 294, 'Dydy', 'E', 2),
+	(46, 296, 'Cola', 'C1', 2);
 
 -- Dumping structure for table testapi.attendance
 CREATE TABLE IF NOT EXISTS `attendance` (
@@ -66,8 +72,7 @@ INSERT INTO `attendance` (`attendanceid`, `userid`, `statususer`) VALUES
 	(6, 282, 1),
 	(7, 283, 1),
 	(8, 284, 1),
-	(9, 286, 1),
-	(10, 287, 1);
+	(9, 286, 1);
 
 -- Dumping structure for table testapi.status
 CREATE TABLE IF NOT EXISTS `status` (
@@ -114,9 +119,9 @@ CREATE TABLE IF NOT EXISTS `userinfo` (
   `nickname` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=290 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=297 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table testapi.userinfo: ~12 rows (approximately)
+-- Dumping data for table testapi.userinfo: ~17 rows (approximately)
 INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VALUES
 	(1, 'John', 'Doe', 'Antony', 'img_173831585812796c564e4-789a-433c-82e7-cfb67dbfa4cd.jpeg'),
 	(277, 'La96', 'Yapie', 'P1e99', 'img_1739257839260ae888cf1-00c9-4c75-9aed-9a8c38760401.jpeg'),
@@ -127,9 +132,8 @@ INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VA
 	(283, 'No2345', 'Ur87', 'B47ok', 'img_1739257448661842fd0e0-4f28-445b-94e3-90c8b633e796.jpeg'),
 	(284, 'Li31', 'Weed', 'Pu334', 'img_1739258053715ca980995-563a-48b4-9492-a796409addf0.jpeg'),
 	(286, 'Pl_46', 'Uso932', 'Pl32', 'img_17392575016651f99aff5-a387-4f8d-82a6-839a7339db35.jpeg'),
-	(287, 'Register', 'AddAcount', 'Test', 'img_1739265584344d9ac89c0-da06-4250-bdc2-54e1e37cc214.jpeg'),
-	(288, 'ds', 'ds', 'Testrigger', 'img_1739268211286Screenshot 2023-07-24 101441.png'),
-	(289, 'iii', 'ii', 'iiiiiiiii', 'img_1739268418075Screenshot 2023-07-24 101441.png');
+	(293, 'Kuakilng', 'Pakthai', 'Khaidow', 'img_173941720030607c27266-a177-491c-a10f-f6b1568ad310.jpeg'),
+	(296, 'Coca', 'Cola', 'Coala', 'img_17394187209396796f2aa-5c52-4697-be28-037d2818f70f.jpeg');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

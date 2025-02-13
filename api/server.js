@@ -399,12 +399,19 @@ app.post('/attendance', upload.none(), async (req, res) => {
 
 app.post('/loginuser',upload.none(),async(req,res)=>{
   const {username,password} = req.body;
-  console.log(`username : ${username} password : ${password}`);
+  console.log(`username : ${username} || password : ${password}`);
   if(username&&password){
-    const sql = "SELECT * FROM account WHERE username = ? AND password = ?";
-  con.query(sql,[username,password],(err,result)=>{
+    const sql = "SELECT * FROM account WHERE username = ?";
+  con.query(sql,[username],(err,result)=>{
     if(err)throw err;
+    if(result[0].password !== password){
+      return res.status(400).json({message:`Password wrong not match in database`});
+    }
+    else{
+      console.log("Success to login");
     return res.status(200).json({message: true,result});
+    }
+    
   }
   )
   }else{
