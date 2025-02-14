@@ -6,7 +6,7 @@ export const storeData = async (value: object) => {
         try {
           const jsonValue = JSON.stringify(value);
           await AsyncStorage.setItem('UID', jsonValue);
-          console.log('dd',jsonValue);
+          console.log('storeData currentUser',jsonValue);
         } catch (e) {
           // saving error
         console.error(e);
@@ -17,7 +17,7 @@ export const storeData = async (value: object) => {
 export const  getData = async () => {
     try {
         const jsonValue = await AsyncStorage.getItem('UID');
-        console.log('ss',jsonValue);
+        console.log('fecthData Currentuser',jsonValue);
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {
@@ -26,3 +26,37 @@ export const  getData = async () => {
         throw new Error();
       }
 };
+export const storeRole = async (value: number) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('Role', jsonValue);
+    console.log('storeRole currentUser',jsonValue);
+  } catch (e) {
+    // saving error
+  console.error(e);
+  throw new Error();
+  }
+};
+export const  getDataRole = async () => {
+  try {
+      const jsonValue = await AsyncStorage.getItem('Role');
+      console.log('fecthRole Currentuser',jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+      
+    } catch (e) {
+      // error reading value
+      console.error(e);
+      throw new Error();
+    }
+};
+export const clearAll = async () => {
+  try {
+    await AsyncStorage.clear()
+  } catch(e) {
+    // clear error
+    console.error(e);
+    throw new Error();
+  }
+
+  console.log('Done.')
+}

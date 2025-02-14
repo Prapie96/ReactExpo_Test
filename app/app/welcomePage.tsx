@@ -3,17 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
+import { clearAll } from '@/hooks/useAysnceStorage';
 
-// interface adminInfoprops{
-//   firstname:string,
-//   lastname:string,
-//   nickname:string,
-//   userid:number,
-// }
 export default function welcomePage() {
   const {user} = useLocalSearchParams();
   console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString());
+  console.log('params nick',params.nickname)
+  console.log('param all',params)
   useEffect(() => {
     const backAction = () => {
       Alert.alert('Warning!', 'If you continue will sign-out from app ,Are you sure you want to go back?', [
@@ -22,11 +19,10 @@ export default function welcomePage() {
           onPress: () => null,
           style: 'cancel',
         },
-        {text: 'YES', onPress: () => router.push('/')},
+        {text: 'YES', onPress: () => {clearAll(),router.push('/')}},
       ]);
       return true;
     };
-
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
@@ -35,12 +31,13 @@ export default function welcomePage() {
     return () => backHandler.remove();
   }, []);
 
+
   return (
     <View >
       <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 
       <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
-        <Text style={styles.titleText}>Welcome, Admin:{params.nickname}</Text>
+        <Text style={styles.titleText}>Welcome, Admin:{params?.nickname || params[0].nickname}</Text>
         <Text>Welcome to applicion to handle users in systems</Text>
         <Text>select the button to choose menu.</Text>
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'textstyle={{

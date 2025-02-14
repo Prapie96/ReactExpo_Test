@@ -1,4 +1,4 @@
-import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert, Modal, Linking } from 'react-native'
+import { ImageBackground,Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert, Linking } from 'react-native'
 import React, {useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import Spinner from 'react-native-loading-spinner-overlay'
@@ -33,12 +33,11 @@ export default function seeDetail() {
       lastname:params.lastname,
       nickname:params.nickname,
       userid:params.userid
-    }))
-  },[])
-  useEffect(()=>{
+    }));
     fecthdata();
     getaccountuserinfo();
   },[])
+
   
   const fecthdata =async () =>{
     setloading(true);

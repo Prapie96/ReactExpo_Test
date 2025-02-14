@@ -7,6 +7,7 @@ import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import ModalChoose from '@/components/modalChoose';
+import { clearAll } from '@/hooks/useAysnceStorage';
 interface userimg{
   uri: string;
 }
@@ -14,9 +15,11 @@ interface userimg{
 export default function detailUser() {
   const [loading,setloading] = useState(false);
   const {user} = useLocalSearchParams();
+
   const [userdata, setuserdata] = useState<userimg>();
   // console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString())
+  console.log('params:',params?.userid ||params[0].userid)
   const [isModalVisible,SetisModalVisible] = useState(false);
   useEffect(()=>{
     fecthdata();
@@ -28,7 +31,7 @@ export default function detailUser() {
     await fetch(api,{
       method:'POST',
       headers:{'Accept': 'application/json','Content-Type': 'application/json'},
-      body: JSON.stringify({userid:params.userid})
+      body: JSON.stringify({userid:params?.userid ||params[0].userid})
     }).then(response => response.json())
       .then(result => {
         if(result){
@@ -43,7 +46,7 @@ export default function detailUser() {
 
   const deleteuser = () =>{
     setloading(true);
-    const getid = {userid: params.userid}
+    const getid = {userid:params?.userid ||params[0].userid}
     console.log("userid :"+ getid.userid);
     const api = `http://192.168.1.57:3000/deleteuser`;
 
@@ -159,9 +162,9 @@ export default function detailUser() {
           Onpress2={saveimage} closeModal={closeModal}></ModalChoose>
           <View style={styles.fontContainer}>
           <Text style={styles.font}>Detailed User</Text>
-            <Text style={styles.font}>UserId:{params.userid}</Text>
-            <Text style={styles.font}>Name: {[params.firstname,` `,params.lastname]}</Text>
-            <Text style={styles.font}>Nickname: {params.nickname}</Text>
+            <Text style={styles.font}>UserId:{params?.userid ||params[0].userid}</Text>
+            <Text style={styles.font}>Name: {[params?.firstname ||params[0].firstname,` `,params?.lastname ||params[0].lastname]}</Text>
+            <Text style={styles.font}>Nickname: {params?.nickname ||params[0].nickname}</Text>
           </View>
           <View style={styles.buttoncontainer}>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(user)/editPage',params:{user:JSON.stringify({...params, uri: userdata?.uri})}})}>
@@ -169,6 +172,9 @@ export default function detailUser() {
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
             <Text> delete </Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>{clearAll(),router.push('/(login)/loginUser')}}>
+            <Text> Signout </Text>
           </TouchableOpacity>
           </View>
           <TouchableOpacity activeOpacity={0.7} onPress={()=>router.push('/(auth)/showUser')} style={{alignItems:'center',marginTop:'5%'}}>

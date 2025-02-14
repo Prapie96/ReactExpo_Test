@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Forminput from '@/components/Forminput'
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router';
-import { storeData,getData } from '@/hooks/useAysnceStorage';
+import { storeData,getData, getDataRole, storeRole } from '@/hooks/useAysnceStorage';
 interface Inputprops {
     username:string;
     password:string;
@@ -55,9 +55,8 @@ export default function loginUser() {
             .then(result =>{
                 if(result){
                     console.log(result);
-                    storeData(result).then(getData);
-                    // setinput(result.result[0]);
-                    // getinfouser(result.result[0]);
+                    setinput(result.result[0]);
+                    getinfouser(result.result[0]);
                 }
                 else{
                     alert("Password wrong !!!");
@@ -93,6 +92,7 @@ export default function loginUser() {
         .then(result =>{
             if(result){
                 setuserdata(result[0]);
+                storeData(result).then(getData);
             }
         }).catch(err => console.error(err));
         
@@ -100,10 +100,13 @@ export default function loginUser() {
     const checkRole = () =>{
         if(input.usertype === 1){
             console.log(`Admin:${userdata.firstname}`);
+            storeRole(input.usertype);
+            console.log('nickname userdata:',userdata.nickname);
             router.push({pathname:'/welcomePage',params:{user:JSON.stringify(userdata)}});
             // router.push('/welcomePage');
         }
         else{
+            storeRole(input.usertype);
             console.log(`User:${userdata.firstname}`);
             router.push({pathname:'/(user)/detailUser',params:{user:JSON.stringify(userdata)}});
         }

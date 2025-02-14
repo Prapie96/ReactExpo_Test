@@ -61,6 +61,7 @@ app.post("/getuser", async(req,res)=>{
   
   app.post("/img",async(req,res)=>{
     const {userid} = req.body;
+    console.log('/img userid:',userid)
     const filenameimg = "SELECT img FROM userinfo WHERE userid = ? ";
     // console.log(`Sow pat join in /img:${path.join()} `)
     if(userid){

@@ -185,11 +185,11 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
             closeModal={closeModal}>
         </ModalChoose>
 
-        <Forminput label='Firstname' placeholder='firstname...'values ={input.firstname } handleonchange={handleChange('firstname')}></Forminput>
-        <Forminput label='Lasttname' placeholder='lastname...'values ={input.lastname } handleonchange={handleChange('lastname')}></Forminput>
-        <Forminput label='Nickname' placeholder='nickname...'values ={input.nickname } handleonchange={handleChange('nickname')}></Forminput>
+        <Forminput label='Firstname' placeholder='firstname...' values={input.firstname} handleonchange={handleChange('firstname')} showtoggle={false}></Forminput>
+        <Forminput label='Lasttname' placeholder='lastname...' values={input.lastname} handleonchange={handleChange('lastname')} showtoggle={false}></Forminput>
+        <Forminput label='Nickname' placeholder='nickname...' values={input.nickname} handleonchange={handleChange('nickname')} showtoggle={false}></Forminput>
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>
-        <CustomButton Onpress={() => router.push('/(auth)/showUser')} title='Back' style={{
+        <CustomButton Onpress={() => {router.back()}} title='Back' style={{
             backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>
