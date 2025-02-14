@@ -31,9 +31,9 @@ export default function RootLayout() {
     
   },[]);
   const getusercurrent = async()=>{
-    const resultgetData = await getData().then(result=>{return result});
-    // console.log('Current Data USer:',resultgetData);
-    const resultgetRole = await getDataRole().then(result=>{ return result});
+    const resultgetData = await getData().then(result=>result);
+    const resultgetRole = await getDataRole().then(result=>result);
+     // console.log('Current Data USer:',resultgetData);
     // console.log('Current Role User:',resultgetRole);
     if(resultgetData){
       if(resultgetRole ===1){

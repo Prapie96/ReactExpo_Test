@@ -406,11 +406,12 @@ app.post('/loginuser',upload.none(),async(req,res)=>{
   con.query(sql,[username],(err,result)=>{
     if(err)throw err;
     if(result[0].password !== password){
-      return res.status(400).json({message:`Password wrong not match in database`});
+      console.log('Password wrong not match in database');
+      return res.status(400).json({message:false});
     }
     else{
       console.log("Success to login");
-    return res.status(200).json({message: true,result});
+      return res.status(200).json({message: true,result});
     }
     
   }

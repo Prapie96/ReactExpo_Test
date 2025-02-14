@@ -53,7 +53,7 @@ export default function loginUser() {
             body: formdata,
         }).then(response => response.json())
             .then(result =>{
-                if(result){
+                if(result.message){
                     console.log(result);
                     setinput(result.result[0]);
                     getinfouser(result.result[0]);
@@ -86,11 +86,13 @@ export default function loginUser() {
             headers:{
                 "Accept": "application/json",
                 'content-Type': 'multipart/form-data',
+
             },
             body: formmdata,
         }).then(response => response.json())
         .then(result =>{
             if(result){
+                
                 setuserdata(result[0]);
                 storeData(result).then(getData);
             }

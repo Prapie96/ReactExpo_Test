@@ -160,10 +160,13 @@ export default function seeDetail() {
   };
 
   const saveimage = async() =>{
-    console.log('Into saveimage()');
-    const {status} = await MediaLibrary.requestPermissionsAsync();
-    console.log(`userdata uri: ${userdata?.uri}`);
+    console.log("Function saveimage called");
+  console.log("Into saveimage()");
+  
+    // console.log(`userdata uri: ${userdata?.uri}`);
     try{
+      const {status} = await MediaLibrary.requestPermissionsAsync();
+      console.log(`Permission status: ${status}`);
       console.log('Into try');
       if(status === 'granted'){
         if(userdata && userdata.uri) {
