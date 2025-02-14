@@ -7,6 +7,7 @@ import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import ModalChoose from '@/components/modalChoose';
+import { clearAll, getDataRole } from '@/hooks/useAysnceStorage';
 interface userimg{
   uri: string;
 }
@@ -17,35 +18,64 @@ interface seeDetailprops{
   lastname:string,
   nickname:string,
   userid:number,
+  usertype?:number
 }
 export default function seeDetail() {
   const [loading,setloading] = useState(false);
   const {user} = useLocalSearchParams();
   const [userdata, setuserdata] = useState<userimg>();
-  const [detailuser,setDetailuser] = useState<seeDetailprops>({username:'',password:'',firstname:'',lastname:'',nickname:'',userid:0} );
-  // console.log(JSON.parse(user.toString()));
-  const params = JSON.parse(user.toString())
+  const [detailuser,setDetailuser] = useState<seeDetailprops>({username:'',password:'',firstname:'',lastname:'',nickname:'',userid:0,usertype:0} );
+  const params = user ? JSON.parse(user.toString()) : {};
   const [isModalVisible,SetisModalVisible] = useState(false);
   useEffect(()=>{
     setDetailuser((prevState) => ({
       ...prevState,
-      firstname:params.firstname,
-      lastname:params.lastname,
-      nickname:params.nickname,
-      userid:params.userid
+      userid:params?.userid ||params[0].userid,
     }));
     fecthdata();
+    fecthimg();
     getaccountuserinfo();
+    getresultRole();
   },[])
-
-  
-  const fecthdata =async () =>{
+  const getresultRole=async()=>{
+    await getDataRole().then(result=>{
+      setDetailuser((prevState) => ({
+        ...prevState,
+        usertype: result
+      }));
+    }).catch((err)=>{
+      console.error(err);
+    })
+  };
+  const fecthdata=async()=>{
+   
+    const formdata = new FormData();
+    formdata.append("userid",params?.userid ||params[0].userid);
+    const api = 'http://192.168.1.57:3000/getuserbyid';
+    await fetch(api,{
+      method:'POST',
+      headers:{'Accept': 'application/json','content-Type': 'multipart/form-data',},
+      body: formdata
+    }).then(response=>response.json()).then(result=>{
+      if(result){
+        setDetailuser((prevState) => ({
+          ...prevState,
+          firstname:result[0].firstname,
+          lastname:result[0].lastname,
+          nickname:result[0].nickname
+        }));
+      }
+    }).catch((err)=>{
+      console.error(err);
+    })
+  }
+  const fecthimg =async () =>{
     setloading(true);
     const api = 'http://192.168.1.57:3000/img';
     await fetch(api,{
       method:'POST',
       headers:{'Accept': 'application/json','Content-Type': 'application/json'},
-      body: JSON.stringify({userid:params.userid})
+      body: JSON.stringify({userid:params?.userid ||params[0].userid})
     }).then(response => response.json())
       .then(result => {
         if(result){
@@ -59,7 +89,7 @@ export default function seeDetail() {
   
     const getaccountuserinfo = async() =>{
       const formdata = new FormData();
-      formdata.append("userid",params.userid);
+      formdata.append("userid",params?.userid ||params[0].userid);
       const api = 'http://192.168.1.57:3000/getaccountuser';
       await fetch(api,{
         method:'POST',
@@ -175,7 +205,7 @@ export default function seeDetail() {
   const closeModal = () => {
     SetisModalVisible(false); 
   };
-
+  
   return (
     <View>
         <ImageBackground source={require('@/assets/images/bg-expoproject.png')} style={styles.bgimg}> 
@@ -198,10 +228,10 @@ export default function seeDetail() {
           closeModal={closeModal}>
           </ModalChoose>
           <View style={styles.fontContainer}>
-            <Text style={styles.font}>UserId:{detailuser.userid}</Text>
-            <Text style={styles.font}>Name1: {[detailuser.firstname,` `,detailuser.lastname]}</Text>
+            {detailuser.usertype ===1 &&  <Text style={styles.font}>UserId:{detailuser.userid}</Text>}
+            <Text style={styles.font}>Name: {detailuser.firstname}</Text>
+            <Text style={styles.font}>LastName: {detailuser.lastname}</Text>
             <Text style={styles.font}>Nickname: {detailuser.nickname}</Text>
-
           </View>
           <View style={styles.buttoncontainer}>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...detailuser, uri: userdata?.uri})}})}>
@@ -210,6 +240,9 @@ export default function seeDetail() {
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
             <Text> delete </Text>
           </TouchableOpacity>
+           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>{clearAll(),router.push('/(login)/loginUser')}}>
+                      <Text> Signout </Text>
+                    </TouchableOpacity>
           </View>
           <TouchableOpacity activeOpacity={0.7} onPress={()=>router.push('/(auth)/showUser')} style={{alignItems:'center',marginTop:'5%'}}>
                     <AntDesign name="close" size={40} color="black" />

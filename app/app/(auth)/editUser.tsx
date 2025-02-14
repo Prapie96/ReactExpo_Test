@@ -15,12 +15,14 @@ interface userdata{
     uri: string,
     username: string,
     password: string,
+    usertype?:number
 }
 export default function editUser() {
     const [isModalVisible,SetisModalVisible] = useState(false);
     const [loading,setloading] = useState(false);
     const  {user} = useLocalSearchParams();
-    const params = JSON.parse(user.toString())
+    const params = JSON.parse(user.toString());
+    // console.log("PARAMS:",params)
     const [input,setinput] = useState<userdata>({
         firstname: '',
         lastname: '',
@@ -29,6 +31,7 @@ export default function editUser() {
         uri: '',
         username: '',
         password: '',
+        usertype:0,
     });
     
 useEffect(()=>{ 
@@ -41,6 +44,7 @@ useEffect(()=>{
         uri: params.uri,
         username: params.username,
         password: params.password,
+        usertype: params.usertype,
     }))
 },[]);
 const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
@@ -172,7 +176,7 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
         const closeModal = () => {
             SetisModalVisible(false); 
           };
-
+          console.log('input',input);
   return (
     
     <View>
@@ -204,8 +208,10 @@ const [image,setImage] = useState<ImagePicker.ImagePickerSuccessResult>();
         <Forminput label='Firstname' placeholder='firstname...' values={input.firstname} handleonchange={handleChange('firstname')} showtoggle={false}></Forminput>
         <Forminput label='Lasttname' placeholder='lastname...' values={input.lastname} handleonchange={handleChange('lastname')} showtoggle={false}></Forminput>
         <Forminput label='Nickname' placeholder='nickname...' values={input.nickname} handleonchange={handleChange('nickname')} showtoggle={false}></Forminput>
-        <Forminput label='Username' placeholder='username...' values={input.username} handleonchange={handleChange('username')} showtoggle={false}></Forminput>
-        <Forminput label='Password' placeholder='password...' values={input.password} handleonchange={handleChange('password')} showtoggle={true}></Forminput>
+        {input.usertype ===1 && <>
+          <Forminput label='Username' placeholder='username...' values={input.username} handleonchange={handleChange('username')} showtoggle={false}></Forminput>
+          <Forminput label='Password' placeholder='password...' values={input.password} handleonchange={handleChange('password')} showtoggle={true}></Forminput>
+        </>}
         </View>
         
         <CustomButton Onpress={editpress} title='Edit User'></CustomButton>

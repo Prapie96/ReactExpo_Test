@@ -2,14 +2,13 @@ import { StyleSheet, Text, View, Image, ImageBackground,BackHandler, Alert} from
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
-import { Redirect, router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { clearAll } from '@/hooks/useAysnceStorage';
 
 export default function welcomePage() {
   const {user} = useLocalSearchParams();
   console.log(JSON.parse(user.toString()));
   const params = JSON.parse(user.toString());
-  console.log('params nick',params.nickname)
   console.log('param all',params)
   useEffect(() => {
     const backAction = () => {

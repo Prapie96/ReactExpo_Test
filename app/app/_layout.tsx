@@ -32,15 +32,15 @@ export default function RootLayout() {
   },[]);
   const getusercurrent = async()=>{
     const resultgetData = await getData().then(result=>{return result});
-    console.log('Current Data USer:',resultgetData);
+    // console.log('Current Data USer:',resultgetData);
     const resultgetRole = await getDataRole().then(result=>{ return result});
-    console.log('Current Role User:',resultgetRole);
+    // console.log('Current Role User:',resultgetRole);
     if(resultgetData){
       if(resultgetRole ===1){
         router.push({pathname:'/welcomePage',params:{user:JSON.stringify(resultgetData)}});
       }
       else{
-        router.push({pathname:'/(user)/detailUser',params:{user:JSON.stringify(resultgetData)}});
+        router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(resultgetData)}});
       }
     }
     else{
