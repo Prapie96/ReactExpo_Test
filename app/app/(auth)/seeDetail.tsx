@@ -8,6 +8,7 @@ import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import ModalChoose from '@/components/modalChoose';
 import { clearAll, getDataRole } from '@/hooks/useAysnceStorage';
+import { ThemedText } from '@/components/ThemedText';
 interface userimg{
   uri: string;
 }
@@ -231,21 +232,21 @@ export default function seeDetail() {
           closeModal={closeModal}>
           </ModalChoose>
           <View style={styles.fontContainer}>
-            {detailuser.usertype ===1 &&  <Text style={styles.font}>UserId:{detailuser.userid}</Text>}
-            <Text style={styles.font}>Name: {detailuser.firstname}</Text>
-            <Text style={styles.font}>LastName: {detailuser.lastname}</Text>
-            <Text style={styles.font}>Nickname: {detailuser.nickname}</Text>
+            {detailuser.usertype ===1 &&  <ThemedText type='subtitle' darkColor='black'>UserId:{detailuser.userid}</ThemedText>}
+            <ThemedText type='subtitle' darkColor='black'>Name: {detailuser.firstname}</ThemedText>
+            <ThemedText type='subtitle' darkColor='black'>LastName: {detailuser.lastname}</ThemedText>
+            <ThemedText type='subtitle' darkColor='black'>Nickname: {detailuser.nickname}</ThemedText>
           </View>
           <View style={styles.buttoncontainer}>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C4D9FF'}]} onPress={()=>router.push({pathname:'/(auth)/editUser',params:{user:JSON.stringify({...detailuser, uri: userdata?.uri})}})}>
-            <Text> EDIT </Text>
+          <ThemedText darkColor='black'> Edit </ThemedText>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={deleteAlert}>
-            <Text> delete </Text>
+            <ThemedText darkColor='black'> Delete </ThemedText>
           </TouchableOpacity>
-           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>{clearAll(),router.push('/(login)/loginUser')}}>
-                      <Text> Signout </Text>
-                    </TouchableOpacity>
+           <TouchableOpacity activeOpacity={0.7} style={[styles.buttonStlye,{backgroundColor:'#C5BAFF'}]} onPress={()=>{clearAll(),router.push('/(auth)/loginUser')}}>
+              <ThemedText  darkColor='black'> Log-out </ThemedText>
+          </TouchableOpacity>
           </View>
           <TouchableOpacity activeOpacity={0.7} onPress={()=>router.push('/(auth)/showUser')} style={{alignItems:'center',marginTop:'5%'}}>
                     <AntDesign name="close" size={40} color="black" />

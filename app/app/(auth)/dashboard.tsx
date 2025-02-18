@@ -120,7 +120,7 @@ const dashboard = () => {
            
           {datauser.map((user)=>(
               <View key={user.userid} style={{paddingHorizontal:20}}>
-                <Text>{user.userid}</Text>
+              
                 <UserCompo firstname={user.firstname} lastname={user.lastname} nickname={user.nickname} userid={user.userid} img={user.img} />
                 
               </View >

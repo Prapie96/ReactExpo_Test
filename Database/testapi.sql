@@ -22,15 +22,16 @@ USE `testapi`;
 -- Dumping structure for table testapi.account
 CREATE TABLE IF NOT EXISTS `account` (
   `accountid` int NOT NULL AUTO_INCREMENT,
-  `userid` int DEFAULT NULL,
+  `userid` int NOT NULL,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `usertype` int DEFAULT '2' COMMENT '1=Admin,2=user',
   PRIMARY KEY (`accountid`),
-  KEY `FK_account_userinfo` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_account_userinfo` (`userid`),
+  CONSTRAINT `FK_account_userinfo` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.account: ~11 rows (approximately)
+-- Dumping data for table testapi.account: ~9 rows (approximately)
 INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`) VALUES
 	(1, 1, 'John', '123', 1),
 	(2, 277, 'Pie', '1', 1),
@@ -40,8 +41,6 @@ INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`
 	(6, 282, 'j3k', 'Qwe', 2),
 	(7, 283, 'bo47', '47yu', 2),
 	(8, 284, 't', 't1', 2),
-	(43, 293, 'Key', 'Dow', 2),
-	(44, 294, 'Dydy', 'E', 2),
 	(46, 296, 'Cola', 'C1', 2);
 
 -- Dumping structure for table testapi.attendance
@@ -52,21 +51,19 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   PRIMARY KEY (`attendanceid`),
   KEY `FK_useridattendance` (`userid`),
   CONSTRAINT `FK_useridattendance` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table testapi.attendance: ~9 rows (approximately)
 INSERT INTO `attendance` (`attendanceid`, `userid`, `statususer`) VALUES
-	(1, 1, 2),
-	(2, 277, 2),
-	(3, 278, 3),
+	(1, 1, 3),
+	(2, 277, 1),
+	(3, 278, 2),
 	(4, 279, 4),
 	(5, 281, 1),
 	(6, 282, 3),
-	(7, 283, 3),
-	(8, 284, 1),
-	(9, 286, 1),
-	(11, 293, 1),
-	(12, 296, 4);
+	(7, 283, 2),
+	(8, 284, 2),
+	(11, 296, 1);
 
 -- Dumping structure for table testapi.status
 CREATE TABLE IF NOT EXISTS `status` (
@@ -82,29 +79,6 @@ INSERT INTO `status` (`statusid`, `statusname`) VALUES
 	(3, 'ลา'),
 	(4, 'ขาดเรียน');
 
--- Dumping structure for table testapi.testattend
-CREATE TABLE IF NOT EXISTS `testattend` (
-  `attendid` int NOT NULL AUTO_INCREMENT,
-  `userid` int NOT NULL DEFAULT '0',
-  `statususer` int NOT NULL DEFAULT (0),
-  PRIMARY KEY (`attendid`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table testapi.testattend: ~12 rows (approximately)
-INSERT INTO `testattend` (`attendid`, `userid`, `statususer`) VALUES
-	(1, 1, 1),
-	(2, 277, 4),
-	(3, 278, 3),
-	(4, 279, 3),
-	(5, 281, 4),
-	(6, 282, 1),
-	(7, 283, 2),
-	(8, 284, 2),
-	(9, 285, 1),
-	(10, 286, 1),
-	(11, 287, 1),
-	(12, 288, 4);
-
 -- Dumping structure for table testapi.userinfo
 CREATE TABLE IF NOT EXISTS `userinfo` (
   `userid` int NOT NULL AUTO_INCREMENT,
@@ -113,9 +87,9 @@ CREATE TABLE IF NOT EXISTS `userinfo` (
   `nickname` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=297 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table testapi.userinfo: ~11 rows (approximately)
+-- Dumping data for table testapi.userinfo: ~9 rows (approximately)
 INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VALUES
 	(1, 'John', 'Doe', 'Antony', 'img_173831585812796c564e4-789a-433c-82e7-cfb67dbfa4cd.jpeg'),
 	(277, 'La96', 'Yapie', 'P1e99', 'img_1739257839260ae888cf1-00c9-4c75-9aed-9a8c38760401.jpeg'),
@@ -125,8 +99,6 @@ INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VA
 	(282, 'Ap48', 'Kt12', 'O31j3k', 'img_1739257995036560bf5c3-7f8d-4f46-93ee-bc4119385523.jpeg'),
 	(283, 'No2345', 'Ur87', 'B47ok', 'img_1739257448661842fd0e0-4f28-445b-94e3-90c8b633e796.jpeg'),
 	(284, 'L31P', 'Weed', 'Pu334', 'img_1739258053715ca980995-563a-48b4-9492-a796409addf0.jpeg'),
-	(286, 'Pl_46', 'Uso932', 'Pl32', 'img_17392575016651f99aff5-a387-4f8d-82a6-839a7339db35.jpeg'),
-	(293, 'Kuakilng', 'Pakthai', 'Khaidow', 'img_1739527239413c627ffb6-a18b-4a55-80bf-bf84ef52788c.jpeg'),
 	(296, 'Mhee', 'Cola', 'Mhacholee', 'img_17394187209396796f2aa-5c52-4697-be28-037d2818f70f.jpeg');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;

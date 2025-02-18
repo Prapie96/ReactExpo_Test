@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     },
     buttontext:{
         fontSize:24,
+        fontFamily:'Itim'
     }
 
 });

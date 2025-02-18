@@ -2,6 +2,7 @@ import { View, Text,StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
+import { ThemedText } from './ThemedText';
 
 interface userCompoProps{
     firstname : string,
@@ -23,10 +24,10 @@ const userCompo = ({firstname,lastname,nickname,userid,img,fecthdata}:userCompoP
         <Image source={{ uri: `http://192.168.1.57:3000/img/${img}` }} style={styles.containerimg} />
         </View>
         <View style={styles.textcontainer}>
-        <Text style={styles.text}>{nickname}</Text>
-        <Text style={styles.text}>
+        <ThemedText  darkColor='black'>{nickname}</ThemedText>
+        <ThemedText  darkColor='black'>
             {/* {nickname}{'\n'} */}
-            Name: {firstname} {lastname} </Text>
+            Name: {firstname} {lastname} </ThemedText>
         </View>
     <View style={styles.viewbutton}>
     </View>
@@ -77,9 +78,7 @@ const styles = StyleSheet.create({
          alignItems:'center',
     
     },
-    text:{
-        fontSize:16,
-    },containerimg:{
+    containerimg:{
         width:70,
         height:70,
         borderRadius: 40,

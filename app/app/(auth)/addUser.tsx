@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        marginTop: '15%',
+        marginTop: '10%',
         width: '100%',
         height: '100%',
         paddingTop:5,
@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
     },
     containerFormInput:{
         gap:10,
-        marginTop:10
+        marginTop:10,
+        
     }
 })

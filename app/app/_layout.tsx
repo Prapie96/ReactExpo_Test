@@ -13,31 +13,33 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Itim: require('../assets/fonts/Itim-Regular.ttf'),
+    // SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  // useEffect(() => {
-  //   if (loaded) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded]);
+  useEffect(() => {
+    if (loaded) {
+      console.log('Font Load:',loaded);
+      SplashScreen.hideAsync();
+      getusercurrent();
+      
+    }
+  }, [loaded]);
 
-  // if (!loaded) {
-  //   return null;
-  // }
-  useEffect(()=>{
-    getusercurrent();
-    SplashScreen.hideAsync();
+  if (!loaded) {
+    return null;
+  }
+  // useEffect(()=>{
+  //   getusercurrent();
+  //   SplashScreen.hideAsync();
     
-  },[]);
+  // },[]);
   const getusercurrent = async()=>{
     const resultgetData = await getData().then(result=>result);
     const resultgetRole = await getDataRole().then(result=>result);
-     // console.log('Current Data USer:',resultgetData);
-    // console.log('Current Role User:',resultgetRole);
     if(resultgetData){
       if(resultgetRole ===1){
-        router.push({pathname:'/welcomePage',params:{user:JSON.stringify(resultgetData)}});
+        router.push({pathname:'/(auth)/welcomePage',params:{user:JSON.stringify(resultgetData)}});
       }
       else{
         router.push({pathname:'/(auth)/seeDetail',params:{user:JSON.stringify(resultgetData)}});
@@ -52,10 +54,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
       <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="welcomePage" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(login)" options={{ headerShown: false }} />
-        <Stack.Screen name="(user)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="dark" /> 
@@ -63,3 +62,4 @@ export default function RootLayout() {
   );
 }
 // This file use o navigate in folder all app 
+

@@ -13,7 +13,7 @@ export default function index() {
         <Text style={styles.titleText}>Welcome To MonsterApp</Text>
         <Text>This app is about managing the monster in your order.</Text>
         {/* <Text>select the button to choose menu.</Text> */}
-        <CustomButton Onpress={() => router.push('/(login)/loginUser')} title='Login'textstyle={{
+        <CustomButton Onpress={() => router.push('/(auth)/loginUser')} title='Login'textstyle={{
           color:'#FFFFFF',
         }}
         style={{
@@ -22,17 +22,10 @@ export default function index() {
         >
           
         </CustomButton>
-        <CustomButton Onpress={()=>router.push('/(auth)/addUser')}title='Register' 
-          style={{
-            backgroundColor: '#FFFFF',
-            borderWidth:1,
-          }}>
-        </CustomButton>
-        <CustomButton Onpress={()=>router.push('/welcomePage')}title='Go index' 
-          style={{
-            backgroundColor: '#FFFFF',
-            borderWidth:1,
-          }}>
+        <CustomButton Onpress={()=>router.push('/(auth)/addUser')}title='Register' textstyle={{
+          color:'#FFFFFF',
+        }}
+          >
         </CustomButton>
 
       </SafeAreaView>

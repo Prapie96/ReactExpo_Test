@@ -7,6 +7,7 @@ import { router } from 'expo-router'
 import UserCompo from '@/components/userCompo'
 import { useState,useEffect } from 'react'
 import Spinner from 'react-native-loading-spinner-overlay'
+import { ThemedText } from '@/components/ThemedText'
 interface User {
     userid:number,
     firstname: string;
@@ -53,7 +54,7 @@ export default function showUser() {
           textStyle={styles.spinnerTextStyle}
         />
         <View style={styles.viewcontain}>
-            <Text style={styles.titletext} >ดูข้อมูล User</Text>
+            <ThemedText type="title" darkColor="black" style={styles.titletext}>ดูข้อมูล User</ThemedText>
         </View>
         <FlatList 
             scrollEnabled = {false}
@@ -66,7 +67,7 @@ export default function showUser() {
               <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User' textstyle={{
           color:'#FFFFFF',
         }}></CustomButton>
-        <CustomButton Onpress={() => router.push('/')} title='Back' style={{
+        <CustomButton Onpress={() => router.back()} title='Back' style={{
             backgroundColor: '#FFFFFF',
             borderWidth:1,
         }}></CustomButton>
@@ -103,10 +104,7 @@ const styles = StyleSheet.create({
         marginBottom:30
     },
     titletext:{
-        fontSize: 32,
-        textAlign:'center',
         marginBottom:25,
-        justifyContent:'center',
         paddingTop:30
     },
     spinnerTextStyle: {

@@ -4,6 +4,7 @@ import Forminput from '@/components/Forminput'
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router';
 import { storeData,getData, getDataRole, storeRole } from '@/hooks/useAysnceStorage';
+import { ThemedText } from '@/components/ThemedText';
 
 interface Inputprops {
     username:string;
@@ -105,8 +106,8 @@ export default function loginUser() {
             console.log(`Admin:${userdata.firstname}`);
             storeRole(input.usertype);
             console.log('nickname userdata:',userdata.nickname);
-            router.push({pathname:'/welcomePage',params:{user:JSON.stringify(userdata)}});
-            // router.push('/welcomePage');
+            router.push({pathname:'/(auth)/welcomePage',params:{user:JSON.stringify(userdata)}});
+        
         }
         else{
             storeRole(input.usertype);
@@ -118,17 +119,15 @@ export default function loginUser() {
   return (
     <SafeAreaView style={{flex:1}}>
     <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={styles.bgimg}>  
-        <View style={{transform: [{translateY: 100}],paddingLeft:20}}>
-            <Text style={styles.texttitle}>Login User</Text>
-            <Text style={{ fontSize:20,}}>To Enter System</Text>
-        </View>
         <View style={styles.container}>  
             <View style={styles.contentcontainer}>
-            <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')} showtoggle={false}></Forminput>
-            <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
-            <Text style={{alignSelf:'flex-end',color:'grey'}}>Forget Password ?</Text>
-            <CustomButton title='Login' Onpress={login} style={{backgroundColor: '#C5BAFF',}}></CustomButton>
+            <ThemedText type='title' darkColor='black'>Login User</ThemedText>
+            <Forminput label='Username' placeholder='username...'values ={input.username } handleonchange={handleChange('username')} showtoggle={false}></Forminput>
+            <Forminput label='Password' placeholder='password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
+            <ThemedText type='link' style={{alignSelf:'flex-end',color:'grey'}}>Forget Password ?</ThemedText>
+            <CustomButton title='Login' Onpress={login} style={{backgroundColor: '#C5BAFF'}} textstyle={{color:'white'}}></CustomButton>
             <CustomButton title='Back' Onpress={()=>{router.back()}}></CustomButton>    
+           
             </View>
         </View>
   </ImageBackground>
@@ -153,11 +152,11 @@ const styles = StyleSheet.create({
     },
     texttitle:{
         fontSize:34,
-        
+        alignSelf:'center'
     },
     contentcontainer:{
        padding:20,
        marginTop:20,
-       gap:10
+       gap:15
     }
 })

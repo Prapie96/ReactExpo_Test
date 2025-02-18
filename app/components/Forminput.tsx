@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
+import { ThemedText } from './ThemedText';
 
 interface ForminputProps {
   label: string;
@@ -18,10 +19,10 @@ const Forminput = ({ label, placeholder, values, handleonchange,showtoggle}: For
      }
   return (
     <View style={style.container}>
-      <Text style={style.labeltext}>{label}</Text>
+      <ThemedText type='defaultSemiBold' darkColor='black'>{label}</ThemedText>
       <View style={style.inputContainer}>
         <TextInput
-          style={style.inputfield}
+          style={[style.inputfield, { fontFamily: 'Itim' }]}
           placeholder={placeholder}
           value={values}
           onChangeText={handleonchange}
@@ -47,6 +48,7 @@ const style = StyleSheet.create({
   },
   inputContainer: {
     position: 'relative',
+    fontFamily:'Itim'
   },
   inputfield: {
     borderWidth: 1,

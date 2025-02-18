@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import { router, useLocalSearchParams } from 'expo-router';
 import { clearAll } from '@/hooks/useAysnceStorage';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function welcomePage() {
   const {user} = useLocalSearchParams();
@@ -36,9 +37,9 @@ export default function welcomePage() {
       <ImageBackground source={require('@/assets/images/bg-expoproject.png')}> 
       <SafeAreaView style={styles.container}>
         <Image source={require('@/assets/images/Monster.png')}/>
-        <Text style={styles.titleText}>Welcome, Admin:{params?.nickname || params[0].nickname}</Text>
-        <Text>Welcome to applicion to handle users in systems</Text>
-        <Text>select the button to choose menu.</Text>
+        <ThemedText type='title' darkColor='black'>Dashboard Admin:{params?.nickname || params[0].nickname}</ThemedText >
+        <ThemedText darkColor='black'>Welcome to applicion to handle users in systems</ThemedText >
+        <ThemedText darkColor='black'>select the button to choose menu.</ThemedText >
         <CustomButton Onpress={() => router.push('/(auth)/addUser')} title='Add User'textstyle={{
           color:'#FFFFFF',
         }}
