@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Forminput from '@/components/Forminput'
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router';
 import { storeData,getData, getDataRole, storeRole } from '@/hooks/useAysnceStorage';
+
 interface Inputprops {
     username:string;
     password:string;
@@ -59,7 +60,7 @@ export default function loginUser() {
                     getinfouser(result.result[0]);
                 }
                 else{
-                    alert("Password wrong !!!");
+                    alert("Username or Password Wrong !!!");
                 }
             })
             .catch(err => console.error(err));
@@ -115,19 +116,48 @@ export default function loginUser() {
     }
     
   return (
-    <View style={styles.container}>
-        <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')} showtoggle={false}></Forminput>
-        <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
-        <CustomButton title='Login' Onpress={login}></CustomButton>
-        <CustomButton title='Back' Onpress={()=>{router.back()}}></CustomButton>
-    </View>
+    <SafeAreaView style={{flex:1}}>
+    <ImageBackground source={require('@/assets/images/Frame1.jpg')}style={styles.bgimg}>  
+        <View style={{transform: [{translateY: 100}],paddingLeft:20}}>
+            <Text style={styles.texttitle}>Login User</Text>
+            <Text style={{ fontSize:20,}}>To Enter System</Text>
+        </View>
+        <View style={styles.container}>  
+            <View style={styles.contentcontainer}>
+            <Forminput label='Username' placeholder='Username...'values ={input.username } handleonchange={handleChange('username')} showtoggle={false}></Forminput>
+            <Forminput label='Password' placeholder='Password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
+            <Text style={{alignSelf:'flex-end',color:'grey'}}>Forget Password ?</Text>
+            <CustomButton title='Login' Onpress={login} style={{backgroundColor: '#C5BAFF',}}></CustomButton>
+            <CustomButton title='Back' Onpress={()=>{router.back()}}></CustomButton>    
+            </View>
+        </View>
+  </ImageBackground>
+    </SafeAreaView>
+    
   )
 }
 
 const styles = StyleSheet.create({
+    bgimg:{
+       flex:1,
+       resizeMode:'cover',
+       
+    },
     container:{
         flex:1,
-       
-        backgroundColor:'#fff',
+        marginTop:'40%',
+        backgroundColor:'#FFFFFF',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,   
+            
+    },
+    texttitle:{
+        fontSize:34,
+        
+    },
+    contentcontainer:{
+       padding:20,
+       marginTop:20,
+       gap:10
     }
 })

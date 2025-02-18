@@ -114,40 +114,57 @@ app.post("/getuser", async(req,res)=>{
   app.post('/regisuser', upload.single("img"), async (req, res) => {
     const { firstname, lastname, nickname, username, password } = req.body;
     const img = req.file ? req.file.filename : null;
-
     if (!firstname || !lastname || !nickname || !username || !password) {
         return res.status(400).json({ message: "Missing required fields" }); // Early return for missing fields
     }
-
     const insertuserinfo = "INSERT INTO userinfo (firstname, lastname, nickname, img) VALUES (?, ?, ?, ?)";
-
     try {
-        con.query(insertuserinfo, [firstname, lastname, nickname, img], (err, result) => {
+      // ขั้นตอนที่ 1: ตรวจสอบว่า username ซ้ำในฐานข้อมูลหรือไม่
+    const checkUsernameQuery = "SELECT COUNT(*) AS count FROM account WHERE username = ?";
+    con.query(checkUsernameQuery, [username], (err, checkResult) => {
+    if (err) {
+        console.error("Error while checking username", err);
+        return res.status(500).json({ message: "Error checking username" });
+    }
+    // ถ้า username ซ้ำให้ส่งข้อความแสดงข้อผิดพลาด
+    if (checkResult[0].count > 0) {
+      console.log("Error Username Already Exists in Database");  
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    // ขั้นตอนที่ 2: Insert into userinfo
+    const insertuserinfo = "INSERT INTO userinfo (firstname, lastname, nickname, img) VALUES (?, ?, ?, ?)";
+    con.query(insertuserinfo, [firstname, lastname, nickname, img], (err, result) => {
+        if (err) {
+            console.error("Error while INSERT USERINFO", err);
+            return res.status(500).json({ message: "Error inserting user info" });
+        }
+
+        if (result.affectedRows !== 1) {
+            return res.status(400).json({ message: "Failed to insert user info" });
+        }
+
+        // ขั้นตอนที่ 3: Insert into account
+        const insertaccount = "INSERT INTO account (userid, username, password) VALUES (?, ?, ?)";
+        con.query(insertaccount, [result.insertId, username, password], (err, data) => {
             if (err) {
-                console.error("Error while INSERT USERINFO", err);
-                return res.status(500).json({ message: "Error inserting user info" }); 
+                console.error("Error while INSERT account", err);
+                return res.status(500).json({ message: "Error inserting account" });
             }
 
-            if (result.affectedRows !== 1) {
-                return res.status(400).json({ message: "Failed to insert user info" }); 
+            if (data.affectedRows !== 1) {
+                return res.status(400).json({ message: "Failed to insert account" });
             }
-
-            const insertaccount = "INSERT INTO account (userid, username, password) VALUES (?, ?, ?)";
-            con.query(insertaccount, [result.insertId, username, password], (err, data) => {
-                if (err) {
-                    console.error("Error while INSERT account", err);
-                    return res.status(500).json({ message: "Error inserting account" }); 
-                }
-
-                if (data.affectedRows !== 1) {
-                    return res.status(400).json({ message: "Failed to insert account" }); 
-                }
-
-                // Only send ONE success response after both inserts are successful
-                console.log(`Success to insert userinfo and account`)
-                return res.status(200).json({ message: "Success to insert userinfo and account", result: { userInfo: result, accountInfo: data } });
+            //send result insertuserinfo and result insertaccount
+            console.log("Success to insert userinfo and account");
+            return res.status(200).json({
+                message: "Success to insert userinfo and account",
+                result: { userInfo: result, accountInfo: data }
             });
         });
+    });
+});
+
     } catch (err) {
         console.error("General error", err);
         return res.status(500).json({ message: "An error occurred" });  // Catch any unexpected errors
@@ -405,13 +422,20 @@ app.post('/loginuser',upload.none(),async(req,res)=>{
     const sql = "SELECT * FROM account WHERE username = ?";
   con.query(sql,[username],(err,result)=>{
     if(err)throw err;
-    if(result[0].password !== password){
-      console.log('Password wrong not match in database');
-      return res.status(400).json({message:false});
+    try{
+      if(result[0].password !== password){
+        console.log('Password wrong not match in database');
+        return res.status(400).json({message:false});
+      }
+      else{
+        console.log("Success to login");
+        return res.status(200).json({message: true,result});
+      }
     }
-    else{
-      console.log("Success to login");
-      return res.status(200).json({message: true,result});
+    catch(err){
+      console.log("Can't Find Username in Database");
+      // console.error(err);
+      return res.status(400).json({message:false});
     }
     
   }
@@ -421,20 +445,6 @@ app.post('/loginuser',upload.none(),async(req,res)=>{
   }
 })
 
-app.post('/registeruser',upload.none(),async(req,res)=>{
-  const {username,password} = req.body;
-  console.log(username,password);
-  if(username&&password){
-    const sql = "INSERT INTO account (username,password) VALUES (?,?)";
-    con.query(sql,[username,password,(err,result)=>{
-      if(err)throw err;
-      res.status(200).json({message: true,result});
-    }])
-  }
-  else{
-    console.error("username or password is missing");
-  }
-})
 
 app.post('/getaccountuser',upload.none(),async(req,res)=>{
   const {userid} = req.body;

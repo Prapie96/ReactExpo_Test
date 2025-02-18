@@ -64,12 +64,8 @@ export default function AddUser() {
                     },
                     body: formdata
                 }).then(respond => respond.json()).then(result => {
-                    if(result){
+                    if(result.message !== "Username already exists"){
                         alertShow();
-                        return result;
-                    }
-                    }).catch(err => console.error(err))
-                    .finally(()=>{setloading(false);
                         setinput({
                             firstname:'',
                             lastname:'',
@@ -79,6 +75,13 @@ export default function AddUser() {
                             password:'',
                             confirmpassword:'',
                         });
+                    }
+                    else{
+                        alert("Username already exists");
+                    }
+                    }).catch(err => console.error(err))
+                    .finally(()=>{setloading(false);
+                        
                     });
             }
             else{
@@ -185,13 +188,6 @@ export default function AddUser() {
         <Forminput label='Username' placeholder='username...' values={input.username} handleonchange={handleChange('username')} showtoggle={false}></Forminput>
         <View style={{}}>
         <Forminput label='Password' placeholder='password...'values ={input.password } handleonchange={handleChange('password')} showtoggle={true}></Forminput>
-        {/* <TouchableOpacity onPress={togglePassword}>
-            {
-                showPasword?( <Entypo name="eye" size={24} color="black" style={{position:'absolute',right:'5%'}} />)
-                : ( <Entypo name="eye-with-line" size={24} color="black" style={{position:'absolute',right:'5%',top:'50%'}} />)
-            }
-       
-        </TouchableOpacity> */}
         </View>
        
         <Forminput label='Confirmed-Password' placeholder='confirmed-Password...'values ={input.confirmpassword } 
