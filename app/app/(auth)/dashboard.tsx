@@ -1,7 +1,10 @@
-import { View, Text,StyleSheet,ScrollView } from 'react-native'
+import { View, Text,StyleSheet,ScrollView,Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Spinner from 'react-native-loading-spinner-overlay'
 import UserCompo from '@/components/userCompo';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ThemedText } from '@/components/ThemedText';
+import CardCompo from '@/components/CardCompo';
 
 
 interface DashboardProps{
@@ -55,8 +58,8 @@ const dashboard = () => {
   }
 
   useEffect(() => {
-      fecthstatusdata();
-      fecthdata();
+      // fecthstatusdata();
+      // fecthdata();
     }, []);
         //Create function to callback 
        async function fecthdata(){
@@ -77,92 +80,52 @@ const dashboard = () => {
 
       
   return (
-      <View>
-          <View style={styles.ContainerHead}>
-          <Spinner
-          visible={loading}
-          textContent={'Loading Fecth All User...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-              <View style={{backgroundColor:'#FFFFFF',padding:20,borderRadius:10,gap:5,marginTop:20}}>
-                  <Text>Total</Text>
-                  <Text style={styles.fontstyle}>{userstatus.totalStudents}</Text>
-                  <Text>Students</Text>
-                  
-              </View>
-              <View style={styles.container4card}>
-              <View style={styles.Card}>
-                  <Text>Present</Text>
-                  <Text style={styles.fontstyle}>{userstatus.presentStudents}</Text>
-                  <Text>Students</Text>
-              </View>
-              <View style={styles.Card}>
-                  <Text>Late</Text>
-                  <Text style={styles.fontstyle}>{userstatus.lateStudents}</Text>
-                  <Text>Students</Text>
-              </View>
-              <View style={styles.Card}>
-                  <Text>Leav</Text>
-                  <Text style={styles.fontstyle}>{userstatus.leavStudents}</Text>
-                  <Text>Students</Text>
-              </View>
-              <View style={styles.Card}>
-                  <Text>Absent</Text>
-                  <Text style={styles.fontstyle}>{userstatus.absentStudents}</Text>
-                  <Text>Students</Text>
-              </View> 
-              </View>
+      <SafeAreaView style={styles.MainContainer}>
+        <View style={styles.HeadContainer}>
+         <View style={{flexDirection:'row',borderWidth:1,padding:10,flex:1}}>
+          <View style={styles.containerImg}>
+            <Image source={require('@/assets/images/Antony.jpeg')} style={styles.ProfileImg}></Image>
           </View>
-           <View style={{backgroundColor:'purple',padding:10}}>
-              <Text style={[styles.fontstyle,{color:'white'}]}>Student in Class</Text>
-            </View>
-          <ScrollView style={styles.ContainerBody}>
-           
-          {datauser.map((user)=>(
-              <View key={user.userid} style={{paddingHorizontal:20}}>
-              
-                <UserCompo firstname={user.firstname} lastname={user.lastname} nickname={user.nickname} userid={user.userid} img={user.img} />
-                
-              </View >
-            ))}
-          </ScrollView >
-      </View>
+          <View>
+          <ThemedText type='subtitle'>Antony United School</ThemedText>
+          <ThemedText type='subtitle'>Hi, Antony</ThemedText>
+          <ThemedText type='subtitle'>Role:Admin</ThemedText>
+          </View>
+         </View>
+        <View style={{flexDirection:'row',borderWidth:1,flex:1,}}>
+        <CardCompo title={'All Student'} total={userstatus.totalStudents}></CardCompo>
+        <CardCompo title={'All Student'} total={userstatus.totalStudents}></CardCompo>
+        </View>
+
+        </View>
+      </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-    ContainerHead:{
-        height:'50%',
-        justifyContent:'center',
-        backgroundColor:'#4759A6',
-        
-        paddingHorizontal:20,
-      
-    },
-    ContainerBody:{
-        backgroundColor:'#F8E1B7',
-        height:'50%'
-    },
-    container4card:{
-      flexDirection:'row',
-      gap:8,
+   MainContainer:{
+    flex:1,
+   },
+   HeadContainer:{
+    backgroundColor:'#C5BAFF',
+    width:'100%',
+    height:'40%',
+    borderBottomLeftRadius:30,
+    borderBottomRightRadius:30,
     
-      justifyContent:'space-between'
-    },
-    Card:{
-      backgroundColor:'#FFFFFF',
-      padding:20,
-      borderRadius:10,
-      gap:5,
-      marginTop:20,
-     
-      
-    },
-    fontstyle:{
-      fontSize:18
-    },
-    spinnerTextStyle: {
-        color: '#FFF'
-      },
+   },
+   ContentContainer:{
+
+   },
+   containerImg:{
+    borderWidth:1,
+    width:'25%',
+    height:'35%'
+   },
+   ProfileImg:{
+    width:'100%',
+    height:'100%',
+    borderRadius:100
+   }
 })
 export default dashboard

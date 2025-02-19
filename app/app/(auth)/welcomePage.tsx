@@ -56,6 +56,7 @@ export default function welcomePage() {
           }}>
         </CustomButton>
       <CustomButton Onpress={()=>router.push('/(auth)/attendenceUser')} title='Attendence'></CustomButton>
+      <CustomButton Onpress={()=>router.push('/(auth)/dashboard')} title='dashboard'></CustomButton>
       {/* <CustomButton Onpress={()=>router.push('/(auth)/dashboard')} title='Dashboard'></CustomButton> */}
       </SafeAreaView>
       </ImageBackground>
