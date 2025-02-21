@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               8.0.40 - MySQL Community Server - GPL
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.8.0.6908
+-- HeidiSQL Version:             12.10.0.7000
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -29,9 +29,9 @@ CREATE TABLE IF NOT EXISTS `account` (
   PRIMARY KEY (`accountid`),
   KEY `FK_account_userinfo` (`userid`),
   CONSTRAINT `FK_account_userinfo` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table testapi.account: ~9 rows (approximately)
+-- Dumping data for table testapi.account: ~10 rows (approximately)
 INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`) VALUES
 	(1, 1, 'John', '123', 1),
 	(2, 277, 'Pie', '1', 1),
@@ -41,7 +41,8 @@ INSERT INTO `account` (`accountid`, `userid`, `username`, `password`, `usertype`
 	(6, 282, 'j3k', 'Qwe', 2),
 	(7, 283, 'bo47', '47yu', 2),
 	(8, 284, 't', 't1', 2),
-	(46, 296, 'Cola', 'C1', 2);
+	(46, 296, 'Cola', 'C1', 2),
+	(86, 334, 'manmoZ', 'Moz12+Xx', 2);
 
 -- Dumping structure for table testapi.attendance
 CREATE TABLE IF NOT EXISTS `attendance` (
@@ -87,9 +88,9 @@ CREATE TABLE IF NOT EXISTS `userinfo` (
   `nickname` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=335 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table testapi.userinfo: ~9 rows (approximately)
+-- Dumping data for table testapi.userinfo: ~10 rows (approximately)
 INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VALUES
 	(1, 'John', 'Doe', 'Antony', 'img_173831585812796c564e4-789a-433c-82e7-cfb67dbfa4cd.jpeg'),
 	(277, 'La96', 'Yapie', 'P1e99', 'img_1739257839260ae888cf1-00c9-4c75-9aed-9a8c38760401.jpeg'),
@@ -99,7 +100,8 @@ INSERT INTO `userinfo` (`userid`, `firstname`, `lastname`, `nickname`, `img`) VA
 	(282, 'Ap48', 'Kt12', 'O31j3k', 'img_1739257995036560bf5c3-7f8d-4f46-93ee-bc4119385523.jpeg'),
 	(283, 'No2345', 'Ur87', 'B47ok', 'img_1739257448661842fd0e0-4f28-445b-94e3-90c8b633e796.jpeg'),
 	(284, 'L31P', 'Weed', 'Pu334', 'img_1739258053715ca980995-563a-48b4-9492-a796409addf0.jpeg'),
-	(296, 'Mhee', 'Cola', 'Mhacholee', 'img_17394187209396796f2aa-5c52-4697-be28-037d2818f70f.jpeg');
+	(296, 'Mhee', 'Cola', 'Mhacholee', 'img_17394187209396796f2aa-5c52-4697-be28-037d2818f70f.jpeg'),
+	(334, 'MangoZ', 'Teenzz', 'saowaros', 'img_1740126305483.jpg');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

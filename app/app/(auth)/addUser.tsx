@@ -4,13 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from "@/components/CustomButton"
 import Forminput from '@/components/Forminput'
 import { router } from 'expo-router'
-import { useState,useEffect } from 'react'
+import { useState} from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Entypo from '@expo/vector-icons/Entypo';
+
 export default function AddUser() {
     const [input,setinput] = useState({
         firstname:'',
@@ -54,7 +54,7 @@ export default function AddUser() {
                 console.log("Into else to fect");
                 console.log(formdata);
                 setloading(true);
-                const api = 'http://192.168.1.57:3000/regisuser';
+                const api = process.env.EXPO_PUBLIC_API_URL+'/user/regisuser';
                 await fetch(api,{
                     method:'POST',
                     headers: {
